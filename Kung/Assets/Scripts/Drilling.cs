@@ -1,8 +1,15 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-
+public enum CurrentDirectionState
+{
+    None,
+    Left,
+    Right,
+    Down
+}
 public class Drilling : MonoBehaviour
 {
 
@@ -12,19 +19,39 @@ public class Drilling : MonoBehaviour
     public float drillSpeed;
     bool isGround = true;
     float cooltime = 0;
-
-    private Dictionary<Vector3Int,float> tileDict = new Dictionary<Vector3Int,float>();
+    // ÇöÀç ±¼ÂøÇÒ ¹æÇâ
+    public CurrentDirectionState currentDirectionState = CurrentDirectionState.Down;
+    //private Dictionary<Vector3Int,float> tileDict = new Dictionary<Vector3Int,float>();
+    private float[,] tiles;
     [SerializeField] private Animator drillAnimator;
+    int width;
+    int height;
+    int offsetX;
+    int offsetY;
+
+    private (bool valid, int x, int y) TryCellToIndex(Vector3Int cellPos)
+    {
+        int x = cellPos.x + offsetX;
+        int y = cellPos.y + offsetY;
+        if (x < 0 || y < 0 || x >= width || y >= height)
+            return (false, 0, 0);
+        return (true, x, y);
+    }
     private void Start()
     {
         BoundsInt bounds = drillAbleTilemap.cellBounds;
-
+        width = bounds.xMax - bounds.xMin;
+        height = bounds.yMax - bounds.yMin;
+        tiles = new float[width, height];
+        offsetX = -bounds.xMin;
+        offsetY = -bounds.yMin;
         for (int x = bounds.xMin; x < bounds.xMax; x++)
         {
             for (int y = bounds.yMin; y < bounds.yMax; y++)
             {
                 Vector3Int pos = new Vector3Int(x, y);
-                tileDict[pos] = 100;
+                //tileDict[pos] = 100;
+                tiles[TryCellToIndex(pos).x, TryCellToIndex(pos).y] = 100; 
             }
         }
     }
@@ -46,12 +73,35 @@ public class Drilling : MonoBehaviour
             //drill.SetActive(true);
             if (cooltime >= drillSpeed)
             {
-                Vector3Int currentPos = drillAbleTilemap.WorldToCell(new Vector3(transform.position.x, transform.position.y, 0));
-                Vector3Int pos = new Vector3Int(currentPos.x, currentPos.y - 1);
-                tileDict[pos] -= drillDamage;
-                if (tileDict[pos] <= 0)
+                Vector3Int currentPos = drillAbleTilemap.WorldToCell(transform.position);
+                Vector3Int pos = currentPos;
+
+
+                switch (currentDirectionState)
                 {
-                    drillAbleTilemap.SetTile(pos, null);
+                    case CurrentDirectionState.None:
+                        break;
+                    case CurrentDirectionState.Left:
+                        pos = new Vector3Int(currentPos.x - 1, currentPos.y);
+                        break;
+                    case CurrentDirectionState.Right:
+                        pos = new Vector3Int(currentPos.x + 1, currentPos.y);
+                        break;
+                    case CurrentDirectionState.Down:
+                        pos = new Vector3Int(currentPos.x, currentPos.y - 1);
+                        break;
+                    default:
+                        break;
+                }
+                //tileDict[pos] -= drillDamage;
+                var (valid, x, y) = TryCellToIndex(pos);
+                if (valid)
+                {
+                    tiles[x, y] -= drillDamage;
+                    if (tiles[x, y] <= 0)
+                    {
+                        drillAbleTilemap.SetTile(pos, null);
+                    }
                 }
                 cooltime = 0;
             }
@@ -64,4 +114,7 @@ public class Drilling : MonoBehaviour
 
         }
     }
+
+
+
 }
