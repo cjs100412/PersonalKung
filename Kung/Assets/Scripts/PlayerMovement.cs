@@ -23,12 +23,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Animator drillAnimator;
 
     [Header("부스트 기능")]
-    public float boostPower = 3.5f; // 부스트 상승파워
+    public float boostPower = 7f; // 부스트 상승파워
     public float maxBoostSpeed = 2f;
     private bool isBoost; // 부스트상태 확인 bool
 
     [Header("낙하 최대속도 제한")]
-    public float maxFallSpeed = -10f;
+    public float maxFallSpeed = -5f;
 
     Rigidbody2D rb;
 
@@ -60,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
         // 부스터, 최대속도 제한
         if (isBoost && rb.linearVelocity.y < maxBoostSpeed)
         {
-            rb.AddForce(new Vector2(0, boostPower), ForceMode2D.Force);
+            rb.AddForce(new Vector2(0, boostPower) * Time.deltaTime * 100, ForceMode2D.Force);
         }
 
         // 낙하 속도 제한
