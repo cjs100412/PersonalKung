@@ -4,29 +4,36 @@ using UnityEngine.UIElements;
 
 public class Booster : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
+    public float boostSpeed;
     public PlayerMovement playerMovement;
-    Animator[] animator;
+    Animator animator;
+    Rigidbody2D rb;
+    private bool isBoost;
 
     private void Awake()
     {
-        //animator = playerMovement.GetComponentInChildren<Animator>();
-        animator = playerMovement.GetComponentsInChildren<Animator>();
+        animator = playerMovement.GetComponent<Animator>();
+        rb = playerMovement.GetComponent<Rigidbody2D>();
+    }
+
+    private void Update()
+    {
+        if (isBoost)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, boostSpeed);
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        foreach (Animator anim in animator)
-        {
-            anim.SetBool("isBoost", true);
-        }
+        animator.SetBool("isBoost", true);
+        isBoost = true;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        foreach (Animator anim in animator)
-        {
-            anim.SetBool("isBoost", false);
-        }
+        animator.SetBool("isBoost", false);
+        isBoost = false;
     }
 
 
