@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     private InputLockState currentState = InputLockState.Any;
     [SerializeField] private Animator headAnimator;
     [SerializeField] private Animator bodyAnimator;
+    [SerializeField] private Animator drillAnimator;
     
 
 
@@ -33,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
            
             ChangeAnimation("MoveLeft", bodyAnimator);
             ChangeAnimation("MoveLeft", headAnimator);
+            ChangeAnimation("MoveLeft", drillAnimator);
         }
         else if (Input.GetKey(KeyCode.RightArrow) && currentState != InputLockState.Right)
         {
@@ -41,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
 
             ChangeAnimation("MoveRight", bodyAnimator);
             ChangeAnimation("MoveRight", headAnimator);
+            ChangeAnimation("MoveRight", drillAnimator);
         }
         else
         {
