@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Animator headAnimator;
     [SerializeField] private Animator bodyAnimator;
     [SerializeField] private Animator boostAnimator;
+    [SerializeField] private Animator drillAnimator;
 
     [Header("부스트 기능")]
     public float boostPower = 3.5f; // 부스트 상승파워
@@ -76,6 +77,7 @@ public class PlayerMovement : MonoBehaviour
            
             ChangeAnimation("MoveLeft", bodyAnimator);
             ChangeAnimation("MoveLeft", headAnimator);
+            ChangeAnimation("MoveLeft", drillAnimator);
         }
         else if (Input.GetKey(KeyCode.RightArrow) && currentState != InputLockState.Right)
         {
@@ -85,6 +87,7 @@ public class PlayerMovement : MonoBehaviour
 
             ChangeAnimation("MoveRight", bodyAnimator);
             ChangeAnimation("MoveRight", headAnimator);
+            ChangeAnimation("MoveRight", drillAnimator);
         }
         else
         {
