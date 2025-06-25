@@ -14,8 +14,8 @@ public enum InputLockState
 
 public class PlayerMovement : MonoBehaviour
 {
-    // ÇÃ·¹ÀÌ¾î¿¡ ºÎÂøÇÒ ÄÄÆ÷³ÍÆ®
-    // ÇÃ·¹ÀÌ¾îÀÇ ÀÌµ¿ Á¦¾î
+    // í”Œë ˆì´ì–´ì— ë¶€ì°©í•  ì»´í¬ë„ŒíŠ¸
+    // í”Œë ˆì´ì–´ì˜ ì´ë™ ì œì–´
 
     [SerializeField] private float speed;
     private InputLockState currentState = InputLockState.Any;
@@ -25,14 +25,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Animator drillAnimator;
 
 
-    [Header("ºÎ½ºÆ® ±â´É")]
-    public float boostPower = 7f; // ºÎ½ºÆ® »ó½ÂÆÄ¿ö
+    [Header("ë¶€ìŠ¤íŠ¸ ê¸°ëŠ¥")]
+    public float boostPower = 7f; // ë¶€ìŠ¤íŠ¸ ìƒìŠ¹íŒŒì›Œ
     public float maxBoostSpeed = 2f;
-    private bool isBoost; // ºÎ½ºÆ®»óÅÂ È®ÀÎ bool
+    private bool isBoost; // ë¶€ìŠ¤íŠ¸ìƒíƒœ í™•ì¸ bool
     
 
-    [Header("³«ÇÏ ÃÖ´ë¼Óµµ Á¦ÇÑ")]
+    [Header("ë‚™í•˜ ìµœëŒ€ì†ë„ ì œí•œ")]
     public float maxFallSpeed = -5f;
+
+    Rigidbody2D rb;
 
     private Rigidbody2D rb;
     private Drilling drilling;
@@ -42,13 +44,13 @@ public class PlayerMovement : MonoBehaviour
         drilling = GetComponent<Drilling>();
     }
 
-    // ÀÌ ÄÄÆ÷³ÍÆ®°¡ È°¼ºÈ­ µÆÀ» ¶§, ´ë¸®ÀÚ¿¡ HandleBoostInput ÇÔ¼ö¸¦ µî·ÏÇÔ (±¸µ¶)
+    // ì´ ì»´í¬ë„ŒíŠ¸ê°€ í™œì„±í™” ëì„ ë•Œ, ëŒ€ë¦¬ìì— HandleBoostInput í•¨ìˆ˜ë¥¼ ë“±ë¡í•¨ (êµ¬ë…)
     private void OnEnable()
     {
         Booster.OnBoostInput += HandleBoostInput;
     }
 
-    // ÀÌ ÄÄÆ÷³ÍÆ®°¡ ºñÈ°¼ºÈ­ µÆÀ» ¶§, ´ë¸®ÀÚÀÇ ÀÌº¥Æ® ±¸µ¶À» ÇØÁ¦ÇÔ.
+    // ì´ ì»´í¬ë„ŒíŠ¸ê°€ ë¹„í™œì„±í™” ëì„ ë•Œ, ëŒ€ë¦¬ìì˜ ì´ë²¤íŠ¸ êµ¬ë…ì„ í•´ì œí•¨.
     private void OnDisable()
     {
         Booster.OnBoostInput -= HandleBoostInput;
@@ -62,13 +64,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        // ºÎ½ºÅÍ, ÃÖ´ë¼Óµµ Á¦ÇÑ
+        // ë¶€ìŠ¤í„°, ìµœëŒ€ì†ë„ ì œí•œ
         if ((isBoost && rb.linearVelocity.y < maxBoostSpeed) || (Input.GetKey(KeyCode.UpArrow) && rb.linearVelocity.y < maxBoostSpeed))
         {
             rb.AddForce(new Vector2(0, boostPower) * Time.deltaTime * 100, ForceMode2D.Force);
         }
 
-        // ³«ÇÏ ¼Óµµ Á¦ÇÑ
+        // ë‚™í•˜ ì†ë„ ì œí•œ
         if (rb.linearVelocityY < maxFallSpeed)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocityX, maxFallSpeed);
@@ -111,7 +113,7 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    // ÄÑ°í½ÍÀº ºÒÅ¸ÀÔ ¾Ö´Ï¸ŞÀÌ¼Ç ÆÄ¶ó¹ÌÅÍ ÀÌ¸§ , ¾Ö´Ï¸ŞÀÌÅÍ ³Ö¾î
+    // ì¼œê³ ì‹¶ì€ ë¶ˆíƒ€ì… ì• ë‹ˆë©”ì´ì…˜ íŒŒë¼ë¯¸í„° ì´ë¦„ , ì• ë‹ˆë©”ì´í„° ë„£ì–´
     private void ChangeAnimation(string aniName, Animator animator)
     {
         var parameters = animator.parameters;
