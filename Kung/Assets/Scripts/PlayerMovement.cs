@@ -93,6 +93,7 @@ public class PlayerMovement : MonoBehaviour
 
             ChangeAnimation("Idle",bodyAnimator);
             ChangeAnimation("Idle",headAnimator);
+            ChangeAnimation("Idle",drillAnimator);
         }
 
 
