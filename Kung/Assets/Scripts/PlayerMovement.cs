@@ -10,6 +10,8 @@ public enum InputLockState
     Left,
     Right
 }
+
+
 public class PlayerMovement : MonoBehaviour
 {
     // 플레이어에 부착할 컴포넌트
@@ -22,19 +24,22 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Animator boostAnimator;
     [SerializeField] private Animator drillAnimator;
 
+
     [Header("부스트 기능")]
-    public float boostPower = 3.5f; // 부스트 상승파워
+    public float boostPower = 7f; // 부스트 상승파워
     public float maxBoostSpeed = 2f;
     private bool isBoost; // 부스트상태 확인 bool
+    
 
     [Header("낙하 최대속도 제한")]
-    public float maxFallSpeed = -10f;
+    public float maxFallSpeed = -5f;
 
-    Rigidbody2D rb;
-
+    private Rigidbody2D rb;
+    private Drilling drilling;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        drilling = GetComponent<Drilling>();
     }
 
     // 이 컴포넌트가 활성화 됐을 때, 대리자에 HandleBoostInput 함수를 등록함 (구독)
@@ -58,13 +63,13 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         // 부스터, 최대속도 제한
-        if (isBoost && rb.linearVelocity.y < maxBoostSpeed)
+        if ((isBoost && rb.linearVelocity.y < maxBoostSpeed) || (Input.GetKey(KeyCode.UpArrow) && rb.linearVelocity.y < maxBoostSpeed))
         {
-            rb.AddForce(new Vector2(0, boostPower), ForceMode2D.Force);
+            rb.AddForce(new Vector2(0, boostPower) * Time.deltaTime * 100, ForceMode2D.Force);
         }
 
         // 낙하 속도 제한
-        if(rb.linearVelocityY < maxFallSpeed)
+        if (rb.linearVelocityY < maxFallSpeed)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocityX, maxFallSpeed);
         }
@@ -72,9 +77,11 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftArrow) && currentState != InputLockState.Left)
         {
             currentState = InputLockState.Right;
+            drilling.currentDirectionState = CurrentDirectionState.Left;
             //transform.Translate(Vector3.left * speed * Time.deltaTime);
-            rb.linearVelocity = new Vector2(- 1 * speed, rb.linearVelocityY);
-           
+            rb.linearVelocity = new Vector2(-1 * speed, rb.linearVelocityY);
+
+
             ChangeAnimation("MoveLeft", bodyAnimator);
             ChangeAnimation("MoveLeft", headAnimator);
             ChangeAnimation("MoveLeft", drillAnimator);
@@ -82,6 +89,7 @@ public class PlayerMovement : MonoBehaviour
         else if (Input.GetKey(KeyCode.RightArrow) && currentState != InputLockState.Right)
         {
             currentState = InputLockState.Left;
+            drilling.currentDirectionState = CurrentDirectionState.Right;
             //transform.Translate(Vector3.right * speed * Time.deltaTime);
             rb.linearVelocity = new Vector2(1 * speed, rb.linearVelocityY);
 
@@ -92,11 +100,12 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             currentState = InputLockState.Any;
-            rb.linearVelocity = new Vector2(0 , rb.linearVelocityY);
+            drilling.currentDirectionState = CurrentDirectionState.Down;
+            rb.linearVelocity = new Vector2(0, rb.linearVelocityY);
 
-            ChangeAnimation("Idle",bodyAnimator);
-            ChangeAnimation("Idle",headAnimator);
-            ChangeAnimation("Idle",drillAnimator);
+            ChangeAnimation("Idle", bodyAnimator);
+            ChangeAnimation("Idle", headAnimator);
+            ChangeAnimation("Idle", drillAnimator);
         }
 
 
