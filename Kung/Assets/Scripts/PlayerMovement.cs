@@ -34,8 +34,6 @@ public class PlayerMovement : MonoBehaviour
     [Header("낙하 최대속도 제한")]
     public float maxFallSpeed = -5f;
 
-    Rigidbody2D rb;
-
     private Rigidbody2D rb;
     private Drilling drilling;
     private void Awake()
