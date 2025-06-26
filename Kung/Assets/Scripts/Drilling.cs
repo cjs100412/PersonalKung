@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -20,6 +21,11 @@ public class Drilling : MonoBehaviour
 
     public float drillDamage;
     public float drillCoolTime;
+    
+    // 카메라 진동관련
+    public float shakeInterval = 0.1f;
+    private float shakeTimer;
+    public CinemachineImpulseSource impulseSource;
 
     bool isGround = true;
 
@@ -79,7 +85,19 @@ public class Drilling : MonoBehaviour
 
         // 애니메이션 처리만 따로
         drillAnimator.SetBool("Drilling", isDrilling);
-
+        if (isDrilling)
+        {
+            shakeTimer += Time.deltaTime;
+            if (shakeTimer >= shakeInterval)
+            {
+                impulseSource.GenerateImpulse();
+                shakeTimer = 0f;
+            }
+        }
+        else
+        {
+            shakeTimer = 0f; // 멈췄을 때 타이머 리셋
+        }
         // 코루틴 제어는 아래와 같이 유지
         if (Input.GetKeyDown(KeyCode.X) && isGround)
         {
