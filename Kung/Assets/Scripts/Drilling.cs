@@ -14,7 +14,7 @@ public class Drilling : MonoBehaviour
 {
 
     [SerializeField] private GameObject drill;
-    [SerializeField] private Tilemap drillAbleTilemap;
+    [SerializeField] private Tilemap brokenableTilemap;
     public float drillDamage;
     public float drillSpeed;
     bool isGround = true;
@@ -24,6 +24,8 @@ public class Drilling : MonoBehaviour
     //private Dictionary<Vector3Int,float> tileDict = new Dictionary<Vector3Int,float>();
     private float[,] tiles;
     [SerializeField] private Animator drillAnimator;
+    public Sprite[] brokenTileSprites;
+    private int spriteIndex;
     int width;
     int height;
     int offsetX;
@@ -39,7 +41,7 @@ public class Drilling : MonoBehaviour
     }
     private void Start()
     {
-        BoundsInt bounds = drillAbleTilemap.cellBounds;
+        BoundsInt bounds = brokenableTilemap.cellBounds;
         width = bounds.xMax - bounds.xMin;
         height = bounds.yMax - bounds.yMin;
         tiles = new float[width, height];
@@ -54,6 +56,7 @@ public class Drilling : MonoBehaviour
                 tiles[TryCellToIndex(pos).x, TryCellToIndex(pos).y] = 100; 
             }
         }
+        spriteIndex = 100 / brokenTileSprites.Length;
     }
 
     // Update is called once per frame
@@ -62,7 +65,7 @@ public class Drilling : MonoBehaviour
 
         if (Input.GetKey(KeyCode.C))
         {
-            Debug.Log(drillAbleTilemap.WorldToCell(new Vector3(transform.position.x, transform.position.y, 0)));
+            Debug.Log(brokenableTilemap.WorldToCell(new Vector3(transform.position.x, transform.position.y, 0)));
         }
 
         if (Input.GetKey(KeyCode.X) && isGround)
@@ -73,7 +76,7 @@ public class Drilling : MonoBehaviour
             //drill.SetActive(true);
             if (cooltime >= drillSpeed)
             {
-                Vector3Int currentPos = drillAbleTilemap.WorldToCell(transform.position);
+                Vector3Int currentPos = brokenableTilemap.WorldToCell(transform.position);
                 Vector3Int pos = currentPos;
 
 
@@ -97,11 +100,21 @@ public class Drilling : MonoBehaviour
                 var (valid, x, y) = TryCellToIndex(pos);
                 if (valid)
                 {
+                    
+
                     tiles[x, y] -= drillDamage;
                     if (tiles[x, y] <= 0)
                     {
-                        drillAbleTilemap.SetTile(pos, null);
+                        brokenableTilemap.SetTile(pos, null);
                     }
+                    else
+                    {
+                        Tile newTile = ScriptableObject.CreateInstance<Tile>();
+                        newTile.sprite = brokenTileSprites[(int)(tiles[x, y] / spriteIndex)];
+                        brokenableTilemap.SetTile(pos, newTile);
+                    }
+                    
+                    
                 }
                 cooltime = 0;
             }
