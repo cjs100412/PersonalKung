@@ -13,7 +13,7 @@ public class MineralDatabase : MonoBehaviour
         Vector3Int cellPos = mineralTilemap.WorldToCell(collision.transform.position);
 
         if (removedCells.Contains(cellPos)) return;
-
+        Debug.Log("Æ®¸®°Å");
         TileBase tile = mineralTilemap.GetTile(cellPos);
         if (tile is CustomOreTile customTile)
         {

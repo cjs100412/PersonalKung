@@ -11,6 +11,7 @@ public class UI : MonoBehaviour
     public Image airBlueImage;
     public Image airYellowImage;
     public Image airRedImage;
+    public Image airNeedle;
 
     public PlayerHealth playerHealth;
 
@@ -18,8 +19,11 @@ public class UI : MonoBehaviour
     {
         hpImage.fillAmount = Mathf.InverseLerp(0f, 100f, playerHealth.hp);
         hpText.text = $"{playerHealth.hp} / 100";
+        float z = (playerHealth.air / (float)playerHealth.maxair) * 180f;
+        airNeedle.transform.rotation = Quaternion.Euler(new Vector3(0, 0, z - 90));
 
-        if(playerHealth.air > playerHealth.maxair / 2 )
+
+        if (playerHealth.air > playerHealth.maxair / 2 )
         {
             airBlueImage.gameObject.SetActive(true);
             airYellowImage.gameObject.SetActive(false);

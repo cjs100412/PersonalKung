@@ -36,6 +36,11 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody2D rigidBody;
     private Drilling drilling;
+    [SerializeField] private PlayerHealth health;
+
+    private bool _isGround;
+    private float _isGroundTimer;
+    private float _BoostTimer;
 
     private bool isDirectionMoving;
     private void Awake()
@@ -66,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleBoostInput(bool isPressed)
     {
+        _BoostTimer = 0;
         isBoost = isPressed;
         boostAnimator.SetBool("isBoost", isPressed);
     }
@@ -101,6 +107,25 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Update()
     {
+        _BoostTimer += Time.deltaTime;
+        Debug.DrawRay(transform.position, new Vector2(0, -0.1f), new Color(1, 0, 0));
+        RaycastHit2D rayHit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f, LayerMask.GetMask("BrokenableTile"));
+        if(rayHit.collider != null)
+        {
+            if (_isGroundTimer >= 0.6f && _BoostTimer >= 0.8f)
+            {
+                health.TakeDamage(20);
+            }
+            _isGround = true;
+            _isGroundTimer = 0;
+            
+        }
+        else
+        {
+            _isGround = false;
+            _isGroundTimer += Time.deltaTime;
+        }
+
         // 부스터, 최대속도 제한
         if ((isBoost && rigidBody.linearVelocity.y < maxBoostSpeed) || (Input.GetKey(KeyCode.UpArrow) && rigidBody.linearVelocity.y < maxBoostSpeed))
         {
