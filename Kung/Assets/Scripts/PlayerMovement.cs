@@ -34,12 +34,13 @@ public class PlayerMovement : MonoBehaviour
     [Header("낙하 최대속도 제한")]
     public float maxFallSpeed = -5f;
 
-
-    private Rigidbody2D rb;
+    private Rigidbody2D rigidBody;
     private Drilling drilling;
+
+    private bool isDirectionMoving;
     private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rigidBody = GetComponent<Rigidbody2D>();
         drilling = GetComponent<Drilling>();
     }
 
@@ -47,12 +48,20 @@ public class PlayerMovement : MonoBehaviour
     private void OnEnable()
     {
         Booster.OnBoostInput += HandleBoostInput;
+        Direction.OnLeftInput += HandleLeftInput;
+        Direction.OnLeftRelease += HandleLeftRelease;
+        Direction.OnRightInput += HandleRightInput;
+        Direction.OnRightRelease += HandleRightRelease;
     }
 
     // 이 컴포넌트가 비활성화 됐을 때, 대리자의 이벤트 구독을 해제함.
     private void OnDisable()
     {
         Booster.OnBoostInput -= HandleBoostInput;
+        Direction.OnLeftInput -= HandleLeftInput;
+        Direction.OnLeftRelease -= HandleLeftRelease;
+        Direction.OnRightInput -= HandleRightInput;
+        Direction.OnRightRelease -= HandleRightRelease;
     }
 
     private void HandleBoostInput(bool isPressed)
@@ -60,19 +69,48 @@ public class PlayerMovement : MonoBehaviour
         isBoost = isPressed;
         boostAnimator.SetBool("isBoost", isPressed);
     }
+    private void HandleLeftInput()
+    {
+        isDirectionMoving = true;
+        currentState = InputLockState.Right;
+        drilling.currentDirectionState = CurrentDirectionState.Left;
+        rigidBody.linearVelocity = new Vector2(-1 * speed, rigidBody.linearVelocityY);
 
+        ChangeAnimation("MoveLeft", bodyAnimator);
+        ChangeAnimation("MoveLeft", headAnimator);
+        ChangeAnimation("MoveLeft", drillAnimator);
+    }
+    private void HandleRightInput()
+    {
+        isDirectionMoving = true;
+        currentState = InputLockState.Left;
+        drilling.currentDirectionState = CurrentDirectionState.Right;
+        rigidBody.linearVelocity = new Vector2(1 * speed, rigidBody.linearVelocityY);
+
+        ChangeAnimation("MoveRight", bodyAnimator);
+        ChangeAnimation("MoveRight", headAnimator);
+        ChangeAnimation("MoveRight", drillAnimator);
+    }
+    private void HandleLeftRelease()
+    {
+        isDirectionMoving = false;
+    }
+    private void HandleRightRelease()
+    {
+        isDirectionMoving = false;
+    }
     private void Update()
     {
         // 부스터, 최대속도 제한
-        if ((isBoost && rb.linearVelocity.y < maxBoostSpeed) || (Input.GetKey(KeyCode.UpArrow) && rb.linearVelocity.y < maxBoostSpeed))
+        if ((isBoost && rigidBody.linearVelocity.y < maxBoostSpeed) || (Input.GetKey(KeyCode.UpArrow) && rigidBody.linearVelocity.y < maxBoostSpeed))
         {
-            rb.AddForce(new Vector2(0, boostPower) * Time.deltaTime * 100, ForceMode2D.Force);
+            rigidBody.AddForce(new Vector2(0, boostPower) * Time.deltaTime * 100, ForceMode2D.Force);
         }
 
         // 낙하 속도 제한
-        if (rb.linearVelocityY < maxFallSpeed)
+        if (rigidBody.linearVelocityY < maxFallSpeed)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocityX, maxFallSpeed);
+            rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, maxFallSpeed);
         }
 
         if (Input.GetKey(KeyCode.LeftArrow) && currentState != InputLockState.Left)
@@ -80,7 +118,7 @@ public class PlayerMovement : MonoBehaviour
             currentState = InputLockState.Right;
             drilling.currentDirectionState = CurrentDirectionState.Left;
             //transform.Translate(Vector3.left * speed * Time.deltaTime);
-            rb.linearVelocity = new Vector2(-1 * speed, rb.linearVelocityY);
+            rigidBody.linearVelocity = new Vector2(-1 * speed, rigidBody.linearVelocityY);
 
 
             ChangeAnimation("MoveLeft", bodyAnimator);
@@ -92,7 +130,7 @@ public class PlayerMovement : MonoBehaviour
             currentState = InputLockState.Left;
             drilling.currentDirectionState = CurrentDirectionState.Right;
             //transform.Translate(Vector3.right * speed * Time.deltaTime);
-            rb.linearVelocity = new Vector2(1 * speed, rb.linearVelocityY);
+            rigidBody.linearVelocity = new Vector2(1 * speed, rigidBody.linearVelocityY);
 
             ChangeAnimation("MoveRight", bodyAnimator);
             ChangeAnimation("MoveRight", headAnimator);
@@ -100,16 +138,16 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            currentState = InputLockState.Any;
-            drilling.currentDirectionState = CurrentDirectionState.Down;
-            rb.linearVelocity = new Vector2(0, rb.linearVelocityY);
-
-            ChangeAnimation("Idle", bodyAnimator);
-            ChangeAnimation("Idle", headAnimator);
-            ChangeAnimation("Idle", drillAnimator);
+            if (!isDirectionMoving)
+            {
+                currentState = InputLockState.Any;
+                drilling.currentDirectionState = CurrentDirectionState.Down;
+                rigidBody.linearVelocity = new Vector2(0, rigidBody.linearVelocityY);
+                ChangeAnimation("Idle", bodyAnimator);
+                ChangeAnimation("Idle", headAnimator);
+                ChangeAnimation("Idle", drillAnimator);
+            }
         }
-
-
     }
 
     // 켜고싶은 불타입 애니메이션 파라미터 이름 , 애니메이터 넣어
