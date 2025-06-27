@@ -1,5 +1,3 @@
-using System.Data.Common;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -11,82 +9,56 @@ public enum InputLockState
     Right
 }
 
-
+[RequireComponent(typeof(Rigidbody2D), typeof(Drilling))]
 public class PlayerMovement : MonoBehaviour
 {
-    // 플레이어에 부착할 컴포넌트
-    // 플레이어의 이동 제어
+    // === 상태 ===
     private InputLockState currentState = InputLockState.Any;
 
-    [SerializeField] private float speed;
-    [SerializeField] private Animator headAnimator;
-    [SerializeField] private Animator bodyAnimator;
-    [SerializeField] private Animator boostAnimator;
+    public bool isDrilling;
+    private bool _isBoost;
+    private bool _isDirectionMoving;
+    private bool _isGround;
 
+    // === 타이머 ===
+    private float _isGroundTimer;
+    private float _boostTimer;
+
+    // === 컴포넌트 ===
+    private Rigidbody2D rigidBody;
+    private Drilling drilling;
+
+    [Header("애니메이터")]
+    [SerializeField] private Animator _headAnimator;
+    [SerializeField] private Animator _bodyAnimator;
+    [SerializeField] private Animator _boostAnimator;
     [SerializeField] private Animator _drillLeft;
     [SerializeField] private Animator _drillRight;
 
-    [Header("부스트 기능")]
-    public float boostPower = 7f; // 부스트 상승파워
-    public float maxBoostSpeed = 2f;
-    private bool isBoost; // 부스트상태 확인 bool
-    public bool isDrilling;
+    [Header("스프라이트")]
+    [SerializeField] private SpriteRenderer _bodySprite;
+    [SerializeField] private SpriteRenderer _headSprite;
+    [SerializeField] private Sprite[] _drillingSprite;
 
-    [Header("낙하 최대속도 제한")]
+    [Header("이동 속도")]
+    [SerializeField] private float _playerSpeed;
+
+    [Header("부스트 설정")]
+    public float boostRisePower = 7f;
+    public float maxBoostSpeed = 2f;
+
+    [Header("낙하 제한")]
     public float maxFallSpeed = -5f;
 
-    private Rigidbody2D rigidBody;
-    private Drilling drilling;
-    [SerializeField] private PlayerHealth health;
+    [SerializeField] private PlayerHealth _playerHealth;
 
-    private float _isGroundTimer;
-    private float _BoostTimer;
-
-    private bool _isGround;
-    private bool isDirectionMoving;
-
-    [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private SpriteRenderer headSprite;
-    [SerializeField] private Sprite[] drillSprite;
-
-    void StartDrillingLeft()
-    {
-        bodyAnimator.enabled = false;
-        spriteRenderer.sprite = drillSprite[0];
-    }
-    void StartDrillingRight()
-    {
-        bodyAnimator.enabled = false;
-        spriteRenderer.sprite = drillSprite[1];
-    }
-    void StartDrillingDown()
-    {
-        bodyAnimator.enabled = false;
-        spriteRenderer.sprite = drillSprite[2];
-    }
-    void StopDrilling()
-    {
-        bodyAnimator.enabled = true;
-    }
-
-    void StartSmiling()
-    {
-        headAnimator.enabled = false;
-        headSprite.sprite = drillSprite[3];
-    }
-    void StopSmiling()
-    {
-        headAnimator.enabled = true;
-    }
-
-
+    // === 생명주기 ===
     private void Awake()
     {
         rigidBody = GetComponent<Rigidbody2D>();
         drilling = GetComponent<Drilling>();
     }
 
-    // 이 컴포넌트가 활성화 됐을 때, 대리자에 HandleBoostInput 함수를 등록함 (구독)
     private void OnEnable()
     {
         Booster.OnBoostInput += HandleBoostInput;
@@ -96,7 +68,6 @@ public class PlayerMovement : MonoBehaviour
         Direction.OnRightRelease += HandleRightRelease;
     }
 
-    // 이 컴포넌트가 비활성화 됐을 때, 대리자의 이벤트 구독을 해제함.
     private void OnDisable()
     {
         Booster.OnBoostInput -= HandleBoostInput;
@@ -106,160 +77,156 @@ public class PlayerMovement : MonoBehaviour
         Direction.OnRightRelease -= HandleRightRelease;
     }
 
+    // === 이벤트 핸들러 ===
     private void HandleBoostInput(bool isPressed)
     {
-        _BoostTimer = 0;
-        isBoost = isPressed;
-        boostAnimator.SetBool("isBoost", isPressed);
+        _boostTimer = 0;
+        _isBoost = isPressed;
+        _boostAnimator.SetBool("isBoost", isPressed);
     }
 
     private void HandleLeftInput()
     {
-        isDirectionMoving = true;
-        currentState = InputLockState.Right;
-        drilling.currentDirectionState = CurrentDirectionState.Left;
-        rigidBody.linearVelocity = new Vector2(-1 * speed, rigidBody.linearVelocityY);
-
-        ChangeAnimation("MoveLeft", bodyAnimator);
-        ChangeAnimation("MoveLeft", headAnimator);
+        _isDirectionMoving = true;
+        MoveHorizontal(-1, "MoveLeft", InputLockState.Right, CurrentDirectionState.Left);
     }
 
     private void HandleRightInput()
     {
-        isDirectionMoving = true;
-        currentState = InputLockState.Left;
-        drilling.currentDirectionState = CurrentDirectionState.Right;
-        rigidBody.linearVelocity = new Vector2(1 * speed, rigidBody.linearVelocityY);
-
-        ChangeAnimation("MoveRight", bodyAnimator);
-        ChangeAnimation("MoveRight", headAnimator);
+        _isDirectionMoving = true;
+        MoveHorizontal(1, "MoveRight", InputLockState.Left, CurrentDirectionState.Right);
     }
 
-    private void HandleLeftRelease()
-    {
-        isDirectionMoving = false;
-    }
+    private void HandleLeftRelease() => _isDirectionMoving = false;
+    private void HandleRightRelease() => _isDirectionMoving = false;
 
-    private void HandleRightRelease()
-    {
-        isDirectionMoving = false;
-    }
-
+    // === 이동 로직 ===
     private void Update()
     {
-        _BoostTimer += Time.deltaTime;
-        Debug.DrawRay(transform.position, new Vector2(0, -0.1f), new Color(1, 0, 0));
-        RaycastHit2D rayHit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f, LayerMask.GetMask("BrokenableTile"));
-        if(rayHit.collider != null)
+        _boostTimer += Time.deltaTime;
+        HandleGroundDetection();
+        HandleBoostMovement();
+        HandleFallSpeedLimit();
+
+        HandleManualInput(); // 키보드 테스트용
+    }
+
+    private void HandleManualInput()
+    {
+        if (Input.GetKey(KeyCode.LeftArrow) && currentState != InputLockState.Left)
         {
-            if (_isGroundTimer >= 0.6f && _BoostTimer >= 0.8f)
-            {
-                health.TakeDamage(20);
-            }
+            MoveHorizontal(-1, "MoveLeft", InputLockState.Right, CurrentDirectionState.Left);
+            if (isDrilling) StartDrillingLeft(); else StopDrilling();
+        }
+        else if (Input.GetKey(KeyCode.RightArrow) && currentState != InputLockState.Right)
+        {
+            MoveHorizontal(1, "MoveRight", InputLockState.Left, CurrentDirectionState.Right);
+            if (isDrilling) StartDrillingRight(); else StopDrilling();
+        }
+        else
+        {
+            IdleState();
+        }
+    }
+
+    private void MoveHorizontal(float direction, string animName, InputLockState lockState, CurrentDirectionState drillDir)
+    {
+        currentState = lockState;
+        drilling.currentDirectionState = drillDir;
+        rigidBody.linearVelocity = new Vector2(direction * _playerSpeed, rigidBody.linearVelocity.y);
+        ChangeAnimation(animName, _bodyAnimator);
+        ChangeAnimation(animName, _headAnimator);
+    }
+
+    private void IdleState()
+    {
+        currentState = InputLockState.Any;
+        drilling.currentDirectionState = CurrentDirectionState.Down;
+        rigidBody.linearVelocity = new Vector2(0, rigidBody.linearVelocity.y);
+
+        ChangeAnimation("Idle", _bodyAnimator);
+        ChangeAnimation("Idle", _headAnimator);
+
+        if (isDrilling)
+        {
+            StartDrillingDown();
+            StartSmiling();
+        }
+        else
+        {
+            StopDrilling();
+            StopSmiling();
+        }
+
+        _drillLeft.SetBool("DrillingLeft", false);
+        _drillRight.SetBool("DrillingRight", false);
+    }
+
+    private void HandleGroundDetection()
+    {
+        Debug.DrawRay(transform.position, Vector2.down * 0.1f, Color.red);
+        var hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f, LayerMask.GetMask("BrokenableTile"));
+
+        if (hit.collider != null)
+        {
+            if (_isGroundTimer >= 0.6f && _boostTimer >= 0.8f)
+                _playerHealth.TakeDamage(20);
+
             _isGround = true;
             _isGroundTimer = 0;
-            
         }
         else
         {
             _isGround = false;
             _isGroundTimer += Time.deltaTime;
         }
+    }
 
-        // 부스터, 최대속도 제한
-        if ((isBoost && rigidBody.linearVelocity.y < maxBoostSpeed) || (Input.GetKey(KeyCode.UpArrow) && rigidBody.linearVelocity.y < maxBoostSpeed))
+    private void HandleBoostMovement()
+    {
+        if ((_isBoost || Input.GetKey(KeyCode.UpArrow)) && rigidBody.linearVelocity.y < maxBoostSpeed)
         {
-            rigidBody.AddForce(new Vector2(0, boostPower) * Time.deltaTime * 100, ForceMode2D.Force);
-        }
-        
-
-        // 낙하 속도 제한
-        if (rigidBody.linearVelocityY < maxFallSpeed)
-        {
-            rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, maxFallSpeed);
-        }
-
-        if (Input.GetKey(KeyCode.LeftArrow) && currentState != InputLockState.Left)
-        {
-            currentState = InputLockState.Right;
-            drilling.currentDirectionState = CurrentDirectionState.Left;
-            rigidBody.linearVelocity = new Vector2(-1 * speed, rigidBody.linearVelocityY);
-
-            ChangeAnimation("MoveLeft", bodyAnimator);
-            ChangeAnimation("MoveLeft", headAnimator);
-            //_drillLeft.SetBool("DrillingLeft", false);
-            if (isDrilling)
-            {
-                StartDrillingLeft();
-            }
-            else
-            {
-                StopDrilling();
-            }
-
-        }
-        else if (Input.GetKey(KeyCode.RightArrow) && currentState != InputLockState.Right)
-        {
-            currentState = InputLockState.Left;
-            drilling.currentDirectionState = CurrentDirectionState.Right;
-            //transform.Translate(Vector3.right * speed * Time.deltaTime);
-            rigidBody.linearVelocity = new Vector2(1 * speed, rigidBody.linearVelocityY);
-
-            if (isDrilling)
-            {
-                StartDrillingRight();
-            }
-            else
-            {
-                StopDrilling();
-            }
-
-
-                ChangeAnimation("MoveRight", bodyAnimator);
-            ChangeAnimation("MoveRight", headAnimator);
-            //_drillRight.SetBool("DrillingRight", false);
-        }
-        else
-        {
-            //if (!isDirectionMoving)
-            //{
-            //    
-            //    //_drilldown.SetBool("DrillingDown", false);
-            //    //ChangeAnimation("Idle", drillAnimator);
-            //}
-            currentState = InputLockState.Any;
-            drilling.currentDirectionState = CurrentDirectionState.Down;
-            rigidBody.linearVelocity = new Vector2(0, rigidBody.linearVelocityY);
-            ChangeAnimation("Idle", bodyAnimator);
-            ChangeAnimation("Idle", headAnimator);
-            if (isDrilling)
-            {
-                StartDrillingDown();
-                StartSmiling();
-            }
-            else
-            {
-                StopDrilling();
-                StopSmiling();
-            }
-            _drillLeft.SetBool("DrillingLeft",false);
-            _drillRight.SetBool("DrillingRight", false);
+            rigidBody.AddForce(Vector2.up * boostRisePower * Time.deltaTime * 100, ForceMode2D.Force);
         }
     }
 
-    // 켜고싶은 불타입 애니메이션 파라미터 이름 , 애니메이터 넣어
+    private void HandleFallSpeedLimit()
+    {
+        if (rigidBody.linearVelocity.y < maxFallSpeed)
+        {
+            rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocity.x, maxFallSpeed);
+        }
+    }
+
+    // === 드릴 & 표정 ===
+    private void StartDrillingLeft() => SetDrillingSprite(0);
+    private void StartDrillingRight() => SetDrillingSprite(1);
+    private void StartDrillingDown() => SetDrillingSprite(2);
+    private void StartSmiling() => SetHeadSprite(3);
+
+    private void StopDrilling() => _bodyAnimator.enabled = true;
+    private void StopSmiling() => _headAnimator.enabled = true;
+
+    private void SetDrillingSprite(int index)
+    {
+        _bodyAnimator.enabled = false;
+        _bodySprite.sprite = _drillingSprite[index];
+    }
+
+    private void SetHeadSprite(int index)
+    {
+        _headAnimator.enabled = false;
+        _headSprite.sprite = _drillingSprite[index];
+    }
+
+    // === 애니메이션 전환 ===
     private void ChangeAnimation(string aniName, Animator animator)
     {
-        var parameters = animator.parameters;
-
-        foreach (var parameter in parameters)
+        foreach (var param in animator.parameters)
         {
-            if (parameter.type == AnimatorControllerParameterType.Bool)
-            {
-                animator.SetBool(parameter.name, false);
-            }
+            if (param.type == AnimatorControllerParameterType.Bool)
+                animator.SetBool(param.name, false);
         }
         animator.SetBool(aniName, true);
-
     }
 }
