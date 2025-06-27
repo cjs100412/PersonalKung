@@ -14,28 +14,30 @@ public enum CurrentDirectionState
 }
 public class Drilling : MonoBehaviour
 {
-
-    [SerializeField] private GameObject drill;
+    [SerializeField] private PlayerMovement player;
     [SerializeField] private Tilemap brokenableTilemap;
     [SerializeField] private Tilemap mineralTilemap;
+    [SerializeField] private Animator _drillLeft;
+    [SerializeField] private Animator _drillRight;
+    [SerializeField] private Animator _drillDown;
+    
+
+    public CurrentDirectionState currentDirectionState = CurrentDirectionState.Down; // 현재 굴착할 방향
+
+    public CinemachineImpulseSource impulseSource; // 카메라 진동관련
+    private Coroutine drillCoroutine;
+
+    private float[,] tiles;
+
+    public float shakeInterval = 0.1f;
+    private float shakeTimer;
 
     public float drillDamage;
     public float drillCoolTime;
     
-    // 카메라 진동관련
-    public float shakeInterval = 0.1f;
-    private float shakeTimer;
-    public CinemachineImpulseSource impulseSource;
-
     bool isGround = true;
 
-    // 현재 굴착할 방향
-    public CurrentDirectionState currentDirectionState = CurrentDirectionState.Down;
 
-    //private Dictionary<Vector3Int,float> tileDict = new Dictionary<Vector3Int,float>();
-    private float[,] tiles;
-
-    [SerializeField] private Animator drillAnimator;
     public Sprite[] brokenTileSprites;
 
     private int spriteIndex;
@@ -53,6 +55,7 @@ public class Drilling : MonoBehaviour
         int y = cellPos.y + offsetY;
         if (x < 0 || y < 0 || x >= width || y >= height)
             return (false, 0, 0);
+
         return (true, x, y);
     }
 
@@ -76,18 +79,16 @@ public class Drilling : MonoBehaviour
         spriteIndex = 100 / brokenTileSprites.Length;
     }
 
-    private Coroutine drillCoroutine;
 
-    // Update is called once per frame
     private void Update()
     {
         bool isDrilling = Input.GetKey(KeyCode.X) && isGround;
 
         // 애니메이션 처리만 따로
-        drillAnimator.SetBool("Drilling", isDrilling);
         if (isDrilling)
         {
             shakeTimer += Time.deltaTime;
+
             if (shakeTimer >= shakeInterval)
             {
                 impulseSource.GenerateImpulse();
@@ -98,19 +99,26 @@ public class Drilling : MonoBehaviour
         {
             shakeTimer = 0f; // 멈췄을 때 타이머 리셋
         }
+
         // 코루틴 제어는 아래와 같이 유지
         if (Input.GetKeyDown(KeyCode.X) && isGround)
         {
+            player.isDrilling = true;
             if (drillCoroutine == null)
                 drillCoroutine = StartCoroutine(DrillingRoutine());
         }
 
         if (Input.GetKeyUp(KeyCode.X))
         {
+            player.isDrilling = false;
+
             if (drillCoroutine != null)
             {
                 StopCoroutine(drillCoroutine);
                 drillCoroutine = null;
+                _drillLeft.SetBool("DrillingLeft", false);
+                _drillRight.SetBool("DrillingRight", false);
+                _drillDown.SetBool("DrillingDown", false);
             }
         }
 
@@ -122,7 +130,6 @@ public class Drilling : MonoBehaviour
 
     private IEnumerator DrillingRoutine()
     {
-        drillAnimator.SetBool("Drilling", true);
 
         while (true)
         {
@@ -133,31 +140,45 @@ public class Drilling : MonoBehaviour
             {
                 case CurrentDirectionState.Left:
                     pos = new Vector3Int(currentPos.x - 1, currentPos.y);
+                    _drillLeft.SetBool("DrillingLeft", true);
+                    _drillRight.SetBool("DrillingRight", false);
+                    _drillDown.SetBool("DrillingDown", false);
                     break;
                 case CurrentDirectionState.Right:
                     pos = new Vector3Int(currentPos.x + 1, currentPos.y);
+                    _drillRight.SetBool("DrillingRight", true);
+                    _drillLeft.SetBool("DrillingLeft", false);
+                    _drillDown.SetBool("DrillingDown", false);
+
                     break;
                 case CurrentDirectionState.Down:
                     pos = new Vector3Int(currentPos.x, currentPos.y - 1);
+                    _drillDown.SetBool("DrillingDown", true);    
+                    _drillLeft.SetBool("DrillingRight", false);    
+                    _drillRight.SetBool("DrillingLeft", false);    
                     break;
             }
 
-            var (valid, x, y) = TryCellToIndex(pos);
+            (bool valid, int x, int y) = TryCellToIndex(pos);
+
             if (valid)
             {
                 tiles[x, y] -= drillDamage;
-
-                if (tiles[x, y] <= 0)
+                if (brokenableTilemap.GetTile(pos) != null)
                 {
-                    brokenableTilemap.SetTile(pos, null);
+                    if (tiles[x, y] <= 0)
+                    {
+                        brokenableTilemap.SetTile(pos, null);
+                    }
+                    else
+                    {
+                        Tile newTile = ScriptableObject.CreateInstance<Tile>();
+                        int index = Mathf.Clamp((int)(tiles[x, y] / spriteIndex), 0, brokenTileSprites.Length - 1);
+                        newTile.sprite = brokenTileSprites[index];
+                        brokenableTilemap.SetTile(pos, newTile);
+                    }
                 }
-                else
-                {
-                    Tile newTile = ScriptableObject.CreateInstance<Tile>();
-                    int index = Mathf.Clamp((int)(tiles[x, y] / spriteIndex), 0, brokenTileSprites.Length - 1);
-                    newTile.sprite = brokenTileSprites[index];
-                    brokenableTilemap.SetTile(pos, newTile);
-                }
+                
             }
 
             yield return new WaitForSeconds(drillCoolTime);

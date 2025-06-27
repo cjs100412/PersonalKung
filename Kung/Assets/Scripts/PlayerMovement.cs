@@ -16,20 +16,21 @@ public class PlayerMovement : MonoBehaviour
 {
     // 플레이어에 부착할 컴포넌트
     // 플레이어의 이동 제어
+    private InputLockState currentState = InputLockState.Any;
 
     [SerializeField] private float speed;
-    private InputLockState currentState = InputLockState.Any;
     [SerializeField] private Animator headAnimator;
     [SerializeField] private Animator bodyAnimator;
     [SerializeField] private Animator boostAnimator;
-    [SerializeField] private Animator drillAnimator;
 
+    [SerializeField] private Animator _drillLeft;
+    [SerializeField] private Animator _drillRight;
 
     [Header("부스트 기능")]
     public float boostPower = 7f; // 부스트 상승파워
     public float maxBoostSpeed = 2f;
     private bool isBoost; // 부스트상태 확인 bool
-    
+    public bool isDrilling;
 
     [Header("낙하 최대속도 제한")]
     public float maxFallSpeed = -5f;
@@ -38,11 +39,47 @@ public class PlayerMovement : MonoBehaviour
     private Drilling drilling;
     [SerializeField] private PlayerHealth health;
 
-    private bool _isGround;
     private float _isGroundTimer;
     private float _BoostTimer;
 
+    private bool _isGround;
     private bool isDirectionMoving;
+
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private SpriteRenderer headSprite;
+    [SerializeField] private Sprite[] drillSprite;
+
+    void StartDrillingLeft()
+    {
+        bodyAnimator.enabled = false;
+        spriteRenderer.sprite = drillSprite[0];
+    }
+    void StartDrillingRight()
+    {
+        bodyAnimator.enabled = false;
+        spriteRenderer.sprite = drillSprite[1];
+    }
+    void StartDrillingDown()
+    {
+        bodyAnimator.enabled = false;
+        spriteRenderer.sprite = drillSprite[2];
+    }
+    void StopDrilling()
+    {
+        bodyAnimator.enabled = true;
+    }
+
+    void StartSmiling()
+    {
+        headAnimator.enabled = false;
+        headSprite.sprite = drillSprite[3];
+    }
+    void StopSmiling()
+    {
+        headAnimator.enabled = true;
+    }
+
+
     private void Awake()
     {
         rigidBody = GetComponent<Rigidbody2D>();
@@ -75,6 +112,7 @@ public class PlayerMovement : MonoBehaviour
         isBoost = isPressed;
         boostAnimator.SetBool("isBoost", isPressed);
     }
+
     private void HandleLeftInput()
     {
         isDirectionMoving = true;
@@ -84,8 +122,8 @@ public class PlayerMovement : MonoBehaviour
 
         ChangeAnimation("MoveLeft", bodyAnimator);
         ChangeAnimation("MoveLeft", headAnimator);
-        ChangeAnimation("MoveLeft", drillAnimator);
     }
+
     private void HandleRightInput()
     {
         isDirectionMoving = true;
@@ -95,16 +133,18 @@ public class PlayerMovement : MonoBehaviour
 
         ChangeAnimation("MoveRight", bodyAnimator);
         ChangeAnimation("MoveRight", headAnimator);
-        ChangeAnimation("MoveRight", drillAnimator);
     }
+
     private void HandleLeftRelease()
     {
         isDirectionMoving = false;
     }
+
     private void HandleRightRelease()
     {
         isDirectionMoving = false;
     }
+
     private void Update()
     {
         _BoostTimer += Time.deltaTime;
@@ -131,6 +171,7 @@ public class PlayerMovement : MonoBehaviour
         {
             rigidBody.AddForce(new Vector2(0, boostPower) * Time.deltaTime * 100, ForceMode2D.Force);
         }
+        
 
         // 낙하 속도 제한
         if (rigidBody.linearVelocityY < maxFallSpeed)
@@ -142,13 +183,20 @@ public class PlayerMovement : MonoBehaviour
         {
             currentState = InputLockState.Right;
             drilling.currentDirectionState = CurrentDirectionState.Left;
-            //transform.Translate(Vector3.left * speed * Time.deltaTime);
             rigidBody.linearVelocity = new Vector2(-1 * speed, rigidBody.linearVelocityY);
-
 
             ChangeAnimation("MoveLeft", bodyAnimator);
             ChangeAnimation("MoveLeft", headAnimator);
-            ChangeAnimation("MoveLeft", drillAnimator);
+            //_drillLeft.SetBool("DrillingLeft", false);
+            if (isDrilling)
+            {
+                StartDrillingLeft();
+            }
+            else
+            {
+                StopDrilling();
+            }
+
         }
         else if (Input.GetKey(KeyCode.RightArrow) && currentState != InputLockState.Right)
         {
@@ -157,21 +205,45 @@ public class PlayerMovement : MonoBehaviour
             //transform.Translate(Vector3.right * speed * Time.deltaTime);
             rigidBody.linearVelocity = new Vector2(1 * speed, rigidBody.linearVelocityY);
 
-            ChangeAnimation("MoveRight", bodyAnimator);
+            if (isDrilling)
+            {
+                StartDrillingRight();
+            }
+            else
+            {
+                StopDrilling();
+            }
+
+
+                ChangeAnimation("MoveRight", bodyAnimator);
             ChangeAnimation("MoveRight", headAnimator);
-            ChangeAnimation("MoveRight", drillAnimator);
+            //_drillRight.SetBool("DrillingRight", false);
         }
         else
         {
-            if (!isDirectionMoving)
+            //if (!isDirectionMoving)
+            //{
+            //    
+            //    //_drilldown.SetBool("DrillingDown", false);
+            //    //ChangeAnimation("Idle", drillAnimator);
+            //}
+            currentState = InputLockState.Any;
+            drilling.currentDirectionState = CurrentDirectionState.Down;
+            rigidBody.linearVelocity = new Vector2(0, rigidBody.linearVelocityY);
+            ChangeAnimation("Idle", bodyAnimator);
+            ChangeAnimation("Idle", headAnimator);
+            if (isDrilling)
             {
-                currentState = InputLockState.Any;
-                drilling.currentDirectionState = CurrentDirectionState.Down;
-                rigidBody.linearVelocity = new Vector2(0, rigidBody.linearVelocityY);
-                ChangeAnimation("Idle", bodyAnimator);
-                ChangeAnimation("Idle", headAnimator);
-                ChangeAnimation("Idle", drillAnimator);
+                StartDrillingDown();
+                StartSmiling();
             }
+            else
+            {
+                StopDrilling();
+                StopSmiling();
+            }
+            _drillLeft.SetBool("DrillingLeft",false);
+            _drillRight.SetBool("DrillingRight", false);
         }
     }
 
