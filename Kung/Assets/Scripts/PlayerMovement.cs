@@ -10,10 +10,12 @@ public enum InputLockState
     Left,
     Right
 }
+
+
 public class PlayerMovement : MonoBehaviour
 {
-    // ÇÃ·¹ÀÌ¾î¿¡ ºÎÂøÇÒ ÄÄÆ÷³ÍÆ®
-    // ÇÃ·¹ÀÌ¾îÀÇ ÀÌµ¿ Á¦¾î
+    // í”Œë ˆì´ì–´ì— ë¶€ì°©í•  ì»´í¬ë„ŒíŠ¸
+    // í”Œë ˆì´ì–´ì˜ ì´ë™ ì œì–´
 
     [SerializeField] private float speed;
     private InputLockState currentState = InputLockState.Any;
@@ -22,59 +24,128 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Animator boostAnimator;
     [SerializeField] private Animator drillAnimator;
 
-    [Header("ºÎ½ºÆ® ±â´É")]
-    public float boostPower = 7f; // ºÎ½ºÆ® »ó½ÂÆÄ¿ö
-    public float maxBoostSpeed = 2f;
-    private bool isBoost; // ºÎ½ºÆ®»óÅÂ È®ÀÎ bool
 
-    [Header("³«ÇÏ ÃÖ´ë¼Óµµ Á¦ÇÑ")]
+    [Header("ë¶€ìŠ¤íŠ¸ ê¸°ëŠ¥")]
+    public float boostPower = 7f; // ë¶€ìŠ¤íŠ¸ ìƒìŠ¹íŒŒì›Œ
+    public float maxBoostSpeed = 2f;
+    private bool isBoost; // ë¶€ìŠ¤íŠ¸ìƒíƒœ í™•ì¸ bool
+    
+
+    [Header("ë‚™í•˜ ìµœëŒ€ì†ë„ ì œí•œ")]
     public float maxFallSpeed = -5f;
 
-    Rigidbody2D rb;
+    private Rigidbody2D rigidBody;
+    private Drilling drilling;
+    [SerializeField] private PlayerHealth health;
 
+    private bool _isGround;
+    private float _isGroundTimer;
+    private float _BoostTimer;
+
+    private bool isDirectionMoving;
     private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rigidBody = GetComponent<Rigidbody2D>();
+        drilling = GetComponent<Drilling>();
     }
 
-    // ÀÌ ÄÄÆ÷³ÍÆ®°¡ È°¼ºÈ­ µÆÀ» ¶§, ´ë¸®ÀÚ¿¡ HandleBoostInput ÇÔ¼ö¸¦ µî·ÏÇÔ (±¸µ¶)
+    // ì´ ì»´í¬ë„ŒíŠ¸ê°€ í™œì„±í™” ëì„ ë•Œ, ëŒ€ë¦¬ìì— HandleBoostInput í•¨ìˆ˜ë¥¼ ë“±ë¡í•¨ (êµ¬ë…)
     private void OnEnable()
     {
         Booster.OnBoostInput += HandleBoostInput;
+        Direction.OnLeftInput += HandleLeftInput;
+        Direction.OnLeftRelease += HandleLeftRelease;
+        Direction.OnRightInput += HandleRightInput;
+        Direction.OnRightRelease += HandleRightRelease;
     }
 
-    // ÀÌ ÄÄÆ÷³ÍÆ®°¡ ºñÈ°¼ºÈ­ µÆÀ» ¶§, ´ë¸®ÀÚÀÇ ÀÌº¥Æ® ±¸µ¶À» ÇØÁ¦ÇÔ.
+    // ì´ ì»´í¬ë„ŒíŠ¸ê°€ ë¹„í™œì„±í™” ëì„ ë•Œ, ëŒ€ë¦¬ìì˜ ì´ë²¤íŠ¸ êµ¬ë…ì„ í•´ì œí•¨.
     private void OnDisable()
     {
         Booster.OnBoostInput -= HandleBoostInput;
+        Direction.OnLeftInput -= HandleLeftInput;
+        Direction.OnLeftRelease -= HandleLeftRelease;
+        Direction.OnRightInput -= HandleRightInput;
+        Direction.OnRightRelease -= HandleRightRelease;
     }
 
     private void HandleBoostInput(bool isPressed)
     {
+        _BoostTimer = 0;
         isBoost = isPressed;
         boostAnimator.SetBool("isBoost", isPressed);
     }
+    private void HandleLeftInput()
+    {
+        isDirectionMoving = true;
+        currentState = InputLockState.Right;
+        drilling.currentDirectionState = CurrentDirectionState.Left;
+        rigidBody.linearVelocity = new Vector2(-1 * speed, rigidBody.linearVelocityY);
 
+        ChangeAnimation("MoveLeft", bodyAnimator);
+        ChangeAnimation("MoveLeft", headAnimator);
+        ChangeAnimation("MoveLeft", drillAnimator);
+    }
+    private void HandleRightInput()
+    {
+        isDirectionMoving = true;
+        currentState = InputLockState.Left;
+        drilling.currentDirectionState = CurrentDirectionState.Right;
+        rigidBody.linearVelocity = new Vector2(1 * speed, rigidBody.linearVelocityY);
+
+        ChangeAnimation("MoveRight", bodyAnimator);
+        ChangeAnimation("MoveRight", headAnimator);
+        ChangeAnimation("MoveRight", drillAnimator);
+    }
+    private void HandleLeftRelease()
+    {
+        isDirectionMoving = false;
+    }
+    private void HandleRightRelease()
+    {
+        isDirectionMoving = false;
+    }
     private void Update()
     {
-        // ºÎ½ºÅÍ, ÃÖ´ë¼Óµµ Á¦ÇÑ
-        if (isBoost && rb.linearVelocity.y < maxBoostSpeed)
+        _BoostTimer += Time.deltaTime;
+        Debug.DrawRay(transform.position, new Vector2(0, -0.1f), new Color(1, 0, 0));
+        RaycastHit2D rayHit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f, LayerMask.GetMask("BrokenableTile"));
+        if(rayHit.collider != null)
         {
-            rb.AddForce(new Vector2(0, boostPower) * Time.deltaTime * 100, ForceMode2D.Force);
+            if (_isGroundTimer >= 0.6f && _BoostTimer >= 0.8f)
+            {
+                health.TakeDamage(20);
+            }
+            _isGround = true;
+            _isGroundTimer = 0;
+            
+        }
+        else
+        {
+            _isGround = false;
+            _isGroundTimer += Time.deltaTime;
         }
 
-        // ³«ÇÏ ¼Óµµ Á¦ÇÑ
-        if(rb.linearVelocityY < maxFallSpeed)
+        // ë¶€ìŠ¤í„°, ìµœëŒ€ì†ë„ ì œí•œ
+        if ((isBoost && rigidBody.linearVelocity.y < maxBoostSpeed) || (Input.GetKey(KeyCode.UpArrow) && rigidBody.linearVelocity.y < maxBoostSpeed))
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocityX, maxFallSpeed);
+            rigidBody.AddForce(new Vector2(0, boostPower) * Time.deltaTime * 100, ForceMode2D.Force);
+        }
+
+        // ë‚™í•˜ ì†ë„ ì œí•œ
+        if (rigidBody.linearVelocityY < maxFallSpeed)
+        {
+            rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, maxFallSpeed);
         }
 
         if (Input.GetKey(KeyCode.LeftArrow) && currentState != InputLockState.Left)
         {
             currentState = InputLockState.Right;
+            drilling.currentDirectionState = CurrentDirectionState.Left;
             //transform.Translate(Vector3.left * speed * Time.deltaTime);
-            rb.linearVelocity = new Vector2(- 1 * speed, rb.linearVelocityY);
-           
+            rigidBody.linearVelocity = new Vector2(-1 * speed, rigidBody.linearVelocityY);
+
+
             ChangeAnimation("MoveLeft", bodyAnimator);
             ChangeAnimation("MoveLeft", headAnimator);
             ChangeAnimation("MoveLeft", drillAnimator);
@@ -82,8 +153,9 @@ public class PlayerMovement : MonoBehaviour
         else if (Input.GetKey(KeyCode.RightArrow) && currentState != InputLockState.Right)
         {
             currentState = InputLockState.Left;
+            drilling.currentDirectionState = CurrentDirectionState.Right;
             //transform.Translate(Vector3.right * speed * Time.deltaTime);
-            rb.linearVelocity = new Vector2(1 * speed, rb.linearVelocityY);
+            rigidBody.linearVelocity = new Vector2(1 * speed, rigidBody.linearVelocityY);
 
             ChangeAnimation("MoveRight", bodyAnimator);
             ChangeAnimation("MoveRight", headAnimator);
@@ -91,18 +163,19 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            currentState = InputLockState.Any;
-            rb.linearVelocity = new Vector2(0 , rb.linearVelocityY);
-
-            ChangeAnimation("Idle",bodyAnimator);
-            ChangeAnimation("Idle",headAnimator);
-            ChangeAnimation("Idle",drillAnimator);
+            if (!isDirectionMoving)
+            {
+                currentState = InputLockState.Any;
+                drilling.currentDirectionState = CurrentDirectionState.Down;
+                rigidBody.linearVelocity = new Vector2(0, rigidBody.linearVelocityY);
+                ChangeAnimation("Idle", bodyAnimator);
+                ChangeAnimation("Idle", headAnimator);
+                ChangeAnimation("Idle", drillAnimator);
+            }
         }
-
-
     }
 
-    // ÄÑ°í½ÍÀº ºÒÅ¸ÀÔ ¾Ö´Ï¸ŞÀÌ¼Ç ÆÄ¶ó¹ÌÅÍ ÀÌ¸§ , ¾Ö´Ï¸ŞÀÌÅÍ ³Ö¾î
+    // ì¼œê³ ì‹¶ì€ ë¶ˆíƒ€ì… ì• ë‹ˆë©”ì´ì…˜ íŒŒë¼ë¯¸í„° ì´ë¦„ , ì• ë‹ˆë©”ì´í„° ë„£ì–´
     private void ChangeAnimation(string aniName, Animator animator)
     {
         var parameters = animator.parameters;

@@ -70,7 +70,7 @@ public class Drilling : MonoBehaviour
             {
                 Vector3Int pos = new Vector3Int(x, y);
                 //tileDict[pos] = 100;
-                tiles[TryCellToIndex(pos).x, TryCellToIndex(pos).y] = 100;
+                tiles[TryCellToIndex(pos).x, TryCellToIndex(pos).y] = 100; 
             }
         }
         spriteIndex = 100 / brokenTileSprites.Length;

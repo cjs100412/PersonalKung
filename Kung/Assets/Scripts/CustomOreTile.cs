@@ -7,6 +7,5 @@ public class CustomOreTile : Tile
     public enum OreType { None, Coor,Iron, Gold, Diamond,Emurald }
     public OreType oreType;
     public int price;
-    public float hp;
     // 추가적인 필드...
 }
