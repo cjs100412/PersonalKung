@@ -104,6 +104,7 @@ public class Drilling : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X) && isGround)
         {
             player.isDrilling = true;
+
             if (drillCoroutine == null)
                 drillCoroutine = StartCoroutine(DrillingRoutine());
         }
