@@ -12,7 +12,6 @@ public class UI : MonoBehaviour
     public Image airYellowImage;
     public Image airRedImage;
     public Image airNeedle;
-    public Image InventoryUI;
     public PlayerHealth playerHealth;
 
     private void Update()
@@ -44,11 +43,5 @@ public class UI : MonoBehaviour
             airRedImage.gameObject.SetActive(true);
             airRedImage.fillAmount = Mathf.InverseLerp(0f, playerHealth.maxair, playerHealth.air);
         }
-    }
-
-    public void OnInventoryButton()
-    {            InventoryUI.transform.localPosition = Vector3.Lerp(InventoryUI.transform.localPosition,
-                                                           new Vector3(1035, 0, 0),
-                                                           Time.deltaTime * 10);
     }
 }
