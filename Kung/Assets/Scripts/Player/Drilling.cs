@@ -15,44 +15,42 @@ public enum CurrentDirectionState
 }
 public class Drilling : MonoBehaviour
 {
+    [Header("잘 연결해야 함")]
     [SerializeField] private PlayerMovement player;
     [SerializeField] private Tilemap brokenableTilemap;
     [SerializeField] private Tilemap mineralTilemap;
 
+    [Header("부셔지는 타일맵 스프라이트 배열")]
     public Sprite[] brokenTileSprites;
+
+    [Header("드릴 성능")]
+    public float drillDamage;
+    public float drillCoolTime; // 낮을수록 좋음
 
     public CurrentDirectionState currentDirectionState = CurrentDirectionState.Down; // 현재 굴착할 방향
 
     public bool isDrilling = false;
 
-    public float drillDamage;
-    public float drillCoolTime;
-    
     private int _width;
     private int _height;
     private int _offsetX;
     private int _offsetY;
     private int _spriteIndex;
 
-    private float[,] tiles; //
+    private float[,] tiles; 
 
 
-    private (bool valid, int x, int y) TryCellToIndex(Vector3Int cellPos)
-    {
-        int x = cellPos.x + _offsetX;
-        int y = cellPos.y + _offsetY;
-        if (x < 0 || y < 0 || x >= _width || y >= _height)
-            return (false, 0, 0);
-
-        return (true, x, y);
-    }
+    
 
     private void Start()
     {
         tileArrayInit();
     }
 
-    
+
+    /// <summary>
+    /// 타일맵의 타일 하나하나 초기화
+    /// </summary>
     private void tileArrayInit()
     {
         BoundsInt bounds = brokenableTilemap.cellBounds;
@@ -72,6 +70,27 @@ public class Drilling : MonoBehaviour
         _spriteIndex = 100 / brokenTileSprites.Length;
     }
 
+
+    /// <summary>
+    /// 들어온 Vector3Int를 음수가 나오지 않도록 오프셋으로 조절해서 배열에서 사용할 인덱스 반환
+    /// </summary>
+    /// <param name="cellPos"></param>
+    /// <returns>배열 범위 안의 좌표인지, 2차원 배열에서 사용할 x,y</returns>
+    private (bool valid, int x, int y) TryCellToIndex(Vector3Int cellPos)
+    {
+        int x = cellPos.x + _offsetX;
+        int y = cellPos.y + _offsetY;
+        if (x < 0 || y < 0 || x >= _width || y >= _height)
+            return (false, 0, 0);
+
+        return (true, x, y);
+    }
+
+
+    /// <summary>
+    /// 드릴 키를 눌렀을 때 동작할 코루틴
+    /// </summary>
+    /// <returns>드릴 쿨타임만큼 기다림</returns>
     public IEnumerator DrillingRoutine()
     {
 
