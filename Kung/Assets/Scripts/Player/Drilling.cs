@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEditor.ShaderGraph.Internal;
@@ -16,9 +17,12 @@ public enum CurrentDirectionState
 public class Drilling : MonoBehaviour
 {
     [Header("잘 연결해야 함")]
-    [SerializeField] private PlayerMovement player;
     [SerializeField] private Tilemap brokenableTilemap;
     [SerializeField] private Tilemap mineralTilemap;
+    [Header("미니맵 관련")]
+    [SerializeField] private Tilemap miniMapFrontTilemap;   //추가
+    [SerializeField] private TextMeshProUGUI _depthText;    //추가
+    private int _surfaceY; // 지면높이.추가
 
     [Header("부셔지는 타일맵 스프라이트 배열")]
     public Sprite[] brokenTileSprites;
@@ -27,6 +31,8 @@ public class Drilling : MonoBehaviour
     public float drillDamage;
     public float drillCoolTime; // 낮을수록 좋음
 
+    private PlayerMovement player;
+    
     public CurrentDirectionState currentDirectionState = CurrentDirectionState.Down; // 현재 굴착할 방향
 
     public bool isDrilling = false;
@@ -44,9 +50,17 @@ public class Drilling : MonoBehaviour
 
     private void Start()
     {
+        player = GetComponent<PlayerMovement>();
         tileArrayInit();
     }
 
+    private void Update()
+    {
+        //이다혜 코드 합치고 주석 풀 것
+        //Vector3Int currentCell = brokenableTilemap.WorldToCell(transform.position); //추가
+        //int depth = Mathf.Max(0, _surfaceY - currentCell.y);    // 지면일 때는 0m.추가
+        //_depthText.text = depth + "m";
+    }
 
     /// <summary>
     /// 타일맵의 타일 하나하나 초기화
@@ -113,12 +127,12 @@ public class Drilling : MonoBehaviour
             }
 
             (bool valid, int x, int y) = TryCellToIndex(pos);
-            if (brokenableTilemap.GetTile(pos) == null)
+            if (!brokenableTilemap.HasTile(pos))
             {
                 isDrilling = false;
 
             }
-            else if (valid)
+            else
             {
                 isDrilling = true;
 
@@ -128,6 +142,12 @@ public class Drilling : MonoBehaviour
                     if (tiles[x, y] <= 0)
                     {
                         brokenableTilemap.SetTile(pos, null);
+                        if (miniMapFrontTilemap != null && miniMapFrontTilemap.HasTile(pos))    //추가
+                        {
+                            miniMapFrontTilemap.SetTile(pos, null); //추가
+                        }
+                        isDrilling = false;
+                        yield return new WaitForSeconds(drillCoolTime);
                     }
                     else
                     {
