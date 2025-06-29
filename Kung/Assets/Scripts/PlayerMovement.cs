@@ -39,7 +39,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("스프라이트")]
     [SerializeField] private SpriteRenderer _bodySprite;
     [SerializeField] private SpriteRenderer _headSprite;
-    [SerializeField] private Sprite[] _drillingSprite;
+    [SerializeField] private Sprite _drillingHeadSprite;
+    [SerializeField] private Sprite _drillingBodySprite;
 
     [Header("이동 속도")]
     [SerializeField] private float _playerSpeed;
@@ -127,20 +128,12 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.X) && _isGround)
         {
-            _drilling.isDrilling = true;
-            if (_drillCoroutine == null)
-                _drillCoroutine = StartCoroutine(_drilling.DrillingRoutine());
+            OnDrillKeyDown();
         }
 
         if (Input.GetKeyUp(KeyCode.X))
         {
-            _drilling.isDrilling = false;
-
-            if (_drillCoroutine != null)
-            {
-                StopCoroutine(_drillCoroutine);
-                _drillCoroutine = null;
-            }
+            OnDrillKeyUp();
         }
 
         _boostTimer += Time.deltaTime;
@@ -151,20 +144,50 @@ public class PlayerMovement : MonoBehaviour
         HandleManualInput(); // 키보드 테스트용
     }
 
+    private void OnDrillKeyUp()
+    {
+        _drilling.isDrilling = false;
+
+        if (_drillCoroutine != null)
+        {
+            StopCoroutine(_drillCoroutine);
+            _drillCoroutine = null;
+        }
+    }
+
+    private void OnDrillKeyDown()
+    {
+        _drilling.isDrilling = true;
+        if (_drillCoroutine == null)
+            _drillCoroutine = StartCoroutine(_drilling.DrillingRoutine());
+    }
+
     private void HandleManualInput()
     {
         if (Input.GetKey(KeyCode.LeftArrow) && currentState != InputLockState.Left)
         {
+            //if (_drilling.currentDirectionState == CurrentDirectionState.Right)
+            //{
+            //    OnDrillKeyUp();
+            //}
             MoveHorizontal(-1, InputLockState.Right, CurrentDirectionState.Left);
-            if (_drilling.isDrilling) StartDrillingLeft(); else StopDrilling();
+            if (_drilling.isDrilling) StartDrillingSide(); else StopDrilling();
         }
         else if (Input.GetKey(KeyCode.RightArrow) && currentState != InputLockState.Right)
         {
+            //if (_drilling.currentDirectionState == CurrentDirectionState.Left)
+            //{
+            //    OnDrillKeyUp();
+            //}
             MoveHorizontal(1, InputLockState.Left, CurrentDirectionState.Right);
             if (_drilling.isDrilling) StartDrillingRight(); else StopDrilling();
         }
         else
         {
+            if (_drilling.currentDirectionState == CurrentDirectionState.Left || _drilling.currentDirectionState == CurrentDirectionState.Right) 
+            {
+                OnDrillKeyUp();
+            }
             IdleState();
         }
     }
@@ -188,14 +211,17 @@ public class PlayerMovement : MonoBehaviour
         ChangeAnimation("Move", _headAnimator);
         _drillDown.SetBool("Stop", true);
         _drillDown.SetBool("Start", false);
+        StopSmiling();
         if (_drilling.isDrilling)
         {
+            StartDrillingSide();
             _drillSide.SetBool("IsSide", true);
             _drillSide.SetBool("Stop", false);
             _drillSide.SetBool("Start", true);
         }
         else
         {
+            StopDrilling();
             _drillSide.SetBool("Stop", true);
             _drillSide.SetBool("Start", false);
         }
@@ -213,19 +239,18 @@ public class PlayerMovement : MonoBehaviour
         _drillSide.SetBool("IsSide", false);
         _drillSide.SetBool("Stop", true);
         _drillSide.SetBool("Start", false);
+        StopDrilling();
         if (_drilling.isDrilling)
         {
             _drillDown.SetBool("Stop", false);
             _drillDown.SetBool("Start", true);
-            
-            StartDrillingDown();
             StartSmiling();
         }
         else
         {
             _drillDown.SetBool("Stop", true);
             _drillDown.SetBool("Start", false);
-            StopDrilling();
+            //StopDrilling();
             StopSmiling();
         }
 
@@ -257,6 +282,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if ((_isBoost || Input.GetKey(KeyCode.UpArrow)) && rigidBody.linearVelocity.y < maxBoostSpeed)
         {
+            OnDrillKeyUp();
             rigidBody.AddForce(Vector2.up * boostRisePower * Time.deltaTime * 100, ForceMode2D.Force);
         }
     }
@@ -270,24 +296,23 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // === 드릴 & 표정 ===
-    private void StartDrillingLeft() => SetDrillingSprite(0);
-    private void StartDrillingRight() => SetDrillingSprite(1);
-    private void StartDrillingDown() => SetDrillingSprite(2);
-    private void StartSmiling() => SetHeadSprite(3);
+    private void StartDrillingSide() => SetDrillingSprite();
+    private void StartDrillingRight() => SetDrillingSprite();
+    private void StartSmiling() => SetHeadSprite();
 
     private void StopDrilling() => _bodyAnimator.enabled = true;
     private void StopSmiling() => _headAnimator.enabled = true;
 
-    private void SetDrillingSprite(int index)
+    private void SetDrillingSprite()
     {
         _bodyAnimator.enabled = false;
-        _bodySprite.sprite = _drillingSprite[index];
+        _bodySprite.sprite = _drillingBodySprite;
     }
 
-    private void SetHeadSprite(int index)
+    private void SetHeadSprite()
     {
         _headAnimator.enabled = false;
-        _headSprite.sprite = _drillingSprite[index];
+        _headSprite.sprite = _drillingHeadSprite;
     }
 
     // === 애니메이션 전환 ===
