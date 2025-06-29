@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     // === 컴포넌트 ===
     private Rigidbody2D rigidBody;
     private Drilling _drilling;
+    private GroundChecker _groundChecker;
 
     [Header("애니메이터")]
     [SerializeField] private Animator _headAnimator;
@@ -67,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rigidBody = GetComponent<Rigidbody2D>();
         _drilling = GetComponent<Drilling>();
+        _groundChecker = GetComponent<GroundChecker>();
     }
 
     private void OnEnable()
@@ -141,7 +143,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         _boostTimer += Time.deltaTime;
-        HandleGroundDetection();
+        _isGround = _groundChecker.IsGrounded;
+        //HandleGroundDetection();
         HandleBoostMovement();
         HandleFallSpeedLimit();
 
