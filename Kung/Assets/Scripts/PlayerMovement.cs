@@ -88,13 +88,13 @@ public class PlayerMovement : MonoBehaviour
     private void HandleLeftInput()
     {
         _isDirectionMoving = true;
-        MoveHorizontal(-1, "MoveLeft", InputLockState.Right, CurrentDirectionState.Left);
+        MoveHorizontal(-1,  InputLockState.Right, CurrentDirectionState.Left);
     }
 
     private void HandleRightInput()
     {
         _isDirectionMoving = true;
-        MoveHorizontal(1, "MoveRight", InputLockState.Left, CurrentDirectionState.Right);
+        MoveHorizontal(1,  InputLockState.Left, CurrentDirectionState.Right);
     }
 
     private void HandleLeftRelease() => _isDirectionMoving = false;
@@ -115,12 +115,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftArrow) && currentState != InputLockState.Left)
         {
-            MoveHorizontal(-1, "MoveLeft", InputLockState.Right, CurrentDirectionState.Left);
+            MoveHorizontal(-1, InputLockState.Right, CurrentDirectionState.Left);
             if (isDrilling) StartDrillingLeft(); else StopDrilling();
         }
         else if (Input.GetKey(KeyCode.RightArrow) && currentState != InputLockState.Right)
         {
-            MoveHorizontal(1, "MoveRight", InputLockState.Left, CurrentDirectionState.Right);
+            MoveHorizontal(1, InputLockState.Left, CurrentDirectionState.Right);
             if (isDrilling) StartDrillingRight(); else StopDrilling();
         }
         else
@@ -129,13 +129,23 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void MoveHorizontal(float direction, string animName, InputLockState lockState, CurrentDirectionState drillDir)
+    private void MoveHorizontal(float direction, InputLockState lockState, CurrentDirectionState drillDir)
     {
+        if (direction == 1)
+        {
+            transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        }
+
+
         currentState = lockState;
         drilling.currentDirectionState = drillDir;
         rigidBody.linearVelocity = new Vector2(direction * _playerSpeed, rigidBody.linearVelocity.y);
-        ChangeAnimation(animName, _bodyAnimator);
-        ChangeAnimation(animName, _headAnimator);
+        ChangeAnimation("Move", _bodyAnimator);
+        ChangeAnimation("Move", _headAnimator);
     }
 
     private void IdleState()
@@ -144,8 +154,8 @@ public class PlayerMovement : MonoBehaviour
         drilling.currentDirectionState = CurrentDirectionState.Down;
         rigidBody.linearVelocity = new Vector2(0, rigidBody.linearVelocity.y);
 
-        ChangeAnimation("Idle", _bodyAnimator);
-        ChangeAnimation("Idle", _headAnimator);
+        ChangeAnimation("Down", _bodyAnimator);
+        ChangeAnimation("Down", _headAnimator);
 
         if (isDrilling)
         {
@@ -158,8 +168,8 @@ public class PlayerMovement : MonoBehaviour
             StopSmiling();
         }
 
-        _drillLeft.SetBool("DrillingLeft", false);
-        _drillRight.SetBool("DrillingRight", false);
+        //_drillLeft.SetBool("DrillingLeft", false);
+        //_drillRight.SetBool("DrillingRight", false);
     }
 
     private void HandleGroundDetection()

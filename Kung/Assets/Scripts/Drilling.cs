@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
+using Unity.VisualScripting;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -155,8 +156,8 @@ public class Drilling : MonoBehaviour
                 case CurrentDirectionState.Down:
                     pos = new Vector3Int(currentPos.x, currentPos.y - 1);
                     _drillDown.SetBool("DrillingDown", true);    
-                    _drillLeft.SetBool("DrillingRight", false);    
-                    _drillRight.SetBool("DrillingLeft", false);    
+                    _drillLeft.SetBool("DrillingLeft", false);    
+                    _drillRight.SetBool("DrillingRight", false);    
                     break;
             }
 
@@ -181,8 +182,14 @@ public class Drilling : MonoBehaviour
                 }
                 
             }
+            if (brokenableTilemap.GetTile(pos) == null)
+            {
+                _drillLeft.SetBool("DrillingLeft", false);
+                _drillRight.SetBool("DrillingRight", false);
+                _drillDown.SetBool("DrillingDown", false);
+            }
 
-            yield return new WaitForSeconds(drillCoolTime);
+                yield return new WaitForSeconds(drillCoolTime);
         }
     }
 
