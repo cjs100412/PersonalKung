@@ -18,15 +18,12 @@ public class Drilling : MonoBehaviour
     [SerializeField] private PlayerMovement player;
     [SerializeField] private Tilemap brokenableTilemap;
     [SerializeField] private Tilemap mineralTilemap;
-    [SerializeField] private Animator _drillLeft;
-    [SerializeField] private Animator _drillRight;
-    [SerializeField] private Animator _drillDown;
     
 
     public CurrentDirectionState currentDirectionState = CurrentDirectionState.Down; // 현재 굴착할 방향
 
-    public CinemachineImpulseSource impulseSource; // 카메라 진동관련
-    private Coroutine drillCoroutine;
+    //public CinemachineImpulseSource impulseSource; // 카메라 진동관련
+    //private Coroutine drillCoroutine;
 
     private float[,] tiles;
 
@@ -37,7 +34,7 @@ public class Drilling : MonoBehaviour
     public float drillCoolTime;
     
     bool isGround = true;
-
+    public bool isDrilling = false;
 
     public Sprite[] brokenTileSprites;
 
@@ -83,46 +80,10 @@ public class Drilling : MonoBehaviour
 
     private void Update()
     {
-        bool isDrilling = Input.GetKey(KeyCode.X) && isGround;
-
-        // 애니메이션 처리만 따로
-        if (isDrilling)
-        {
-            shakeTimer += Time.deltaTime;
-
-            if (shakeTimer >= shakeInterval)
-            {
-                impulseSource.GenerateImpulse();
-                shakeTimer = 0f;
-            }
-        }
-        else
-        {
-            shakeTimer = 0f; // 멈췄을 때 타이머 리셋
-        }
+        
 
         // 코루틴 제어는 아래와 같이 유지
-        if (Input.GetKeyDown(KeyCode.X) && isGround)
-        {
-            player.isDrilling = true;
-
-            if (drillCoroutine == null)
-                drillCoroutine = StartCoroutine(DrillingRoutine());
-        }
-
-        if (Input.GetKeyUp(KeyCode.X))
-        {
-            player.isDrilling = false;
-
-            if (drillCoroutine != null)
-            {
-                StopCoroutine(drillCoroutine);
-                drillCoroutine = null;
-                _drillLeft.SetBool("DrillingLeft", false);
-                _drillRight.SetBool("DrillingRight", false);
-                _drillDown.SetBool("DrillingDown", false);
-            }
-        }
+       
 
         //if (Input.GetKey(KeyCode.C))
         //{
@@ -130,41 +91,37 @@ public class Drilling : MonoBehaviour
         //}
     }
 
-    private IEnumerator DrillingRoutine()
+    public IEnumerator DrillingRoutine()
     {
 
         while (true)
         {
             Vector3Int currentPos = brokenableTilemap.WorldToCell(transform.position);
             Vector3Int pos = currentPos;
-
             switch (currentDirectionState)
             {
                 case CurrentDirectionState.Left:
                     pos = new Vector3Int(currentPos.x - 1, currentPos.y);
-                    _drillLeft.SetBool("DrillingLeft", true);
-                    _drillRight.SetBool("DrillingRight", false);
-                    _drillDown.SetBool("DrillingDown", false);
                     break;
                 case CurrentDirectionState.Right:
                     pos = new Vector3Int(currentPos.x + 1, currentPos.y);
-                    _drillRight.SetBool("DrillingRight", true);
-                    _drillLeft.SetBool("DrillingLeft", false);
-                    _drillDown.SetBool("DrillingDown", false);
 
                     break;
                 case CurrentDirectionState.Down:
                     pos = new Vector3Int(currentPos.x, currentPos.y - 1);
-                    _drillDown.SetBool("DrillingDown", true);    
-                    _drillLeft.SetBool("DrillingLeft", false);    
-                    _drillRight.SetBool("DrillingRight", false);    
                     break;
             }
 
             (bool valid, int x, int y) = TryCellToIndex(pos);
-
-            if (valid)
+            if (brokenableTilemap.GetTile(pos) == null)
             {
+                isDrilling = false;
+
+            }
+            else if (valid)
+            {
+                isDrilling = true;
+
                 tiles[x, y] -= drillDamage;
                 if (brokenableTilemap.GetTile(pos) != null)
                 {
@@ -182,12 +139,7 @@ public class Drilling : MonoBehaviour
                 }
                 
             }
-            if (brokenableTilemap.GetTile(pos) == null)
-            {
-                _drillLeft.SetBool("DrillingLeft", false);
-                _drillRight.SetBool("DrillingRight", false);
-                _drillDown.SetBool("DrillingDown", false);
-            }
+            
 
                 yield return new WaitForSeconds(drillCoolTime);
         }
