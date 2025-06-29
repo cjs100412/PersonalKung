@@ -10,7 +10,6 @@ public class MineralTile : MonoBehaviour
 {
     [Header("드래그 앤 드롭 해")]
     [SerializeField] private Tilemap mineralTilemap;
-    [SerializeField] private TextMeshProUGUI _priceText;
     [SerializeField] private RectTransform _MineralCanvas;
 
     [Header("풀링 MineralTextPool 끌어다 놓기")]
