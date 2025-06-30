@@ -6,7 +6,7 @@ public class NormalMonsterHealth : MonoBehaviour
     
     private int _maxHp = 30;
 
-    Health hp;
+    public Health hp;
 
     public Animator animator;
     [SerializeField] private GameObject _treasureChest;
