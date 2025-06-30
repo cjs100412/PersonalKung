@@ -4,17 +4,15 @@ public class BossMovement : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rigid;
     [SerializeField] private Transform _playerTransform;
+    [SerializeField] private BossController _bossController;
 
     public float speed = 0.5f;
 
 
-    private void Awake()
-    {
-
-    }
-
     void Update()
     {
+        //if (_bossController.isBusy) return;
+
         Vector2 dist = _playerTransform.position - transform.position;
 
         Vector2 vel = rigid.linearVelocity;
@@ -27,4 +25,6 @@ public class BossMovement : MonoBehaviour
         s.x = scaleX;
         transform.localScale = s;
     }
+
+
 }
