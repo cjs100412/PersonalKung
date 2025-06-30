@@ -57,9 +57,9 @@ public class Drilling : MonoBehaviour
     private void Update()
     {
         //이다혜 코드 합치고 주석 풀 것
-        //Vector3Int currentCell = brokenableTilemap.WorldToCell(transform.position); //추가
-        //int depth = Mathf.Max(0, _surfaceY - currentCell.y);    // 지면일 때는 0m.추가
-        //_depthText.text = depth + "m";
+        Vector3Int currentCell = _brokenableTilemap.WorldToCell(transform.position); //추가
+        int depth = Mathf.Max(0, _surfaceY - currentCell.y);    // 지면일 때는 0m.추가
+        _depthText.text = depth + "m";
     }
 
     /// <summary>
