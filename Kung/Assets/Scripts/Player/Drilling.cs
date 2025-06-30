@@ -17,10 +17,10 @@ public enum CurrentDirectionState
 public class Drilling : MonoBehaviour
 {
     [Header("잘 연결해야 함")]
-    [SerializeField] private Tilemap brokenableTilemap;
-    [SerializeField] private Tilemap mineralTilemap;
+    [SerializeField] private Tilemap _brokenableTilemap;
+    [SerializeField] private Tilemap _mineralTilemap;
     [Header("미니맵 관련")]
-    [SerializeField] private Tilemap miniMapFrontTilemap;   //추가
+    [SerializeField] private Tilemap _miniMapFrontTilemap;   //추가
     [SerializeField] private TextMeshProUGUI _depthText;    //추가
     private int _surfaceY; // 지면높이.추가
 
@@ -31,7 +31,7 @@ public class Drilling : MonoBehaviour
     public float drillDamage;
     public float drillCoolTime; // 낮을수록 좋음
 
-    private PlayerMovement player;
+    private PlayerMovement _player;
     
     public CurrentDirectionState currentDirectionState = CurrentDirectionState.Down; // 현재 굴착할 방향
 
@@ -43,14 +43,14 @@ public class Drilling : MonoBehaviour
     private int _offsetY;
     private int _spriteIndex;
 
-    private float[,] tiles; 
+    private float[,] _tiles; 
 
 
     
 
     private void Start()
     {
-        player = GetComponent<PlayerMovement>();
+        _player = GetComponent<PlayerMovement>();
         tileArrayInit();
     }
 
@@ -67,10 +67,10 @@ public class Drilling : MonoBehaviour
     /// </summary>
     private void tileArrayInit()
     {
-        BoundsInt bounds = brokenableTilemap.cellBounds;
+        BoundsInt bounds = _brokenableTilemap.cellBounds;
         _width = bounds.xMax - bounds.xMin;
         _height = bounds.yMax - bounds.yMin;
-        tiles = new float[_width, _height];
+        _tiles = new float[_width, _height];
         _offsetX = -bounds.xMin;
         _offsetY = -bounds.yMin;
         for (int x = bounds.xMin; x < bounds.xMax; x++)
@@ -78,7 +78,7 @@ public class Drilling : MonoBehaviour
             for (int y = bounds.yMin; y < bounds.yMax; y++)
             {
                 Vector3Int pos = new Vector3Int(x, y);
-                tiles[TryCellToIndex(pos).x, TryCellToIndex(pos).y] = 100;
+                _tiles[TryCellToIndex(pos).x, TryCellToIndex(pos).y] = 100;
             }
         }
         _spriteIndex = 100 / brokenTileSprites.Length;
@@ -110,7 +110,7 @@ public class Drilling : MonoBehaviour
 
         while (true)
         {
-            Vector3Int currentPos = brokenableTilemap.WorldToCell(transform.position);
+            Vector3Int currentPos = _brokenableTilemap.WorldToCell(transform.position);
             Vector3Int pos = currentPos;
             switch (currentDirectionState)
             {
@@ -127,7 +127,7 @@ public class Drilling : MonoBehaviour
             }
 
             (bool valid, int x, int y) = TryCellToIndex(pos);
-            if (!brokenableTilemap.HasTile(pos))
+            if (!_brokenableTilemap.HasTile(pos))
             {
                 isDrilling = false;
 
@@ -136,15 +136,15 @@ public class Drilling : MonoBehaviour
             {
                 isDrilling = true;
 
-                tiles[x, y] -= drillDamage;
-                if (brokenableTilemap.GetTile(pos) != null)
+                _tiles[x, y] -= drillDamage;
+                if (_brokenableTilemap.GetTile(pos) != null)
                 {
-                    if (tiles[x, y] <= 0)
+                    if (_tiles[x, y] <= 0)
                     {
-                        brokenableTilemap.SetTile(pos, null);
-                        if (miniMapFrontTilemap != null && miniMapFrontTilemap.HasTile(pos))    //추가
+                        _brokenableTilemap.SetTile(pos, null);
+                        if (_miniMapFrontTilemap != null && _miniMapFrontTilemap.HasTile(pos))    //추가
                         {
-                            miniMapFrontTilemap.SetTile(pos, null); //추가
+                            _miniMapFrontTilemap.SetTile(pos, null); //추가
                         }
                         isDrilling = false;
                         yield return new WaitForSeconds(drillCoolTime);
@@ -152,9 +152,9 @@ public class Drilling : MonoBehaviour
                     else
                     {
                         Tile newTile = ScriptableObject.CreateInstance<Tile>();
-                        int index = Mathf.Clamp((int)(tiles[x, y] / _spriteIndex), 0, brokenTileSprites.Length - 1);
+                        int index = Mathf.Clamp((int)(_tiles[x, y] / _spriteIndex), 0, brokenTileSprites.Length - 1);
                         newTile.sprite = brokenTileSprites[index];
-                        brokenableTilemap.SetTile(pos, newTile);
+                        _brokenableTilemap.SetTile(pos, newTile);
                     }
                 }
                 
