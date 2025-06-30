@@ -20,7 +20,7 @@ public class NormalMonster : MonoBehaviour
 
     void Update()
     {
-        if (_health.isDead)
+        if (_health.hp.IsDead)
         {
             rigid.linearVelocity = Vector2.zero;
             return;

@@ -27,21 +27,21 @@ public class UI : MonoBehaviour
             airBlueImage.gameObject.SetActive(true);
             airYellowImage.gameObject.SetActive(false);
             airRedImage.gameObject.SetActive(false);
-            airBlueImage.fillAmount = Mathf.InverseLerp(0f, playerHealth._maxair, playerHealth.air.Amount);
+            airBlueImage.fillAmount = Mathf.InverseLerp(0f, playerHealth.air.MaxAmount, playerHealth.air.Amount);
         }
         else if(playerHealth.air.Amount > playerHealth.air.Amount / 5)
         {
             airBlueImage.gameObject.SetActive(false);
             airYellowImage.gameObject.SetActive(true);
             airRedImage.gameObject.SetActive(false);
-            airYellowImage.fillAmount = Mathf.InverseLerp(0f, playerHealth._maxair, playerHealth.air.Amount);
+            airYellowImage.fillAmount = Mathf.InverseLerp(0f, playerHealth.air.MaxAmount, playerHealth.air.Amount);
         }
         else
         {
             airBlueImage.gameObject.SetActive(false);
             airYellowImage.gameObject.SetActive(false);
             airRedImage.gameObject.SetActive(true);
-            airRedImage.fillAmount = Mathf.InverseLerp(0f, playerHealth._maxair, playerHealth.air.Amount);
+            airRedImage.fillAmount = Mathf.InverseLerp(0f, playerHealth.air.MaxAmount, playerHealth.air.Amount);
         }
     }
 }
