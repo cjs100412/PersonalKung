@@ -35,4 +35,4 @@ MonoBehaviour:
   m_Flags: 1
   m_ColliderType: 1
   oreType: 1
-  durability: 0
+  price: 50
