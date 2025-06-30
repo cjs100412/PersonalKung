@@ -2,57 +2,47 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-// TODO : 낙뎀 추가 : IsGround 마지막으로 감지했을때가 언제인지 부스트 마지막으로 썼을때가 언제인지 계산
-
-// TODO : 애니메이터 연결 : 맞는 모션, 죽는 모션. Trigger로 구현
-
-// TODO : UI랑 연결 : HUD의 산소통과 체력통, 숫자랑 연결하기. UI전용 스크립트 필요함
 public class PlayerHealth : MonoBehaviour
 {
-    [Header("체력, 산소")]
-    public int air;
-    public int hp;
-    public int maxair = 100;
-    private int maxhp = 100;
-    private bool isAirDecrease;
-    private bool isHpDecrease;
+    private int _maxair = 100;
+    private int _maxhp = 100;
+    private bool _isAirDecrease;
+    private bool _isHpDecrease;
 
+    private const float _decreaseAirTime = 3.0f;
+    private const float _hpDecreaseInterval = 0.2f;
 
-    private float decreaseAirTime = 3.0f;
-
-
-    private bool isDead;
-    
-    
-    private bool isInvincible;
-    private float invincibleTime = 1.0f;
+    private bool _isInvincible;
+    private float _invincibleTime = 1.0f;
 
     [Header("Head랑 Body 애니메이터 연결")]
     public Animator headAnimator;
     public Animator bodyAnimator;
 
+    public Health hp;
+    public Air air;
+
     private void Awake()
     {
-        hp = maxhp;
-        air = maxair;
+        hp = Health.New(_maxhp, _maxhp);
+        air = Air.New(_maxair, _maxair);
     }
 
     void Update()
     {
-        if (isDead) return;
+        if (hp.IsDead) return;
 
-        if(transform.position.y >= -4)
+        if(transform.position.y >= -4 && air.Current < _maxair)
         {
-            air = maxair;
+            air = air.Heal(_maxair);
         }
 
-        // 일단 대충 0 아래로가면 산소가 달도록
-        if(transform.position.y < -4 && !isAirDecrease)
+        if(transform.position.y < -4 && !_isAirDecrease)
         {
             StartCoroutine(airDecrease());
         }
 
-        if(air <= 0 && !isHpDecrease)
+        if(air.IsAirZero && !_isHpDecrease)
         {
             StartCoroutine(hpDecrease());
         }
@@ -63,43 +53,43 @@ public class PlayerHealth : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            air -= 5;
+            air = air.AirDecrease(5);
             Debug.Log($"현재 산소 :{air}");
         }
     }
 
     IEnumerator hpDecrease()
     {
-        isHpDecrease = true;
-        yield return new WaitForSeconds(0.2f);
-        hp--;
+        _isHpDecrease = true;
+        yield return new WaitForSeconds(_hpDecreaseInterval);
+        hp = hp.TakeDamage(1);
         Debug.Log($"현재 체력 : {hp}");
 
-        if (hp <= 0)
+        if (hp.IsDead)
         {
             Die();
         }
-        isHpDecrease = false;
+        _isHpDecrease = false;
     }
 
     public void TakeDamage(int amount)
     {
-        if (isDead) return;
+        if (hp.IsDead || _isInvincible) return;
 
-        hp -= amount;
+        hp = hp.TakeDamage(amount);
+        if(hp.IsDead)
+        {
+            Die();
+            return;
+        }
         headAnimator.SetTrigger("isDamaged");
         bodyAnimator.SetTrigger("isDamaged");
         StartCoroutine(Invincible());
         Debug.Log($"현재 체력 : {hp}");
-        if(hp <= 0)
-        {
-            Die();
-        }
     }
 
     public void Die()
     {
-        isDead = true;
         headAnimator.SetTrigger("isDead");
         bodyAnimator.SetTrigger("isDead");
         Debug.Log("사망");
@@ -107,21 +97,17 @@ public class PlayerHealth : MonoBehaviour
 
     IEnumerator Invincible()
     {
-        isInvincible = true;
+        _isInvincible = true;
         Debug.Log("무적");
-        yield return new WaitForSeconds(invincibleTime);
-        isInvincible = false;
+        yield return new WaitForSeconds(_invincibleTime);
+        _isInvincible = false;
     }
     
     IEnumerator airDecrease()
     {
-        isAirDecrease = true;
-        yield return new WaitForSeconds(decreaseAirTime);
-        if(air >= 0)
-        {
-            air--;
-            Debug.Log($"현재 산소 : {air}");
-        }
-        isAirDecrease = false;
+        _isAirDecrease = true;
+        air = air.AirDecrease(1);
+        yield return new WaitForSeconds(_decreaseAirTime);
+        _isAirDecrease = false;
     }
 }
