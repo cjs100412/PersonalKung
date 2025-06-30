@@ -2,14 +2,11 @@ using UnityEngine;
 
 public class MiniMapPlayer : MonoBehaviour
 {
-    public Transform player;           
+    [SerializeField] private Transform _player;           
 
     void LateUpdate()
     {
-        if (player != null)
-        {
-            Vector3 newPos = player.position;
-            transform.position = new Vector3(newPos.x, newPos.y, transform.position.z);
-        }
+        Vector3 currentPos = _player.position;
+        transform.position = new Vector3(currentPos.x, currentPos.y, transform.position.z);
     }
 }
