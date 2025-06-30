@@ -4,10 +4,10 @@ using UnityEngine;
 public class NormalMonsterHealth : MonoBehaviour
 {
     public int hp;
-    private int maxHp = 30;
+    private int _maxHp = 30;
 
     public Animator animator;
-    [SerializeField] GameObject TreasureChest;
+    [SerializeField] private GameObject _treasureChest;
 
     const float TreasureChestOffset = 0.07f;
     const int DestroyTime = 2;
@@ -15,7 +15,7 @@ public class NormalMonsterHealth : MonoBehaviour
     public bool isDead;
     private void Awake()
     {
-        hp = maxHp;
+        hp = _maxHp;
     }
 
     private void Update()
@@ -25,7 +25,7 @@ public class NormalMonsterHealth : MonoBehaviour
         // Test용 몬스터 죽이기
         if (Input.GetKeyDown(KeyCode.P))
         {
-            TakeDamage(maxHp);
+            TakeDamage(_maxHp);
         }
     }
 
@@ -38,11 +38,11 @@ public class NormalMonsterHealth : MonoBehaviour
         Debug.Log($"몬스터 현재 체력 : {hp}");
         if (hp <= 0)
         {
-            StartCoroutine(Die());
+            Die();
         }
     }
 
-    IEnumerator Die()
+    public void Die()
     {
         isDead = true;
         animator.SetTrigger("isDead");
@@ -50,9 +50,8 @@ public class NormalMonsterHealth : MonoBehaviour
 
         Vector2 TreasureChestPosition = transform.position;
         TreasureChestPosition.y -= TreasureChestOffset;
-        Instantiate(TreasureChest, TreasureChestPosition, Quaternion.identity);
+        Instantiate(_treasureChest, TreasureChestPosition, Quaternion.identity);
 
-        yield return new WaitForSeconds(DestroyTime);
-        Destroy(gameObject);
+        Destroy(gameObject, DestroyTime);
     }
 }
