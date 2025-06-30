@@ -16,12 +16,15 @@ public enum CurrentDirectionState
 }
 public class Drilling : MonoBehaviour
 {
-    [Header("잘 연결해야 함")]
+    [Header("채굴 타일맵")]
     [SerializeField] private Tilemap _brokenableTilemap;
     [SerializeField] private Tilemap _mineralTilemap;
     [Header("미니맵 관련")]
     [SerializeField] private Tilemap _miniMapFrontTilemap;   //추가
     [SerializeField] private TextMeshProUGUI _depthText;    //추가
+    [Header("플레이어 연결")]
+    [SerializeField] private PlayerMovement _player;
+
     private int _surfaceY; // 지면높이.추가
 
     [Header("부셔지는 타일맵 스프라이트 배열")]
@@ -30,9 +33,9 @@ public class Drilling : MonoBehaviour
     [Header("드릴 성능")]
     public float drillDamage;
     public float drillCoolTime; // 낮을수록 좋음
+    private Coroutine _drillCoroutine;
 
-    private PlayerMovement _player;
-    
+
     public CurrentDirectionState currentDirectionState = CurrentDirectionState.Down; // 현재 굴착할 방향
 
     public bool isDrilling = false;
@@ -45,20 +48,15 @@ public class Drilling : MonoBehaviour
 
     private float[,] _tiles; 
 
-
-    
-
     private void Start()
     {
-        _player = GetComponent<PlayerMovement>();
         tileArrayInit();
     }
 
     private void Update()
     {
-        //이다혜 코드 합치고 주석 풀 것
-        //Vector3Int currentCell = brokenableTilemap.WorldToCell(transform.position); //추가
-        //int depth = Mathf.Max(0, _surfaceY - currentCell.y);    // 지면일 때는 0m.추가
+        Vector3Int currentCell = _brokenableTilemap.WorldToCell(transform.position); //추가
+        int depth = Mathf.Max(0, _surfaceY - currentCell.y);    // 지면일 때는 0m.추가
         //_depthText.text = depth + "m";
     }
 
@@ -100,28 +98,40 @@ public class Drilling : MonoBehaviour
         return (true, x, y);
     }
 
-
+    public void C_StartDrilling(int dir)
+    {
+        if (_drillCoroutine == null)
+            _drillCoroutine = StartCoroutine(DrillingRoutine(dir));
+    }
+    public void C_StopDrilling(int dir)
+    {
+        if (_drillCoroutine != null)
+        {
+            StopCoroutine(_drillCoroutine);
+            _drillCoroutine = null;
+        }
+    }
     /// <summary>
     /// 드릴 키를 눌렀을 때 동작할 코루틴
     /// </summary>
     /// <returns>드릴 쿨타임만큼 기다림</returns>
-    public IEnumerator DrillingRoutine()
+    public IEnumerator DrillingRoutine(int dir)
     {
 
         while (true)
         {
             Vector3Int currentPos = _brokenableTilemap.WorldToCell(transform.position);
             Vector3Int pos = currentPos;
-            switch (currentDirectionState)
+            switch (dir)
             {
-                case CurrentDirectionState.Left:
+                case -1:
                     pos = new Vector3Int(currentPos.x - 1, currentPos.y);
                     break;
-                case CurrentDirectionState.Right:
+                case 1:
                     pos = new Vector3Int(currentPos.x + 1, currentPos.y);
 
                     break;
-                case CurrentDirectionState.Down:
+                case 0:
                     pos = new Vector3Int(currentPos.x, currentPos.y - 1);
                     break;
             }

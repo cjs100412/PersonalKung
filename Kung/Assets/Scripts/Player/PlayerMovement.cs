@@ -168,7 +168,7 @@ public class PlayerMovement : MonoBehaviour
     {
         _drilling.isDrilling = true;
         if (_drillCoroutine == null)
-            _drillCoroutine = StartCoroutine(_drilling.DrillingRoutine());
+            _drillCoroutine = StartCoroutine(_drilling.DrillingRoutine(1));
     }
 
 
