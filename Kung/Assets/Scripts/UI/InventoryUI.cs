@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 
@@ -6,29 +7,13 @@ public class InventoryUI : MonoBehaviour
     public Transform enterTarget;
     public Transform quitTarget;
 
+    private float _UIspeed = 0.5f;
     public void OnInventoryEnterButton()
-    {
-        StartCoroutine(EnterInventoryUI());
+    { 
+        transform.DOLocalMove(enterTarget.localPosition, _UIspeed);
     }
     public void OnInventoryQuitButton()
     {
-        StartCoroutine(QuitInventoryUI());
-    }
-
-    IEnumerator EnterInventoryUI()
-    {
-        while (Vector3.Distance(transform.localPosition, enterTarget.localPosition) > 0.1f){
-            transform.localPosition = Vector3.Lerp(transform.localPosition, enterTarget.localPosition, Time.deltaTime * 10);
-            yield return null;
-        }
-        transform.localPosition = enterTarget.localPosition;
-    }
-    IEnumerator QuitInventoryUI()
-    {
-        while (Vector3.Distance(transform.localPosition, quitTarget.localPosition) > 0.1f){
-            transform.localPosition = Vector3.Lerp(transform.localPosition, quitTarget.localPosition, Time.deltaTime * 10);
-            yield return null;
-        }
-        transform.localPosition = quitTarget.localPosition;
+        transform.DOLocalMove(quitTarget.localPosition, _UIspeed);
     }
 }
