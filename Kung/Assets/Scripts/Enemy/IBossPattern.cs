@@ -12,3 +12,9 @@ public interface IBossPattern
     //쿨타임 시간 계산
     float Cooldown { get; }
 }
+
+public interface ISpawnPattern : IBossPattern
+{
+    // 프리팹 스폰을 사용하는 패턴들은 스폰포인트 설정도 해줘야함
+    void SetSpawnPoint(Transform spawnPoint);
+}
