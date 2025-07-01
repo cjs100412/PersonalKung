@@ -1,0 +1,132 @@
+[
+    {
+        "Id": "2005",
+        "ItemName": "구급상자",
+        "Price": 1000,
+        "Discription" : "HP를 모두 회복시켜 준다."  
+    },
+    {
+        "Id": "2004",
+        "ItemName": "산소캡슐(대)",
+        "Price": 2000,
+        "Discription": "AP를 모두 회복시켜 준다."
+
+    },
+    {
+        "Id": "2001",
+        "ItemName": "폭탄",
+        "Price": 100,
+        "Discription": "적을 죽일 수 있는 폭탄이다."
+
+    },
+    {
+        "Id": "2002",
+        "ItemName": "울트라 폭탄",
+        "Price": 300,
+        "Discription": "폭탄보다 강한 위력을 가진 폭탁이다."
+
+    },
+    {
+        "Id": "2003",
+        "ItemName": "다이나마이트",
+        "Price": 2000,
+        "Discription": "암석을 깨트릴 수 있다."
+
+    },
+    {
+        "Id": "2007",
+        "ItemName": "확장팩",
+        "Price": 10000,
+        "Discription": "인벤토리 공간을 1줄 늘려준다."
+    },
+    {
+        "Id": "3201",
+        "ItemName": "나이스 캡",
+        "Price": 5000,
+        "Discription": "AIR 용량과 방어력 100% 상승"
+    },
+    {
+        "Id": "3202",
+        "ItemName": "메가 캡",
+        "Price": 20000,
+        "Discription": "AIR 용량과 방어력 150% 상승"
+    },
+    {
+        "Id": "3203",
+        "ItemName": "울트라 캡",
+        "Price": 50000,
+        "Discription": "AIR 용량과 방어력 200% 상승"
+    },
+    {
+        "Id": "3204",
+        "ItemName": "수퍼 캡",
+        "Price": 150000,
+        "Discription": "AIR 용량과 방어력 250% 상승"
+    },
+    {
+        "Id": "3205",
+        "ItemName": "레어 캡",
+        "Price": 300000,
+        "Discription": "AIR 용량과 방어력 400% 상승"
+    },
+    {
+        "Id": "3102",
+        "ItemName": "나이스 드릴",
+        "Price": 5000,
+        "Discription": "굴착 능력 100% 상승"
+    },
+    {
+        "Id": "3103",
+        "ItemName": "메가 드릴",
+        "Price": 20000,
+        "Discription": "굴착 능력 150% 상승"
+    },
+    {
+        "Id": "3104",
+        "ItemName": "수퍼 드릴",
+        "Price": 100000,
+        "Discription": "굴착 능력 200% 상승"
+    },
+    {
+        "Id": "3105",
+        "ItemName": "골드 드릴",
+        "Price": 200000,
+        "Discription": "굴착 능력 250% 상승"
+    },
+    {
+        "Id": "3106",
+        "ItemName": "레어 드릴",
+        "Price": 350000,
+        "Discription": "굴착 능력 300% 상승"
+    },
+    {
+        "Id": "3301",
+        "ItemName": "나이스 슈즈",
+        "Price": 2000,
+        "Discription": "이동속도 100% 증가"
+    },
+    {
+        "Id": "3302",
+        "ItemName": "메가 슈즈",
+        "Price": 10000,
+        "Discription": "이동속도 150% 증가"
+    },
+    {
+        "Id": "3303",
+        "ItemName": "울트라 슈즈",
+        "Price": 80000,
+        "Discription": "이동속도 180% 증가"
+    },
+    {
+        "Id": "3304",
+        "ItemName": "수퍼 슈즈",
+        "Price": 150000,
+        "Discription": "이동속도 200% 증가"
+    },
+    {
+        "Id": "3305",
+        "ItemName": "레어 슈즈",
+        "Price": 300000,
+        "Discription": "이동속도 250% 증가"
+    }
+]
