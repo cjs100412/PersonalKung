@@ -42,24 +42,38 @@ public class ShopButton : MonoBehaviour
     [SerializeField] private Button[] _shopButtons;
     [SerializeField] private GameObject TextPanel;
     [SerializeField] private ShopText _shop;
+    [SerializeField] private GameObject _shopButtonPrefab;
+    [SerializeField] private Image _buttonIcon;
+    [SerializeField] private TextMeshPro _nameText;
+    [SerializeField] private TextMeshPro _priceText;
+    [SerializeField] private RectTransform buttonPar;
     private ShopItem[] _shopItems;
+    const string path = "Items/";
     private void Awake()
     {
 
         // Resources 폴더에서 JSON 불러오기
         TextAsset jsonFile = Resources.Load<TextAsset>("ShopItems");
+
         if (jsonFile == null)
         {
-            Debug.LogError("ShopItems_RootArray.json 파일이 Resources 폴더에 없습니다.");
-            return;
+            throw new Exception("json없음");
         }
 
         _shopItems = JsonHelper.FromJson<ShopItem>(jsonFile.text);
 
-        for (int i = 0; i < _shopButtons.Length; i++)
+        for (int i = 0; i < _shopItems.Length; i++)
         {
             int itemIndex = i;
-            _shopButtons[i].onClick.AddListener(() => OnClickShopItem(itemIndex));
+            GameObject go = Instantiate(_shopButtonPrefab, buttonPar);
+
+            go.GetComponentsInChildren<Image>()[1].sprite = Resources.Load<Sprite>(path + _shopItems[i].Id.ToString());
+            
+            TextMeshProUGUI[] texts = go.GetComponentsInChildren<TextMeshProUGUI>();
+            texts[0].text = _shopItems[i].ItemName;
+            texts[1].text = _shopItems[i].Price.ToString();
+            
+            go.GetComponent<Button>().onClick.AddListener(() => OnClickShopItem(itemIndex));
         }
     }
 
@@ -67,8 +81,8 @@ public class ShopButton : MonoBehaviour
     {
         if (_shopItems == null || index >= _shopItems.Length)
         {
-            Debug.LogWarning("아이템 정보가 없습니다.");
-            return;
+            throw new IndexOutOfRangeException("인덱스 초과");
+
         }
         ShopItem item = _shopItems[index];
         _shop.SetText(item.ItemName, item.Price, item.Discription);
