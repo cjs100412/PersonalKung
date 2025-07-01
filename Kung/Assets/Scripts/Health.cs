@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public struct Health
+public class Health
 {
     public int Amount { get; }
     public int MaxAmount { get; }

@@ -92,6 +92,7 @@ public class PlayerMovement : MonoBehaviour
     // === 이벤트 핸들러 ===
     private void HandleBoostInput(bool isPressed)
     {
+        if (IsMovementLocked) return;
         _boostTimer = 0;
         _isBoost = isPressed;
         _boostAnimator.SetBool("isBoost", isPressed);
@@ -99,12 +100,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleLeftInput()
     {
+        if (IsMovementLocked) return;
         _isDirectionMoving = true;
         MoveHorizontal(-1,  InputLockState.Right, CurrentDirectionState.Left);
     }
 
     private void HandleRightInput()
     {
+        if (IsMovementLocked) return;
         _isDirectionMoving = true;
         MoveHorizontal(1,  InputLockState.Left, CurrentDirectionState.Right);
     }
@@ -116,6 +119,15 @@ public class PlayerMovement : MonoBehaviour
     // === 이동 로직 ===
     private void Update()
     {
+
+        if (IsMovementLocked) 
+        {
+            IdleState(); // 정지 상태로 만들고
+            OnDrillKeyUp(); // 드릴 정지 상태
+            return;      // 나머지 이동 로직 실행 안 함
+        }
+
+
 
         // 애니메이션 처리만 따로
         if (_drilling.isDrilling)
@@ -166,6 +178,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDrillKeyDown()
     {
+        if (IsMovementLocked) return;
+
         _drilling.isDrilling = true;
         if (_drillCoroutine == null)
             _drillCoroutine = StartCoroutine(_drilling.DrillingRoutine());
@@ -174,6 +188,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleManualInput()
     {
+
+        if (IsMovementLocked) return; // 잠금
+
+
         if (Input.GetKey(KeyCode.LeftArrow) && currentState != InputLockState.Left)
         {
             
@@ -278,6 +296,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleBoostMovement()
     {
+
+        if (IsMovementLocked) return; // 잠금
+
         if ((_isBoost || Input.GetKey(KeyCode.UpArrow)) && rigidBody.linearVelocity.y < maxBoostSpeed)
         {
             OnDrillKeyUp();
@@ -355,6 +376,8 @@ public class PlayerMovement : MonoBehaviour
         _drillSide.SetBool("Stop", true);
         _drillSide.SetBool("Start", false);
     }
+
+    public bool IsMovementLocked { get; set; } = false;
 
 
 }
