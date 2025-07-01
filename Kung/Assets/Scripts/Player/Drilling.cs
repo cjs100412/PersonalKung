@@ -32,7 +32,7 @@ public class Drilling : MonoBehaviour
 
     [Header("드릴 성능")]
     public float drillDamage;
-    public float drillCoolTime; // 낮을수록 좋음
+    public float drillCoolTime;
     private Coroutine _drillCoroutine;
 
 
@@ -46,7 +46,8 @@ public class Drilling : MonoBehaviour
     private int _offsetY;
     private int _spriteIndex;
 
-    private float[,] _tiles; 
+    public float[,] _tiles;
+
 
     private void Start()
     {

@@ -1,57 +1,81 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] public Rigidbody2D rigid;
-    [SerializeField] public Animator _bodyAnimator;
-    [SerializeField] public Animator _headAnimator;
-    [SerializeField] public Animator _drillSide;
-    [SerializeField] public Animator _drillDown;
-    [SerializeField] public Drilling _drilling;
-    private StateMachine stateMachine;
+    [Header("드릴 성능")]
+    public float drillDamage;
+    public float drillCoolTime;
+
+
+    //private Coroutine _drillCoroutine;
+
+    public Rigidbody2D rigid;
+    public Animator _bodyAnimator;
+    public Animator _headAnimator;
+    public Animator _drillSide;
+    public Animator _drillDown;
+    public Drilling _drilling;
+    public TileManager tileManager;
+
+    public float[,] tiles = new float[0,0];
+    public Sprite[] brokenTileSprites;
+    public Tilemap brokenableTilemap;
+
+    private StateMachine moveStateMachine;
+    private StateMachine drillStateMachine;
     public InputLockState InputLockState = InputLockState.Any;
-    bool isMoving;
     public int currentDirection = 0;
+    public bool isDrilling;
     void Start()
     {
-        stateMachine = new StateMachine();
-        stateMachine.ChangeState(new IdleState());
+        moveStateMachine = new StateMachine();
+        drillStateMachine = new StateMachine();
+        tiles = tileManager.tiles;
+        brokenTileSprites = tileManager.brokenTileSprites;
+        brokenableTilemap = tileManager.brokenabelTileMap;
+        moveStateMachine.ChangeState(new IdleState());
     }
 
 
     void Update()
     {
-        stateMachine.Update();
-        //InputLockState = currentDirection == 1 ? InputLockState.Left : InputLockState.Right;
-        
-        
+        moveStateMachine.Update();
+        drillStateMachine.Update();
+        if (Input.GetKey(KeyCode.X))
+        {
+            if (drillStateMachine.currentState is DrillState)
+            {
+                return;
+            }
+            drillStateMachine.ChangeState(new DrillState(this));
+        }
+
+        if (Input.GetKeyUp(KeyCode.X))
+        {
+            drillStateMachine.ChangeState(new IdleState());
+        }
+
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             currentDirection = -1;
-            if (stateMachine.currentState is RunState) return;
-            //InputLockState = InputLockState.Right;
-            stateMachine.ChangeState(new RunState(this));
+            if (moveStateMachine.currentState is RunState) return;
+            moveStateMachine.ChangeState(new RunState(this));
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
+
+        if (Input.GetKey(KeyCode.RightArrow))
         {
             currentDirection = 1;
 
-            if (stateMachine.currentState is RunState) return;
-            //InputLockState = InputLockState.Left;
-            stateMachine.ChangeState(new RunState(this));
+            if (moveStateMachine.currentState is RunState) return;
+            moveStateMachine.ChangeState(new RunState(this));
         }
 
-        if (Input.GetKey(KeyCode.X))
-        {
-            if (stateMachine.currentState is SideDrillState) return;
-            stateMachine.ChangeState(new SideDrillState(this));
-
-        }
         else if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
         {
             currentDirection = 0;
-            stateMachine.ChangeState(new IdleState());
+            moveStateMachine.ChangeState(new IdleState());
         }
     }
 
