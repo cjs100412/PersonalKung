@@ -54,7 +54,7 @@ public class GroundChecker : MonoBehaviour
             // 두 벡터가 같은 방향을 가리킬수록 1에 가까워지고, 수직일수록 0에 가까워집니다.
             if (Vector3.Dot(normal, Vector3.up) >= _groundNormalThreshold)
             {
-                Debug.Log("닿음");
+                //Debug.Log("닿음");
                 _isGrounded = true;
                 return; // 땅을 찾았으므로 더 이상 확인할 필요가 없습니다.
             }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
@@ -5,6 +6,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class MineralTile : MonoBehaviour
 {
@@ -19,6 +21,9 @@ public class MineralTile : MonoBehaviour
     [SerializeField] private float _textdissapperTime;
     [SerializeField] private float repeatCycle;
 
+    [SerializeField] private Inventory _inventory;
+    public event Action<CustomOreTile> OnOreCollected;
+
     private Camera mainCamera;
     private HashSet<Vector3Int> removedCells = new HashSet<Vector3Int>();
 
@@ -29,6 +34,8 @@ public class MineralTile : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
+        if (_inventory.isFull) return;
+
         Vector3Int cellPos = mineralTilemap.WorldToCell(collision.transform.position);
         Vector3 tilePos = mineralTilemap.CellToWorld(cellPos) + Vector3.up * 0.3f;
 
@@ -39,6 +46,7 @@ public class MineralTile : MonoBehaviour
         if (tile is CustomOreTile customTile)
         {
             StartCoroutine(ExprotPrice(customTile.price, tilePos));
+            OnOreCollected?.Invoke(customTile); // 인벤토리 UI에 직접 접근하지않고 이벤트를 발생시킴
             mineralTilemap.SetTile(cellPos, null);
             removedCells.Add(cellPos);
         }
