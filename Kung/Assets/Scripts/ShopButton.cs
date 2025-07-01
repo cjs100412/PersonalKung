@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ public class ShopItem
     public string Id;
     public string ItemName; // 아이템 이름 (예: "구급상자")
     public int Price;       // 아이템 가격 (예: 1000)
+    public string Discription;
 }
 [Serializable]
 public class ShopItemList
@@ -38,10 +40,12 @@ public static class JsonHelper
 public class ShopButton : MonoBehaviour
 {
     [SerializeField] private Button[] _shopButtons;
+    [SerializeField] private GameObject TextPanel;
+    [SerializeField] private ShopText _shop;
     private ShopItem[] _shopItems;
-
     private void Awake()
     {
+
         // Resources 폴더에서 JSON 불러오기
         TextAsset jsonFile = Resources.Load<TextAsset>("ShopItems");
         if (jsonFile == null)
@@ -66,8 +70,9 @@ public class ShopButton : MonoBehaviour
             Debug.LogWarning("아이템 정보가 없습니다.");
             return;
         }
-
-        var item = _shopItems[index];
+        ShopItem item = _shopItems[index];
+        _shop.SetText(item.ItemName, item.Price, item.Discription);
         Debug.Log($"아이템 이름 : {item.ItemName}, 아이템 가격 : {item.Price}");
+        
     }
 }

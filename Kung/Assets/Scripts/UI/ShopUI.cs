@@ -2,7 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 
-public class Shop : MonoBehaviour
+public class ShopUI : MonoBehaviour
 {
     public Transform enterShopTarget;
     public Transform quitShopTarget;
@@ -14,7 +14,7 @@ public class Shop : MonoBehaviour
 
     public float delayBeforeShopOpen = 0.5f;
 
-    [SerializeField] private GameObject ShopUI;
+    [SerializeField] private GameObject _shopUI;
     [SerializeField] private GameObject InventoryUI;
     [SerializeField] private PlayerMovement playerMovement;
 
@@ -33,7 +33,7 @@ public class Shop : MonoBehaviour
         }
 
 
-        ShopUI.transform.DOLocalMove(quitShopTarget.localPosition, _UIspeed);
+        _shopUI.transform.DOLocalMove(quitShopTarget.localPosition, _UIspeed);
         InventoryUI.transform.DOLocalMove(quitInventoryTarget.localPosition, _UIspeed);
 
         playerMovement.IsMovementLocked = false;
@@ -81,7 +81,7 @@ public class Shop : MonoBehaviour
         // 이렇게 다시 확인하는 이유는 플레이어가 지연 시간 동안 트리거 밖으로 나갈 수도 있기 때문입니다.
         if (_isPlayerInsideTrigger)
         {
-            ShopUI.transform.DOLocalMove(enterShopTarget.localPosition, _UIspeed);
+            _shopUI.transform.DOLocalMove(enterShopTarget.localPosition, _UIspeed);
             InventoryUI.transform.DOLocalMove(enterInventoryTarget.localPosition, _UIspeed);
 
             playerMovement.IsMovementLocked = true;

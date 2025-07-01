@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 
 public class Gold
@@ -10,7 +11,7 @@ public class Gold
         _gold = gold;
     }
 
-    public static Gold New(int hp) => new Gold(hp);
+    public static Gold New(int gold) => new Gold(gold);
 
     public Gold AddGold(int amount)
     {
@@ -26,19 +27,13 @@ public class Gold
         // »ý·«
         if (_gold < amount)
         {
-            goldEnough = false;
             return Gold.New(_gold);
         }
-
-
-
-
-        goldEnough = true;
 
         return Gold.New(_gold - amount);
 
     }
+    public bool IsEnough(int amount) => _gold >= amount;
     public bool goldEnough;
-    private bool GoldLess(int amount) => _gold < amount;
 
 }
