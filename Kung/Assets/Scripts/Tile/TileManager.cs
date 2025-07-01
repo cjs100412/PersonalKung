@@ -3,36 +3,34 @@ using UnityEngine.Tilemaps;
 
 public class TilemapPopulator : MonoBehaviour
 {
+    [SerializeField] Transform par;
     [Header("미리 만든 타일맵 연결")]
-    [SerializeField] private Tilemap groundTilemap;
-    [SerializeField] private Tile groundTile;
+    [SerializeField] private GameObject brokenTileMap;
+    [SerializeField] private GameObject backGroundTIleMap;
+    [SerializeField] private GameObject frontMiniMapTilemap;
+    [SerializeField] private GameObject backMiniMapTilemap;
+    [SerializeField] private GameObject mineralTilemap;
 
-    [SerializeField] private Tilemap brokenTilemap;
-    [SerializeField] private Tile brokenTile;
+    [SerializeField] private Drilling _drilling;
 
-    [SerializeField] private Tilemap frontMiniMapTilemap;
-    [SerializeField] private Tile frontMiniMapTile;
 
-    [SerializeField] private Tilemap backMiniMapTilemap;
-    [SerializeField] private Tile backMiniMapTile;
 
     
 
-    [SerializeField] private Tilemap mineralTilemap;
     [SerializeField] private Tile mineralTile;
 
     public int width = 60;
     public int height = 666;
 
-    void Start()
+    void Awake()
     {
-        FillGround(brokenTilemap, brokenTile);
-        FillGround(groundTilemap, groundTile);
-        FillGround(frontMiniMapTilemap, frontMiniMapTile);
-        FillGround(backMiniMapTilemap, backMiniMapTile);
-
-
-        //PlaceMinerals();
+        Instantiate(backGroundTIleMap, par);
+        Instantiate(brokenTileMap, par);
+        Instantiate(frontMiniMapTilemap, par);
+        Instantiate(backMiniMapTilemap, par);
+        Instantiate(mineralTilemap, par);
+        _drilling._brokenableTilemap = brokenTileMap.GetComponent<Tilemap>();  
+        
     }
 
     void FillGround(Tilemap tilemap, Tile tile)
@@ -46,13 +44,5 @@ public class TilemapPopulator : MonoBehaviour
         }
     }
 
-    void PlaceMinerals()
-    {
-        for (int i = 0; i < 20; i++)
-        {
-            int x = Random.Range(-width / 2, width / 2);
-            int y = Random.Range(-height / 2, height / 2);
-            mineralTilemap.SetTile(new Vector3Int(x, y, 0), mineralTile);
-        }
-    }
+    
 }

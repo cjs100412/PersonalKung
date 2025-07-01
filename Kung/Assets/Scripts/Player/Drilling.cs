@@ -17,8 +17,8 @@ public enum CurrentDirectionState
 public class Drilling : MonoBehaviour
 {
     [Header("Ã¤±¼ Å¸ÀÏ¸Ê")]
-    [SerializeField] private Tilemap _brokenableTilemap;
-    [SerializeField] private Tilemap _mineralTilemap;
+    public Tilemap _brokenableTilemap;
+    
     [Header("¹Ì´Ï¸Ê °ü·Ã")]
     [SerializeField] private Tilemap _miniMapFrontTilemap;   //Ãß°¡
     [SerializeField] private TextMeshProUGUI _depthText;    //Ãß°¡
