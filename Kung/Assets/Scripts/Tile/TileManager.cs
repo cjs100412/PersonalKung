@@ -15,12 +15,9 @@ public class TilemapPopulator : MonoBehaviour
 
 
 
-    
 
-    [SerializeField] private Tile mineralTile;
 
-    public int width = 60;
-    public int height = 666;
+   
 
     void Awake()
     {
@@ -33,16 +30,6 @@ public class TilemapPopulator : MonoBehaviour
         
     }
 
-    void FillGround(Tilemap tilemap, Tile tile)
-    {
-        for (int x = -width / 2; x < width / 2; x++)
-        {
-            for (int y = -height / 2; y < height / 2; y++)
-            {
-                tilemap.SetTile(new Vector3Int(x, y -333, 0), tile);
-            }
-        }
-    }
-
+    
     
 }
