@@ -1,40 +1,20 @@
 using UnityEngine;
 
-public class MiniMapCamera : MonoBehaviour
+public class MiniMapCameraFollow : MonoBehaviour
 {
-    public Transform player;
-    private Vector3 positionControl; 
-
-    public bool followX = false;
-    public bool followY = true;
+    [SerializeField] private Transform _player;
+    private Vector3 _positionControl;  // 시작할 때의 오프셋 저장
 
     void Start()
     {
-        if (player != null)
-        {
-            positionControl = transform.position - player.position;   // 카메라 위치랑 플레이어 위치 조절
-        }
+        // 현재 카메라 위치에서 타겟까지의 오프셋을 저장
+       _positionControl = transform.position - _player.position;
     }
 
-    // LateUpdate로 튕김 방지
     void LateUpdate()
     {
-        if (player != null)
-        {
-            Vector3 currentPos = transform.position;
-
-            if (followX) 
-            { 
-                currentPos.x = player.position.x + positionControl.x;
-            }
-
-            if (followY)
-            {
-                currentPos.y = player.position.y + positionControl.y;
-            }
-
-            currentPos.z = player.position.z + positionControl.z;  // z좌표는 유지
-            transform.position = currentPos;
-        }
+        Vector3 currentPos = _player.position + _positionControl;
+        
+        transform.position = currentPos;
     }
 }
