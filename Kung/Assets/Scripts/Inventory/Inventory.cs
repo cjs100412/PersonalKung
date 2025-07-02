@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    public List<UserInventoryItem> items;
+    public List<Item> items;
 
     [SerializeField] private InventorySlotUI[] slots = new InventorySlotUI[25];
     [SerializeField] private MineralTile mineralTile;

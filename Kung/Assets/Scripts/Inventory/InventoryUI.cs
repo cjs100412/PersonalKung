@@ -40,20 +40,16 @@ class InventoryUI : MonoBehaviour
 
     private void OnPointerDown()
     {
-        // Left Click : Begin Drag
         if (Input.GetMouseButtonDown(0))
         {
             _beginDragSlot = RaycastAndGetFirstComponent<InventorySlotUI>();
 
-            // 아이템을 갖고 있는 슬롯만 해당
             if (_beginDragSlot != null && !_beginDragSlot.isEmpty)
             {
-                // 위치 기억, 참조 등록
                 _beginDragIconTransform = _beginDragSlot.transform;
                 _beginDragIconPoint = _beginDragIconTransform.position;
                 _beginDragCursorPoint = Input.mousePosition;
 
-                // 맨 위에 보이기
                 _beginDragSlotSiblingIndex = _beginDragSlot.transform.GetSiblingIndex();
                 _beginDragSlot.transform.SetAsLastSibling();
             }
@@ -63,33 +59,28 @@ class InventoryUI : MonoBehaviour
             }
         }
     }
-    /// <summary> 드래그하는 도중 </summary>
+
     private void OnPointerDrag()
     {
         if (_beginDragSlot == null) return;
 
         if (Input.GetMouseButton(0))
         {
-            // 위치 이동
             _beginDragIconTransform.position =
                 _beginDragIconPoint + (Input.mousePosition - _beginDragCursorPoint);
         }
     }
-    /// <summary> 클릭을 뗄 경우 </summary>
+
     private void OnPointerUp()
     {
         if (Input.GetMouseButtonUp(0))
         {
-            // End Drag
             if (_beginDragSlot != null)
             {
-                // 위치 복원
                 _beginDragIconTransform.position = _beginDragIconPoint;
 
-                // UI 순서 복원
                 _beginDragSlot.transform.SetSiblingIndex(_beginDragSlotSiblingIndex);
 
-                // 참조 제거
                 _beginDragSlot = null;
                 _beginDragIconTransform = null;
             }
