@@ -5,13 +5,12 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Unity 인스펙터에서 이 구조체를 편집할 수 있도록 [Serializable] 어트리뷰트 추가
 [Serializable]
 public class ShopItem
 {
     public string Id;
-    public string ItemName; // 아이템 이름 (예: "구급상자")
-    public int Price;       // 아이템 가격 (예: 1000)
+    public string ItemName;
+    public int Price;      
     public string Discription;
 }
 [Serializable]
@@ -36,17 +35,21 @@ public static class JsonHelper
 }
 
 
-
+/// <summary>
+/// Json에서 불러온 데이터로 상점에 보여줄 아이템 버튼 생성과 버튼 클릭시 상호작용을 구현
+/// </summary>
 public class ShopButton : MonoBehaviour
 {
-    [SerializeField] private Button[] _shopButtons;
-    [SerializeField] private GameObject TextPanel;
-    [SerializeField] private ShopText _shop;
+    [Header("아이템 생성할 부모")]
+    [SerializeField] private RectTransform buttonParent;
+
+    [Header("생성할 프리팹")]
     [SerializeField] private GameObject _shopButtonPrefab;
-    [SerializeField] private Image _buttonIcon;
-    [SerializeField] private TextMeshPro _nameText;
-    [SerializeField] private TextMeshPro _priceText;
-    [SerializeField] private RectTransform buttonPar;
+
+    [Header("버튼 클릭시 텍스트 출력을 위한 요소들")]
+    [SerializeField] private ShopText _shopText;
+    [SerializeField] private GameObject TextPanel;
+
     private ShopItem[] _shopItems;
     const string path = "Items/";
     private void Awake()
@@ -65,7 +68,7 @@ public class ShopButton : MonoBehaviour
         for (int i = 0; i < _shopItems.Length; i++)
         {
             int itemIndex = i;
-            GameObject go = Instantiate(_shopButtonPrefab, buttonPar);
+            GameObject go = Instantiate(_shopButtonPrefab, buttonParent);
 
             go.GetComponentsInChildren<Image>()[1].sprite = Resources.Load<Sprite>(path + _shopItems[i].Id.ToString());
             
@@ -85,7 +88,7 @@ public class ShopButton : MonoBehaviour
 
         }
         ShopItem item = _shopItems[index];
-        _shop.SetText(item.ItemName, item.Price, item.Discription);
+        _shopText.SetText(item.ItemName, item.Price, item.Discription);
         Debug.Log($"아이템 이름 : {item.ItemName}, 아이템 가격 : {item.Price}");
         
     }

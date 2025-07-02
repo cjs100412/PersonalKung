@@ -4,12 +4,15 @@ using UnityEngine.UI;
 
 public class ShopText : MonoBehaviour
 {
+    [Header("메시지 박스에서 출력을 위한 UI 연결")]
     [SerializeField] Text _itemName;
-    [SerializeField] TextMeshProUGUI _itemPrice;
     [SerializeField] Text _itemDiscription;
+    [SerializeField] TextMeshProUGUI _itemPrice;
+
+    [Header("각 패널 연결")]
     [SerializeField] GameObject _shopTextPanel;
     [SerializeField] GameObject _shopNotEnoughTextPanel;
-    [SerializeField] private Gold playerGold;
+    private Gold playerGold;
     private int _price;
     private void Start()
     {
