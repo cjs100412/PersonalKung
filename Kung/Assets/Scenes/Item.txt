@@ -1,0 +1,114 @@
+Item
+
+- int id
+
+ItemService
+
+- id로 스프라이트 반환 함수
+
+Inventory
+
+- 인벤토리 정의
+- 유저 인벤토리 아이템 담고 있음
+
+userInventoryItem
+
+- 유저가 획득한 아이템 
+
+
+[System.Serializable]
+public class ItemData
+{
+    public string itemName;
+    public Sprite icon;
+    public int maxStack = 1;
+}
+
+[System.Serializable]
+public class InventorySlot
+{
+    public ItemData item;
+    public int count;
+
+    public bool IsEmpty => item == null || count == 0;
+
+    public void AddItem(ItemData newItem, int amount)
+    {
+        if (item == null)
+        {
+            item = newItem;
+            count = amount;
+        }
+        else if (item == newItem)
+        {
+            count += amount;
+        }
+    }
+
+    public void RemoveItem(int amount)
+    {
+        count -= amount;
+        if (count <= 0)
+        {
+            ClearSlot();
+        }
+    }
+
+    public void ClearSlot()
+    {
+        item = null;
+        count = 0;
+    }
+}
+
+public class Inventory : MonoBehaviour
+{
+    public List<InventorySlot> slots = new List<InventorySlot>();
+    public int slotCount = 20;
+
+    private void Awake()
+    {
+        for (int i = 0; i < slotCount; i++)
+        {
+            slots.Add(new InventorySlot());
+        }
+    }
+
+    public bool AddItem(ItemData item, int amount = 1)
+    {
+        // 이미 있는 아이템 스택에 추가
+        foreach (var slot in slots)
+        {
+            if (!slot.IsEmpty && slot.item == item && slot.count < item.maxStack)
+            {
+                slot.AddItem(item, amount);
+                return true;
+            }
+        }
+
+        // 빈 슬롯에 추가
+        foreach (var slot in slots)
+        {
+            if (slot.IsEmpty)
+            {
+                slot.AddItem(item, amount);
+                return true;
+            }
+        }
+
+        // 인벤토리 가득 참
+        return false;
+    }
+
+    public void RemoveItem(ItemData item, int amount = 1)
+    {
+        foreach (var slot in slots)
+        {
+            if (!slot.IsEmpty && slot.item == item)
+            {
+                slot.RemoveItem(amount);
+                break;
+            }
+        }
+    }
+}
