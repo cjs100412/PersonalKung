@@ -17,10 +17,9 @@ public enum CurrentDirectionState
 public class Drilling : MonoBehaviour
 {
     [Header("잘 연결해야 함")]
-    [SerializeField] private Tilemap _brokenableTilemap;
     [SerializeField] private Tilemap _mineralTilemap;
     [Header("미니맵 관련")]
-    [SerializeField] private Tilemap _miniMapFrontTilemap;   //추가
+    public Tilemap _miniMapFrontTilemap;   //추가
     [SerializeField] private TextMeshProUGUI _depthText;    //추가
     private int _surfaceY; // 지면높이.추가
 
@@ -32,7 +31,8 @@ public class Drilling : MonoBehaviour
     public float drillCoolTime; // 낮을수록 좋음
 
     private PlayerMovement _player;
-    
+    public Tilemap _brokenableTilemap;
+
     public CurrentDirectionState currentDirectionState = CurrentDirectionState.Down; // 현재 굴착할 방향
 
     public bool isDrilling = false;
