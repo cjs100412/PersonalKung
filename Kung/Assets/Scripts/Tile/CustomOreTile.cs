@@ -19,5 +19,6 @@ public class CustomOreTile : Tile
     }
     public OreType oreType;
     public int price;
+    public int id;
     // 추가적인 필드...
 }
