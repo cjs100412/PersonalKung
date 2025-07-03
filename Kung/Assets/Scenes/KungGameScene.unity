@@ -4653,10 +4653,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 612670527}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d029695e58f6ff44ab7c5c2a4183173e, type: 3}
+  m_Script: {fileID: 11500000, guid: b502637fe3db7494f850f0f5a5ba67de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inventoryServiceLocator: {fileID: 11400000, guid: ec01cf465d4266d479ff8dc0ccd128c5, type: 2}
+  _inventoryServiceLocator: {fileID: 11400000, guid: 9e305352b541900459714187f962477e, type: 2}
   _inventoryRepositoryLocator: {fileID: 11400000, guid: 6066df244f63c054987255406f157c4f, type: 2}
   _inventoryItemServiceLocator: {fileID: 11400000, guid: c0e7431e0933d3b4da50bc33bd4bc5d6, type: 2}
 --- !u!1 &642223360
@@ -6827,7 +6827,7 @@ MonoBehaviour:
   pool: {fileID: 2015925899}
   _textdissapperTime: 2
   repeatCycle: 0.07
-  _inventoryServiceLocator: {fileID: 11400000, guid: ec01cf465d4266d479ff8dc0ccd128c5, type: 2}
+  _inventoryServiceLocator: {fileID: 11400000, guid: 9e305352b541900459714187f962477e, type: 2}
 --- !u!1 &728004660
 GameObject:
   m_ObjectHideFlags: 0
@@ -32394,11 +32394,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1714175648}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efb973bad5752d3409a6546b3b4eb372, type: 3}
+  m_Script: {fileID: 11500000, guid: 58ff71d03c032a54c8f67736b9a1bace, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _inventoryItems: {fileID: 1391989253}
-  _inventoryServiceLocator: {fileID: 11400000, guid: ec01cf465d4266d479ff8dc0ccd128c5, type: 2}
+  _inventoryServiceLocator: {fileID: 11400000, guid: 9e305352b541900459714187f962477e, type: 2}
   _inventoryRepositoryLocator: {fileID: 11400000, guid: 6066df244f63c054987255406f157c4f, type: 2}
   _itemServiceLocator: {fileID: 11400000, guid: c0e7431e0933d3b4da50bc33bd4bc5d6, type: 2}
   _UIspeed: 0.5
@@ -32757,7 +32757,7 @@ MonoBehaviour:
   _itemPrice: {fileID: 656644660}
   _shopTextPanel: {fileID: 1554642043}
   _shopNotEnoughTextPanel: {fileID: 773295711}
-  _inventoryServiceLocator: {fileID: 11400000, guid: ec01cf465d4266d479ff8dc0ccd128c5, type: 2}
+  _inventoryServiceLocator: {fileID: 11400000, guid: 9e305352b541900459714187f962477e, type: 2}
   _inventoryUI: {fileID: 1714175652}
 --- !u!1001 &1824717299
 PrefabInstance:
@@ -40619,7 +40619,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9194987711842007457}
   - component: {fileID: 5428683844403216974}
-  - component: {fileID: 9194987711842007458}
   - component: {fileID: 9194987711842007459}
   - component: {fileID: 9194987711842007460}
   m_Layer: 8
@@ -41492,28 +41491,6 @@ Transform:
   - {fileID: 5204708961140592883}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9194987711842007458
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8275996748172859492}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b36c36113f96e41b01caf087e9e6a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enterShopTarget: {fileID: 1496746570}
-  quitShopTarget: {fileID: 1397566403}
-  enterInventoryTarget: {fileID: 2047732718}
-  quitInventoryTarget: {fileID: 559650014}
-  _UIspeed: 0.5
-  delayBeforeShopOpen: 0.5
-  _shopUI: {fileID: 495144893}
-  InventoryUI: {fileID: 1130738014}
-  playerMovement: {fileID: 1513979808}
-  _isPlayerInsideTrigger: 0
 --- !u!61 &9194987711842007459
 BoxCollider2D:
   m_ObjectHideFlags: 0
