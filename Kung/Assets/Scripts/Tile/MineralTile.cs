@@ -31,10 +31,10 @@ public class MineralTile : MonoBehaviour
     {
         mainCamera = Camera.main;
 
-        for (int count = 1; count <= 24; ++count)
-        {
-            _inventoryServiceLocator.Service.AcquireItem(1003);
-        }
+        //for (int count = 1; count <= 24; ++count)
+        //{
+        //    _inventoryServiceLocator.Service.AcquireItem(1003);
+        //}
     }
 
     private void OnTriggerStay2D(Collider2D collision)
