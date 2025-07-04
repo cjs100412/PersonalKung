@@ -22,6 +22,8 @@ public class PlayerHealth : MonoBehaviour
     public Health hp;
     public Air air;
 
+    [SerializeField] private PlayerStats _playerStats;
+
     public int MaxHp => _maxhp;
     public int MaxAir
     {
@@ -35,19 +37,29 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        _playerStats.OnAirCapacityChanged += HandleAirCapacityChanged;
+    }
+
+    private void OnDisable()
+    {
+        _playerStats.OnAirCapacityChanged -= HandleAirCapacityChanged;
+    }
+
     private void Awake()
     {
         hp = Health.New(_maxhp, _maxhp);
-        air = Air.New(_maxair, _maxair);
+        air = Air.New(MaxAir, MaxAir);
     }
 
     void Update()
     {
         if (hp.IsDead) return;
 
-        if(transform.position.y >= -1 && air.Current < _maxair)
+        if(transform.position.y >= -1 && air.Current < MaxAir)
         {
-            air = air.Heal(_maxair);
+            air = air.Heal(MaxAir);
         }
 
         if(transform.position.y < -1 && !_isAirDecrease)
@@ -123,5 +135,18 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log($"현재 산소 :{air.Amount}");
         yield return new WaitForSeconds(_decreaseAirTime);
         _isAirDecrease = false;
+    }
+
+    private void HandleAirCapacityChanged(float newCapacity)
+    {
+        MaxAir = Mathf.FloorToInt(newCapacity);
+        if(air.Amount > MaxAir)
+        {
+            air = Air.New(MaxAir, MaxAir);
+        }
+        else
+        {
+            air = Air.New(air.Amount, MaxAir);
+        }
     }
 }

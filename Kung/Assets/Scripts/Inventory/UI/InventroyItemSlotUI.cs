@@ -10,7 +10,7 @@ public class InventoryItemSlotUI : MonoBehaviour
 {
     [SerializeField] private Image _icon;
     [SerializeField] private TextMeshProUGUI _quantityText;
-    [SerializeField] private Sprite sprite;
+    [SerializeField] private Sprite _sprite;
     public Sprite currentSprite;
 
     public bool isItem;
@@ -31,7 +31,7 @@ public class InventoryItemSlotUI : MonoBehaviour
 
     public void RemoveData()
     {
-        _icon.sprite = sprite;
+        _icon.sprite = _sprite;
         _quantityText.text = "";
         isItem = false;
         _itemId = 0;

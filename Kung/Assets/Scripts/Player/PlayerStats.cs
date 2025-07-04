@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -12,7 +13,19 @@ public class PlayerStats : MonoBehaviour
     public float boosterSpeed;
     public float defense;
     public float drillDamage;
-    public float airCapacity;
+    public float _airCapacity;
+    public float airCapacity
+    {
+        get => _airCapacity;
+
+        set
+        {
+            _airCapacity = value;
+            OnAirCapacityChanged?.Invoke(_airCapacity);
+        }
+    }
+
+    public event Action<float> OnAirCapacityChanged;
 
     private void Start()
     {
