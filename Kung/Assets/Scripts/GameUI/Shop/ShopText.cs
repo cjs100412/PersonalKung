@@ -20,7 +20,7 @@ public class ShopText : MonoBehaviour
     [SerializeField] private InventoryUI _inventoryUI;
     private void Start()
     {
-        playerGold = Gold.New(10000);
+        playerGold = Gold.New(1000000);
 
     }
     public void SetText(string name, int price, string dis)

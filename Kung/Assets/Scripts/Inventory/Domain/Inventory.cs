@@ -5,7 +5,6 @@ using System.Linq;
 public class Inventory
 {
     List<UserInventoryItem> items = new List<UserInventoryItem>();
-
     public bool IsSlotCountFull => items.Count >= 25;
 
     public IReadOnlyList<UserInventoryItem> Items
