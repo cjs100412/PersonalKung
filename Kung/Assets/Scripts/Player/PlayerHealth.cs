@@ -15,9 +15,18 @@ public class PlayerHealth : MonoBehaviour
     private bool _isInvincible;
     private float _invincibleTime = 1.0f;
 
-    [Header("Head¶û Body ¾Ö´Ï¸ŞÀÌÅÍ ¿¬°á")]
-    public Animator headAnimator;
-    public Animator bodyAnimator;
+    [HideInInspector] public bool isDamaged;
+
+    [Header("Headë‘ Body ì• ë‹ˆë©”ì´í„° ì—°ê²°")]
+    [SerializeField] private Animator _headAnimator;
+    [SerializeField] private Animator _bodyAnimator;
+
+    [Header("Damage Object ì—°ê²°")]
+    [SerializeField] private Rigidbody2D _playerRigid;
+    [SerializeField] private Animator _damageAnimator;
+    [SerializeField] private GameObject _damageObject;
+    [SerializeField] private GameObject _headObject;
+    [SerializeField] private GameObject _bodyObject;
 
     public Health hp;
     public Air air;
@@ -27,15 +36,10 @@ public class PlayerHealth : MonoBehaviour
     public int MaxHp => _maxhp;
     public int MaxAir
     {
-        get
-        {
-            return _maxair;
-        }
-        private set
-        {
-            _maxair = value;
-        }
+        get => _maxair;
+        set => _maxair = value;
     }
+    
 
     private void OnEnable()
     {
@@ -79,7 +83,7 @@ public class PlayerHealth : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             air = air.AirDecrease(5);
-            Debug.Log($"ÇöÀç »ê¼Ò :{air.Amount}");
+            Debug.Log($"í˜„ì¬ ì‚°ì†Œ :{air.Amount}");
         }
     }
 
@@ -88,7 +92,7 @@ public class PlayerHealth : MonoBehaviour
         _isHpDecrease = true;
         yield return new WaitForSeconds(_hpDecreaseInterval);
         hp = hp.TakeDamage(1);
-        Debug.Log($"ÇöÀç Ã¼·Â : {hp.Amount}");
+        Debug.Log($"í˜„ì¬ ì²´ë ¥ : {hp.Amount}");
 
         if (hp.IsDead)
         {
@@ -104,26 +108,29 @@ public class PlayerHealth : MonoBehaviour
         hp = hp.TakeDamage(amount);
         if(hp.IsDead)
         {
-            Die();
+            Die();  
             return;
         }
-        headAnimator.SetTrigger("isDamaged");
-        bodyAnimator.SetTrigger("isDamaged");
+
+        StartCoroutine(playerAttacked());
+        // ì½”ë£¨í‹´ì´ ì‹œì‘ë˜ë©´ í”Œë ˆì´ì–´ë¥¼ ì´ë™ì‹œí‚¬ ìˆ˜ ì—†ê³ , ë¬´ì  ìƒíƒœê°€ ë¨
+
+
         StartCoroutine(Invincible());
-        Debug.Log($"ÇöÀç Ã¼·Â : {hp.Amount}");
+        Debug.Log($"í˜„ì¬ ì²´ë ¥ : {hp.Amount}");
     }
 
     public void Die()
     {
-        headAnimator.SetTrigger("isDead");
-        bodyAnimator.SetTrigger("isDead");
-        Debug.Log("»ç¸Á");
+        _headAnimator.SetTrigger("isDead");
+        _bodyAnimator.SetTrigger("isDead");
+        Debug.Log("ì‚¬ë§");
     }
 
     IEnumerator Invincible()
     {
         _isInvincible = true;
-        Debug.Log("¹«Àû");
+        Debug.Log("ë¬´ì ");
         yield return new WaitForSeconds(_invincibleTime);
         _isInvincible = false;
     }
@@ -132,9 +139,30 @@ public class PlayerHealth : MonoBehaviour
     {
         _isAirDecrease = true;
         air = air.AirDecrease(1);
-        Debug.Log($"ÇöÀç »ê¼Ò :{air.Amount}");
+        Debug.Log($"í˜„ì¬ ì‚°ì†Œ :{air.Amount}");
         yield return new WaitForSeconds(_decreaseAirTime);
         _isAirDecrease = false;
+    }
+
+
+    IEnumerator playerAttacked()
+    {
+        isDamaged = true;
+        _damageObject.SetActive(true);
+        _damageAnimator.SetBool("isDamaged", true);
+        SetPlayerObjectsActive(false);
+        _playerRigid.linearVelocity = new Vector2(0, 2);
+        yield return new WaitForSeconds(0.8f);
+        _damageAnimator.SetBool("isDamaged", false);
+        _damageObject.SetActive(false);
+        SetPlayerObjectsActive(true);
+        isDamaged = false;
+    }
+
+    private void SetPlayerObjectsActive(bool isActive)
+    {
+        _headObject.SetActive(isActive);
+        _bodyObject.SetActive(isActive);
     }
 
     private void HandleAirCapacityChanged(float newCapacity)
