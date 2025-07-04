@@ -33,6 +33,7 @@ public class Drilling : MonoBehaviour
 
     private PlayerMovement _player;
     public Tilemap _brokenableTilemap;
+    public Tilemap _rockTilemap;
 
     public CurrentDirectionState currentDirectionState = CurrentDirectionState.Down; // ÇöÀç ±¼ÂøÇÒ ¹æÇâ
 
@@ -112,26 +113,34 @@ public class Drilling : MonoBehaviour
         while (true)
         {
             Vector3Int currentPos = _brokenableTilemap.WorldToCell(transform.position);
+            Vector3Int rockCurrentPos = _rockTilemap.WorldToCell(transform.position);
             Vector3Int pos = currentPos;
+            Vector3Int rockPos = rockCurrentPos;
             switch (currentDirectionState)
             {
                 case CurrentDirectionState.Left:
                     pos = new Vector3Int(currentPos.x - 1, currentPos.y);
+                    rockPos = new Vector3Int(rockCurrentPos.x - 1, rockCurrentPos.y);
                     break;
                 case CurrentDirectionState.Right:
                     pos = new Vector3Int(currentPos.x + 1, currentPos.y);
-
+                    rockPos = new Vector3Int(rockCurrentPos.x + 1, rockCurrentPos.y);
                     break;
                 case CurrentDirectionState.Down:
                     pos = new Vector3Int(currentPos.x, currentPos.y - 1);
+                    rockPos = new Vector3Int(rockCurrentPos.x, rockCurrentPos.y - 1);
                     break;
             }
 
             (bool valid, int x, int y) = TryCellToIndex(pos);
-            if (!_brokenableTilemap.HasTile(pos))
+            if (!_brokenableTilemap.HasTile(pos) && !_rockTilemap.HasTile(rockPos))
             {
                 isDrilling = false;
 
+            }
+            else if(_rockTilemap.HasTile(rockPos))
+            {
+                isDrilling = true;
             }
             else
             {
@@ -158,7 +167,7 @@ public class Drilling : MonoBehaviour
                         _brokenableTilemap.SetTile(pos, newTile);
                     }
                 }
-                
+
             }
             
 

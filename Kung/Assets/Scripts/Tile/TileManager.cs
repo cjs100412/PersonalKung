@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class TilemapPopulator : MonoBehaviour
+public class TileManager : MonoBehaviour
 {
     [SerializeField] Transform par;
     [Header("미리 만든 타일맵 연결")]
@@ -13,8 +13,8 @@ public class TilemapPopulator : MonoBehaviour
     [SerializeField] private Drilling _drilling;
 
 
+    private Tilemap brokenTileMapInstance;
 
-    
 
     [SerializeField] private Tile mineralTile;
 
@@ -25,10 +25,10 @@ public class TilemapPopulator : MonoBehaviour
     {
         Instantiate(backGroundTIleMap, par);
         Instantiate(backMiniMapTilemap, par);
-        _drilling._brokenableTilemap = Instantiate(brokenTileMap, par).GetComponent<Tilemap>();  
-        _drilling._miniMapFrontTilemap = Instantiate(frontMiniMapTilemap, par).GetComponent<Tilemap>();  
-        
+        _drilling._brokenableTilemap = Instantiate(brokenTileMap, par).GetComponent<Tilemap>();
+        _drilling._miniMapFrontTilemap = Instantiate(frontMiniMapTilemap, par).GetComponent<Tilemap>();
     }
+
 
     void FillGround(Tilemap tilemap, Tile tile)
     {

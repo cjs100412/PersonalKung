@@ -22,6 +22,19 @@ public class PlayerHealth : MonoBehaviour
     public Health hp;
     public Air air;
 
+    public int MaxHp => _maxhp;
+    public int MaxAir
+    {
+        get
+        {
+            return _maxair;
+        }
+        private set
+        {
+            _maxair = value;
+        }
+    }
+
     private void Awake()
     {
         hp = Health.New(_maxhp, _maxhp);
@@ -32,12 +45,12 @@ public class PlayerHealth : MonoBehaviour
     {
         if (hp.IsDead) return;
 
-        if(transform.position.y >= -4 && air.Current < _maxair)
+        if(transform.position.y >= -1 && air.Current < _maxair)
         {
             air = air.Heal(_maxair);
         }
 
-        if(transform.position.y < -4 && !_isAirDecrease)
+        if(transform.position.y < -1 && !_isAirDecrease)
         {
             StartCoroutine(airDecrease());
         }
@@ -54,7 +67,7 @@ public class PlayerHealth : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             air = air.AirDecrease(5);
-            Debug.Log($"현재 산소 :{air}");
+            Debug.Log($"현재 산소 :{air.Amount}");
         }
     }
 
@@ -63,7 +76,7 @@ public class PlayerHealth : MonoBehaviour
         _isHpDecrease = true;
         yield return new WaitForSeconds(_hpDecreaseInterval);
         hp = hp.TakeDamage(1);
-        Debug.Log($"현재 체력 : {hp}");
+        Debug.Log($"현재 체력 : {hp.Amount}");
 
         if (hp.IsDead)
         {
@@ -85,7 +98,7 @@ public class PlayerHealth : MonoBehaviour
         headAnimator.SetTrigger("isDamaged");
         bodyAnimator.SetTrigger("isDamaged");
         StartCoroutine(Invincible());
-        Debug.Log($"현재 체력 : {hp}");
+        Debug.Log($"현재 체력 : {hp.Amount}");
     }
 
     public void Die()
@@ -107,6 +120,7 @@ public class PlayerHealth : MonoBehaviour
     {
         _isAirDecrease = true;
         air = air.AirDecrease(1);
+        Debug.Log($"현재 산소 :{air.Amount}");
         yield return new WaitForSeconds(_decreaseAirTime);
         _isAirDecrease = false;
     }
