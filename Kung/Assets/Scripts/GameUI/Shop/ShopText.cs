@@ -16,8 +16,10 @@ public class ShopText : MonoBehaviour
     private Gold playerGold;
     private int _price;
     [SerializeField] private InventoryServiceLocatorSO _inventoryServiceLocator;
+    [SerializeField] private ShortCutServiceLocatorSO _shortCutServiceLocator;
     private int id;
     [SerializeField] private InventoryUI _inventoryUI;
+    [SerializeField] private ShortcutKey _shortcutKey;
     private void Start()
     {
         playerGold = Gold.New(1000000);
@@ -42,7 +44,15 @@ public class ShopText : MonoBehaviour
         if (playerGold.IsEnough(_price))
         {
             playerGold = playerGold.RemoveGold(_price);
-            _inventoryServiceLocator.Service.AcquireItem(id);
+            if(id < 2000)
+            {
+                _shortCutServiceLocator.Service.AddShortCutItemQuantity(id);
+            }
+            else
+            {
+                _inventoryServiceLocator.Service.AcquireItem(id);
+            }
+            _shortcutKey.Refresh();
             _inventoryUI.Refresh();
         }
         else

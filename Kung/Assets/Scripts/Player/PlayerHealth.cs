@@ -17,11 +17,11 @@ public class PlayerHealth : MonoBehaviour
 
     [HideInInspector] public bool isDamaged;
 
-    [Header("Head¶û Body ¾Ö´Ï¸ÞÀÌÅÍ ¿¬°á")]
+    [Header("Headëž‘ Body ì• ë‹ˆë©”ì´í„° ì—°ê²°")]
     [SerializeField] private Animator _headAnimator;
     [SerializeField] private Animator _bodyAnimator;
 
-    [Header("Damage Object ¿¬°á")]
+    [Header("Damage Object ì—°ê²°")]
     [SerializeField] private Rigidbody2D _playerRigid;
     [SerializeField] private Animator _damageAnimator;
     [SerializeField] private GameObject _damageObject;
@@ -31,6 +31,8 @@ public class PlayerHealth : MonoBehaviour
     public Health hp;
     public Air air;
 
+    [SerializeField] private PlayerStats _playerStats;
+
     public int MaxHp => _maxhp;
     public int MaxAir
     {
@@ -39,19 +41,29 @@ public class PlayerHealth : MonoBehaviour
     }
     
 
+    private void OnEnable()
+    {
+        _playerStats.OnAirCapacityChanged += HandleAirCapacityChanged;
+    }
+
+    private void OnDisable()
+    {
+        _playerStats.OnAirCapacityChanged -= HandleAirCapacityChanged;
+    }
+
     private void Awake()
     {
         hp = Health.New(_maxhp, _maxhp);
-        air = Air.New(_maxair, _maxair);
+        air = Air.New(MaxAir, MaxAir);
     }
 
     void Update()
     {
         if (hp.IsDead) return;
 
-        if(transform.position.y >= -1 && air.Current < _maxair)
+        if(transform.position.y >= -1 && air.Current < MaxAir)
         {
-            air = air.Heal(_maxair);
+            air = air.Heal(MaxAir);
         }
 
         if(transform.position.y < -1 && !_isAirDecrease)
@@ -71,7 +83,7 @@ public class PlayerHealth : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             air = air.AirDecrease(5);
-            Debug.Log($"ÇöÀç »ê¼Ò :{air.Amount}");
+            Debug.Log($"í˜„ìž¬ ì‚°ì†Œ :{air.Amount}");
         }
     }
 
@@ -80,7 +92,7 @@ public class PlayerHealth : MonoBehaviour
         _isHpDecrease = true;
         yield return new WaitForSeconds(_hpDecreaseInterval);
         hp = hp.TakeDamage(1);
-        Debug.Log($"ÇöÀç Ã¼·Â : {hp.Amount}");
+        Debug.Log($"í˜„ìž¬ ì²´ë ¥ : {hp.Amount}");
 
         if (hp.IsDead)
         {
@@ -101,24 +113,24 @@ public class PlayerHealth : MonoBehaviour
         }
 
         StartCoroutine(playerAttacked());
-        // ÄÚ·çÆ¾ÀÌ ½ÃÀÛµÇ¸é ÇÃ·¹ÀÌ¾î¸¦ ÀÌµ¿½ÃÅ³ ¼ö ¾ø°í, ¹«Àû »óÅÂ°¡ µÊ
+        // ì½”ë£¨í‹´ì´ ì‹œìž‘ë˜ë©´ í”Œë ˆì´ì–´ë¥¼ ì´ë™ì‹œí‚¬ ìˆ˜ ì—†ê³ , ë¬´ì  ìƒíƒœê°€ ë¨
 
 
         StartCoroutine(Invincible());
-        Debug.Log($"ÇöÀç Ã¼·Â : {hp.Amount}");
+        Debug.Log($"í˜„ìž¬ ì²´ë ¥ : {hp.Amount}");
     }
 
     public void Die()
     {
         _headAnimator.SetTrigger("isDead");
         _bodyAnimator.SetTrigger("isDead");
-        Debug.Log("»ç¸Á");
+        Debug.Log("ì‚¬ë§");
     }
 
     IEnumerator Invincible()
     {
         _isInvincible = true;
-        Debug.Log("¹«Àû");
+        Debug.Log("ë¬´ì ");
         yield return new WaitForSeconds(_invincibleTime);
         _isInvincible = false;
     }
@@ -127,10 +139,11 @@ public class PlayerHealth : MonoBehaviour
     {
         _isAirDecrease = true;
         air = air.AirDecrease(1);
-        Debug.Log($"ÇöÀç »ê¼Ò :{air.Amount}");
+        Debug.Log($"í˜„ìž¬ ì‚°ì†Œ :{air.Amount}");
         yield return new WaitForSeconds(_decreaseAirTime);
         _isAirDecrease = false;
     }
+
 
     IEnumerator playerAttacked()
     {
@@ -152,4 +165,16 @@ public class PlayerHealth : MonoBehaviour
         _bodyObject.SetActive(isActive);
     }
 
+    private void HandleAirCapacityChanged(float newCapacity)
+    {
+        MaxAir = Mathf.FloorToInt(newCapacity);
+        if(air.Amount > MaxAir)
+        {
+            air = Air.New(MaxAir, MaxAir);
+        }
+        else
+        {
+            air = Air.New(air.Amount, MaxAir);
+        }
+    }
 }
