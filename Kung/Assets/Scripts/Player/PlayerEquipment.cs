@@ -1,10 +1,16 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 
 public class PlayerEquipment : MonoBehaviour
 {
     public EquipmentData equippedHelmet;
     public EquipmentData equippedBoots;
     public EquipmentData equippedDrill;
+
+    [SerializeField] TextMeshProUGUI drillDamageText;
+    [SerializeField] TextMeshProUGUI moveMentSpeedText;
+    [SerializeField] TextMeshProUGUI defenseText;
+    [SerializeField] TextMeshProUGUI airCapacityText;
 
     private PlayerStats playerStats;
 
@@ -23,12 +29,12 @@ public class PlayerEquipment : MonoBehaviour
                 ApplyEquipment(equippedHelmet);
                 break;
             case EquipmentData.EquipmentType.Boots:
-                ApplyEquipment(equippedBoots);
                 equippedBoots = equipment;
+                ApplyEquipment(equippedBoots);
                 break;
             case EquipmentData.EquipmentType.Drill:
-                ApplyEquipment(equippedDrill);
                 equippedDrill = equipment;
+                ApplyEquipment(equippedDrill);
                 break;
         }
 
@@ -46,13 +52,19 @@ public class PlayerEquipment : MonoBehaviour
             case EquipmentData.EquipmentType.Helmet:
                 playerStats.defense = data.defance;
                 playerStats.airCapacity = data.airCapacity;
+                defenseText.text = playerStats.defense.ToString();
+                airCapacityText.text = playerStats.airCapacity.ToString(); 
+
                 break;
             case EquipmentData.EquipmentType.Boots:
                 playerStats.boosterSpeed = data.bosterSpeed;
                 playerStats.movementSpeed = data.movementSpeed;
+                moveMentSpeedText.text = playerStats.boosterSpeed.ToString();
+
                 break;
             case EquipmentData.EquipmentType.Drill:
                 playerStats.drillDamage = data.drillDamage;
+                drillDamageText.text = playerStats.drillDamage.ToString(); 
                 break;
             default:
                 break;

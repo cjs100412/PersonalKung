@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7465a86bb8075c545841b4cae2b9ddbd, type: 3}
   m_Name: drill3
   m_EditorClassIdentifier: 
-  itemId: 0
+  equipmentType: 3
+  itemId: 2203
   movementSpeed: 0
   bosterSpeed: 0
   defance: 0
-  drillDamage: 0
+  drillDamage: 4
   airCapacity: 0

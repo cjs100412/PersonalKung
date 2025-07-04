@@ -12,6 +12,8 @@ public interface IUserInventroyService
     void AcquireItem(int itemId);
     void SellAllMineral();
     bool CanAcquireItem(int itemId);
+
+    void RemoveItem(int itemId);
 }
 
 
@@ -73,5 +75,10 @@ public class UserInventoryService : IUserInventroyService
         }
 
         Debug.Log("모든 광물을 판매하여 얻은 금액: " + allprice);
+    }
+
+    public void RemoveItem(int itemId)
+    {
+        _inventory.RemoveItem(itemId);
     }
 }
