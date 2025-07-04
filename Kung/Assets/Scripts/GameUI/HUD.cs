@@ -27,8 +27,16 @@ public class UI : MonoBehaviour
 
     private void Update()
     {
-        hpImage.fillAmount = Mathf.InverseLerp(0f, 100f, playerHealth.hp.Amount);
-        hpText.text = $"{playerHealth.hp.Amount} / 100";
+        if(playerHealth.hp.Amount <= 0)
+        {
+            hpImage.fillAmount = 0f;
+            hpText.text = "0 / 100";
+        }
+        else
+        {
+            hpImage.fillAmount = Mathf.InverseLerp(0f, 100f, playerHealth.hp.Amount);
+            hpText.text = $"{playerHealth.hp.Amount} / 100";
+        }
         float z = (playerHealth.air.Amount / (float)playerHealth.air.MaxAmount) * 180f;
         airNeedle.transform.rotation = Quaternion.Euler(new Vector3(0, 0, z - 90));
 

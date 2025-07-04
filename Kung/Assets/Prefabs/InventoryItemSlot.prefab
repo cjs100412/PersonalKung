@@ -192,7 +192,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _icon: {fileID: 1261460056214992974}
   _quantityText: {fileID: 1737765235668016375}
-  sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  _sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  currentSprite: {fileID: 0}
+  isItem: 0
+  _itemId: 0
+  buttonIndex: 0
 --- !u!1 &5167546969099592960
 GameObject:
   m_ObjectHideFlags: 0
