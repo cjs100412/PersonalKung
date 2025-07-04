@@ -80,10 +80,10 @@ public class Drilling : MonoBehaviour
             for (int y = bounds.yMin; y < bounds.yMax; y++)
             {
                 Vector3Int pos = new Vector3Int(x, y);
-                _tiles[TryCellToIndex(pos).x, TryCellToIndex(pos).y] = 100;
+                _tiles[TryCellToIndex(pos).x, TryCellToIndex(pos).y] = 30;
             }
         }
-        _spriteIndex = 100 / brokenTileSprites.Length;
+        _spriteIndex = 30 / brokenTileSprites.Length;
     }
 
 

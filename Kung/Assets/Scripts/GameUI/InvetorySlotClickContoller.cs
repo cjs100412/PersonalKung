@@ -37,7 +37,8 @@ public class InvetorySlotClickContoller : MonoBehaviour
         if (slot.isItem)
         {
             Debug.Log(slot._itemId);
-           _panel.SetActive(true);
+            _panel.transform.position = slots[index].transform.position + new Vector3(0,-250,0);
+            _panel.SetActive(true);
             currentIndex = index;
         }
     }

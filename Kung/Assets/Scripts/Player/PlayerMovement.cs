@@ -120,6 +120,7 @@ public class PlayerMovement : MonoBehaviour
     // === 이동 로직 ===
     private void Update()
     {
+        if (_playerHealth.isDamaged == true) return;
 
         if (IsMovementLocked) 
         {

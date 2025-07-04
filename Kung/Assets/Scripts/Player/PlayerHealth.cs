@@ -15,9 +15,18 @@ public class PlayerHealth : MonoBehaviour
     private bool _isInvincible;
     private float _invincibleTime = 1.0f;
 
+    [HideInInspector] public bool isDamaged;
+
     [Header("Head랑 Body 애니메이터 연결")]
-    public Animator headAnimator;
-    public Animator bodyAnimator;
+    [SerializeField] private Animator _headAnimator;
+    [SerializeField] private Animator _bodyAnimator;
+
+    [Header("Damage Object 연결")]
+    [SerializeField] private Rigidbody2D _playerRigid;
+    [SerializeField] private Animator _damageAnimator;
+    [SerializeField] private GameObject _damageObject;
+    [SerializeField] private GameObject _headObject;
+    [SerializeField] private GameObject _bodyObject;
 
     public Health hp;
     public Air air;
@@ -25,15 +34,10 @@ public class PlayerHealth : MonoBehaviour
     public int MaxHp => _maxhp;
     public int MaxAir
     {
-        get
-        {
-            return _maxair;
-        }
-        private set
-        {
-            _maxair = value;
-        }
+        get => _maxair;
+        set => _maxair = value;
     }
+    
 
     private void Awake()
     {
@@ -92,19 +96,22 @@ public class PlayerHealth : MonoBehaviour
         hp = hp.TakeDamage(amount);
         if(hp.IsDead)
         {
-            Die();
+            Die();  
             return;
         }
-        headAnimator.SetTrigger("isDamaged");
-        bodyAnimator.SetTrigger("isDamaged");
+
+        StartCoroutine(playerAttacked());
+        // 코루틴이 시작되면 플레이어를 이동시킬 수 없고, 무적 상태가 됨
+
+
         StartCoroutine(Invincible());
         Debug.Log($"현재 체력 : {hp.Amount}");
     }
 
     public void Die()
     {
-        headAnimator.SetTrigger("isDead");
-        bodyAnimator.SetTrigger("isDead");
+        _headAnimator.SetTrigger("isDead");
+        _bodyAnimator.SetTrigger("isDead");
         Debug.Log("사망");
     }
 
@@ -124,4 +131,25 @@ public class PlayerHealth : MonoBehaviour
         yield return new WaitForSeconds(_decreaseAirTime);
         _isAirDecrease = false;
     }
+
+    IEnumerator playerAttacked()
+    {
+        isDamaged = true;
+        _damageObject.SetActive(true);
+        _damageAnimator.SetBool("isDamaged", true);
+        SetPlayerObjectsActive(false);
+        _playerRigid.linearVelocity = new Vector2(0, 2);
+        yield return new WaitForSeconds(0.8f);
+        _damageAnimator.SetBool("isDamaged", false);
+        _damageObject.SetActive(false);
+        SetPlayerObjectsActive(true);
+        isDamaged = false;
+    }
+
+    private void SetPlayerObjectsActive(bool isActive)
+    {
+        _headObject.SetActive(isActive);
+        _bodyObject.SetActive(isActive);
+    }
+
 }
