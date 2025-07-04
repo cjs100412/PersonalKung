@@ -28509,6 +28509,7 @@ GameObject:
   - component: {fileID: 1513979810}
   - component: {fileID: 1513979811}
   - component: {fileID: 1513979812}
+  - component: {fileID: 1513979813}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -28621,13 +28622,12 @@ MonoBehaviour:
   _headSprite: {fileID: 5941268308110666890}
   _drillingHeadSprite: {fileID: -1691205843395863381, guid: a39efebf269357740b2b714cb501d375, type: 3}
   _drillingBodySprite: {fileID: 5965510306319525891, guid: d05ec4acf7a271e44ad59dbe171471d3, type: 3}
-  _playerSpeed: 2
-  boostRisePower: 7
   maxBoostSpeed: 2
   maxFallSpeed: -5
   impulseSource: {fileID: 1513979811}
   shakeInterval: 0.1
   _playerHealth: {fileID: 1513979810}
+  _playerStats: {fileID: 1513979813}
 --- !u!114 &1513979809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28651,7 +28651,7 @@ MonoBehaviour:
   - {fileID: -884930898, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
   - {fileID: -1613704672, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
   - {fileID: 1962809639, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
-  drillDamage: 20
+  _playerState: {fileID: 1513979813}
   drillCoolTime: 0.1
   _brokenableTilemap: {fileID: 0}
   currentDirectionState: 3
@@ -28736,6 +28736,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _groundNormalThreshold: 0.8
+--- !u!114 &1513979813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1513979804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4b8d27cbde313542a00abe62ba2c1c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseMovementSpeed: 1
+  baseBoosterSpeed: 7
+  baseDefense: 0
+  baseDrillDamage: 1
+  baseAirCapacity: 100
+  movementSpeed: 0
+  boosterSpeed: 0
+  defense: 0
+  drillDamage: 0
+  airCapacity: 0
 --- !u!1 &1537644013
 GameObject:
   m_ObjectHideFlags: 0

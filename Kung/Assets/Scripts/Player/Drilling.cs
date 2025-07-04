@@ -27,7 +27,8 @@ public class Drilling : MonoBehaviour
     public Sprite[] brokenTileSprites;
 
     [Header("드릴 성능")]
-    public float drillDamage;
+    [SerializeField] PlayerStats _playerState;
+    //public float drillDamage;
     public float drillCoolTime; // 낮을수록 좋음
 
     private PlayerMovement _player;
@@ -136,7 +137,7 @@ public class Drilling : MonoBehaviour
             {
                 isDrilling = true;
 
-                _tiles[x, y] -= drillDamage;
+                _tiles[x, y] -= _playerState.drillDamage;
                 if (_brokenableTilemap.GetTile(pos) != null)
                 {
                     if (_tiles[x, y] <= 0)
