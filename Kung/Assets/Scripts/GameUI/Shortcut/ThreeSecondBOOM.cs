@@ -25,6 +25,8 @@ public class ThreeSecondBOOM : MonoBehaviour
         }
         Destroy(Instantiate(_Effect, transform.position, Quaternion.identity), 3);
     }
+
+    // 폭발 범위 보여주는 기즈모
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
