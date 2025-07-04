@@ -11,7 +11,11 @@ public class InventoryItemSlotUI : MonoBehaviour
     [SerializeField] private Image _icon;
     [SerializeField] private TextMeshProUGUI _quantityText;
     [SerializeField] private Sprite sprite;
+    public Sprite currentSprite;
 
+    public bool isItem;
+    public int _itemId;
+    public int buttonIndex;
     private void Start()
     {
     }
@@ -19,12 +23,21 @@ public class InventoryItemSlotUI : MonoBehaviour
     {
         Debug.Log(data.Quantity.ToString());
         _icon.sprite = data.IconSprite;
+        currentSprite = data.IconSprite;
         _quantityText.text = data.Quantity.ToString();
+        _itemId = data.ItemId;
+        isItem = true;
     }
 
     public void RemoveData()
     {
         _icon.sprite = sprite;
         _quantityText.text = "";
+        isItem = false;
+        _itemId = 0;
     }
+
+    
+
+    
 }
