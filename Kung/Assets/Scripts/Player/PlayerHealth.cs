@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
@@ -23,14 +24,17 @@ public class PlayerHealth : MonoBehaviour
 
     [Header("Damage Object 연결")]
     [SerializeField] private Rigidbody2D _playerRigid;
+    [SerializeField] private Collider2D _playerColider;
     [SerializeField] private Animator _damageAnimator;
     [SerializeField] private GameObject _damageObject;
     [SerializeField] private GameObject _headObject;
     [SerializeField] private GameObject _bodyObject;
+    [SerializeField] private InventoryServiceLocatorSO _inventoryServiceLocator;
+    [SerializeField] private ShortCutServiceLocatorSO _shortCutServiceLocator;
 
     public Health hp;
     public Air air;
-
+    public Gold gold;
     [SerializeField] private PlayerStats _playerStats;
 
     public int MaxHp => _maxhp;
@@ -53,7 +57,6 @@ public class PlayerHealth : MonoBehaviour
 
     private void Awake()
     {
-        hp = Health.New(_maxhp, _maxhp);
         air = Air.New(MaxAir, MaxAir);
     }
 
@@ -176,5 +179,40 @@ public class PlayerHealth : MonoBehaviour
         {
             air = Air.New(air.Amount, MaxAir);
         }
+    }
+
+    public void Respawn(int savedhp,int savedcoin, List<UserInventoryItemDto> savedInventoryItems, List<UserShortCutItemDto> savedShortCutItems)
+    {
+        // 1) 위치 복원
+        transform.position = new Vector3(-1, 0, 0);
+
+        // 2) 회전/스케일 초기화 (바닥에 똑바로 세우기)
+        transform.rotation = Quaternion.identity;
+        var ls = transform.localScale;
+        ls.y = Mathf.Abs(ls.y);
+        transform.localScale = ls;
+
+        // 3) 물리·충돌 복원
+        _playerColider.enabled = true;
+        _playerRigid.simulated = true;
+        _playerRigid.linearVelocity = Vector2.zero;  // 이전 관성 제거
+
+        // 4) 이동 스크립트 재활성화
+        var pm = GetComponent<PlayerMovement>();
+        if (pm != null) pm.enabled = true;
+
+        // 5) 체력복원
+        hp = Health.New(savedhp, _maxhp);
+        gold = Gold.New(savedcoin);
+        _inventoryServiceLocator.Service.SetItems(savedInventoryItems);
+        _shortCutServiceLocator.Service.SetShortCut(savedShortCutItems);
+
+        // 6) 애니메이터 상태 리셋
+        _headAnimator.ResetTrigger("isDead");
+        _bodyAnimator.ResetTrigger("isDead");
+        _headAnimator.Play("Idle");
+        _bodyAnimator.Play("Idle");
+
+        Debug.Log($"Player Respawned HP={hp.Amount}");
     }
 }

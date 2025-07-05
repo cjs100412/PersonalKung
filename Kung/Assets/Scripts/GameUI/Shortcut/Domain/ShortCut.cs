@@ -14,11 +14,14 @@ public class ShortCut
         items.Add(UserShortCutItem.Acquire(1001));
         items.Add(UserShortCutItem.Acquire(1002));
     }
-    public IReadOnlyList<UserShortCutItem> Items
+    public List<UserShortCutItem> Items
     {
-        get { return items.AsReadOnly(); }
+        get { return items; }
     }
-
+    public void SetShortCut(List<UserShortCutItem> setShortCutItems)
+    {
+        items = setShortCutItems;
+    }
     public void AddItem(UserShortCutItem item)
     {
          items.Add(item);
@@ -59,4 +62,6 @@ public class ShortCut
 
         return !item.IsEmpty;
     }
+
+    
 }

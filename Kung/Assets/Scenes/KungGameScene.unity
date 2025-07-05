@@ -1171,6 +1171,7 @@ GameObject:
   - component: {fileID: 202258608}
   - component: {fileID: 202258607}
   - component: {fileID: 202258606}
+  - component: {fileID: 202258609}
   m_Layer: 5
   m_Name: SaveButton
   m_TagString: Untagged
@@ -1242,9 +1243,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: InventoryUI, Assembly-CSharp
-        m_MethodName: OnInventoryQuitButton
+      - m_Target: {fileID: 202258609}
+        m_TargetAssemblyTypeName: SaveButton, Assembly-CSharp
+        m_MethodName: OnSaveButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1292,6 +1293,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 202258604}
   m_CullTransparentMesh: 1
+--- !u!114 &202258609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 202258604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dd7a4d7dfa14cd4bafcc75f38c435f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerHealth: {fileID: 1513979810}
+  _inventoryServiceLocator: {fileID: 11400000, guid: 9e305352b541900459714187f962477e, type: 2}
+  _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
 --- !u!1 &218482189
 GameObject:
   m_ObjectHideFlags: 0
@@ -1864,6 +1880,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 268566934}
   m_CullTransparentMesh: 1
+--- !u!1 &295966865
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 295966867}
+  - component: {fileID: 295966866}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &295966866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 295966865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a689bbbe0477464cbbaa3a0488a102a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &295966867
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 295966865}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -846.6371, y: 114.16666, z: -0.73038876}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &303196305
 GameObject:
   m_ObjectHideFlags: 0
@@ -4209,7 +4269,7 @@ MonoBehaviour:
   _inventoryServiceLocator: {fileID: 11400000, guid: 9e305352b541900459714187f962477e, type: 2}
   _inventoryRepositoryLocator: {fileID: 11400000, guid: 6066df244f63c054987255406f157c4f, type: 2}
   _inventoryItemServiceLocator: {fileID: 11400000, guid: c0e7431e0933d3b4da50bc33bd4bc5d6, type: 2}
-  _shortCutServiceLocator: {fileID: 0}
+  _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
 --- !u!1 &642223360
 GameObject:
   m_ObjectHideFlags: 0
@@ -6201,7 +6261,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 6004
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 47e0b730cfcc258488b3925834b6e16c, type: 2}
   m_sharedMaterial: {fileID: 5792215424004096883, guid: 47e0b730cfcc258488b3925834b6e16c, type: 2}
@@ -29557,10 +29617,13 @@ MonoBehaviour:
   _headAnimator: {fileID: 9124900276528244639}
   _bodyAnimator: {fileID: 7415238218699116900}
   _playerRigid: {fileID: 1513979806}
+  _playerColider: {fileID: 1513979805}
   _damageAnimator: {fileID: 3813113396071409146}
   _damageObject: {fileID: 879610655628058488}
   _headObject: {fileID: 9124900276528244638}
   _bodyObject: {fileID: 1139374735612442843}
+  _inventoryServiceLocator: {fileID: 11400000, guid: 9e305352b541900459714187f962477e, type: 2}
+  _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
   _playerStats: {fileID: 1513979813}
 --- !u!114 &1513979811
 MonoBehaviour:
@@ -30765,6 +30828,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inventoryItems: {fileID: 1391989253}
+  _playerHealth: {fileID: 1513979810}
+  _goldText: {fileID: 933881010}
   _inventoryServiceLocator: {fileID: 11400000, guid: 9e305352b541900459714187f962477e, type: 2}
   _inventoryRepositoryLocator: {fileID: 11400000, guid: 6066df244f63c054987255406f157c4f, type: 2}
   _itemServiceLocator: {fileID: 11400000, guid: c0e7431e0933d3b4da50bc33bd4bc5d6, type: 2}
@@ -31157,10 +31222,11 @@ MonoBehaviour:
   _itemPrice: {fileID: 656644660}
   _shopTextPanel: {fileID: 1554642043}
   _shopNotEnoughTextPanel: {fileID: 773295711}
+  _playerHealth: {fileID: 1513979810}
   _inventoryServiceLocator: {fileID: 11400000, guid: 9e305352b541900459714187f962477e, type: 2}
-  _shortCutServiceLocator: {fileID: 0}
+  _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
   _inventoryUI: {fileID: 1714175652}
-  _shortcutKey: {fileID: 0}
+  _shortcutKey: {fileID: 1984737746879642997}
 --- !u!1001 &1824717299
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34900,8 +34966,8 @@ MonoBehaviour:
   _bigBomb: {fileID: 3760667090193064818, guid: 84ad226288774f144b665f514c7af2ba, type: 3}
   _dynamite: {fileID: 7076675715968345461, guid: fcc32e048211ba647812d437aafbdd44, type: 3}
   _rockTile: {fileID: 4170200343735213604}
-  _shortCutServiceLocator: {fileID: 0}
-  _itemServiceLocator: {fileID: 0}
+  _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
+  _itemServiceLocator: {fileID: 11400000, guid: c0e7431e0933d3b4da50bc33bd4bc5d6, type: 2}
 --- !u!224 &1994795649355190380
 RectTransform:
   m_ObjectHideFlags: 0
@@ -43454,3 +43520,4 @@ SceneRoots:
   - {fileID: 1513979807}
   - {fileID: 1010459573}
   - {fileID: 612670528}
+  - {fileID: 295966867}

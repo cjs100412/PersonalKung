@@ -15,7 +15,7 @@ public class UserShortCutItem
             );
     }
 
-    private UserShortCutItem(int itemId, int quantity)
+    public UserShortCutItem(int itemId, int quantity)
     {
         ItemId = itemId;
         Quantity = quantity;

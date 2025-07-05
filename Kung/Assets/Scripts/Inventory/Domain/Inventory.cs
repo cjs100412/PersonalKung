@@ -7,9 +7,14 @@ public class Inventory
     List<UserInventoryItem> items = new List<UserInventoryItem>();
     public bool IsSlotCountFull => items.Count >= 25;
 
-    public IReadOnlyList<UserInventoryItem> Items
+    public List<UserInventoryItem> Items
     {
-        get { return items.AsReadOnly(); }
+        get { return items; }
+    }
+
+    public void SetItems(List<UserInventoryItem> setItems)
+    {
+        items = setItems;
     }
 
     public void AddItem(UserInventoryItem item)

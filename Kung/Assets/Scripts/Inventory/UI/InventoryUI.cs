@@ -1,11 +1,14 @@
 using DG.Tweening;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 
 public class InventoryUI : MonoBehaviour
 {
     [SerializeField] private GameObject _inventoryItems;
+    [SerializeField] private PlayerHealth _playerHealth;
+    [SerializeField] private TextMeshProUGUI _goldText;
 
     private InventoryItemSlotUI[] _slots;
 
@@ -31,6 +34,7 @@ public class InventoryUI : MonoBehaviour
         {
             _slots[i].RemoveData();
         }
+        _goldText.text = _playerHealth.gold.gold.ToString();
     }
 
     [SerializeField] private float _UIspeed = 0.5f;
