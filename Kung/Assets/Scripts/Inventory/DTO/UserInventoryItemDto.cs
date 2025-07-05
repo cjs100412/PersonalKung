@@ -1,12 +1,13 @@
 ﻿using System;
 
+[Serializable]
 public sealed class UserInventoryItemDto
 {
-    public long SerialNumber { get; }
-    public int ItemId { get; }
-    public int Quantity { get; }
 
-    public bool IsStackable { get; }
+    public long SerialNumber;
+    public int ItemId;
+    public int Quantity;
+    public bool IsStackable;
     public bool IsFull => !IsStackable || Quantity >= 5;
 
     public UserInventoryItemDto(UserInventoryItem item)

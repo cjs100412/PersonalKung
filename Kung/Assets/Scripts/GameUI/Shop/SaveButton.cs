@@ -8,7 +8,7 @@ public class SaveButton : MonoBehaviour
     [SerializeField] private ShortCutServiceLocatorSO _shortCutServiceLocator;
     public void OnSaveButtonClick()
     {
-        // 2) 기존 SaveGame 로직도 호출
+        // 기존 SaveGame 로직도 호출
         GameManager.I.SaveGame(
             new Vector3(-1, 0, 0),
             _playerHealth.hp.Amount,

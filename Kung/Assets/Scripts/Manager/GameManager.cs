@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     PlayerData data;
     public int SavedHp => data.hp;
     public int SavedCoins => data.coins;
+    [SerializeField] private ShortCutServiceLocatorSO _shortCutServiceLocator;
 
     void Awake()
     {
@@ -40,10 +41,10 @@ public class GameManager : MonoBehaviour
         data = new PlayerData();
 
         //에디터에선 테스트용으로 삭제
-#if UNITY_EDITOR
-        if (File.Exists(savePath))
-            File.Delete(savePath);
-#endif
+//#if UNITY_EDITOR
+//        if (File.Exists(savePath))
+//            File.Delete(savePath);
+//#endif
 
         if (File.Exists(savePath))
         {
@@ -55,7 +56,7 @@ public class GameManager : MonoBehaviour
             if (data.defeatedEnemies == null) data.defeatedEnemies = new List<string>();
             if (data.destroyedWalls == null) data.destroyedWalls = new List<string>();
             if (data.inventoryItems == null) data.inventoryItems = new List<UserInventoryItemDto>();
-            if (data.shortCutItems == null) data.shortCutItems = new List<UserShortCutItemDto>();
+            //if (data.shortCutItems == null) data.shortCutItems = new List<UserShortCutItemDto>();
 
         }
         else
@@ -68,20 +69,14 @@ public class GameManager : MonoBehaviour
 
     void InitializeDefaultSave()
     {
-        // 현재 씬과 플레이어의 시작 위치, 최대 체력 등 원하는 기본값 세팅
         data.hp = 100;         // 기본 HP
         data.coins = 0;           // 기본 동전
 
         data.defeatedEnemies = new List<string>();
         data.destroyedWalls = new List<string>();
         data.inventoryItems = new List<UserInventoryItemDto>();
-        data.shortCutItems = new List<UserShortCutItemDto>{
-        new UserShortCutItemDto(new UserShortCutItem(1003,0)),
-        new UserShortCutItemDto(new UserShortCutItem(1004,0)),
-        new UserShortCutItemDto(new UserShortCutItem(1005,0)),
-        new UserShortCutItemDto(new UserShortCutItem(1001,0)),
-        new UserShortCutItemDto(new UserShortCutItem(1002,0))
-    };
+        //data.shortCutItems = new List<UserShortCutItemDto>();
+        data.shortCutItems = _shortCutServiceLocator.Service.Items;
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(savePath, json);
         Debug.Log($"[GameManager] Save initialized: {savePath}");
@@ -95,7 +90,7 @@ public class GameManager : MonoBehaviour
         data.shortCutItems = shortCutItems;
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(savePath, json);
-        Debug.Log("Game Saved → " + savePath + ")");
+        Debug.Log("Game Saved → " + savePath + ")" + data.shortCutItems[0].ItemId.ToString());
     }
 
     public void LoadGame()

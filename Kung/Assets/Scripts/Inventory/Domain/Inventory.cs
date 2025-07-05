@@ -10,6 +10,7 @@ public class Inventory
     public List<UserInventoryItem> Items
     {
         get { return items; }
+        set { items = value; }
     }
 
     public void SetItems(List<UserInventoryItem> setItems)
