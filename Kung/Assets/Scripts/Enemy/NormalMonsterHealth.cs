@@ -30,7 +30,6 @@ public class NormalMonsterHealth : MonoBehaviour
         }
     }
 
-
     public void TakeDamage(int amount)
     {
         if (hp.IsDead) return;

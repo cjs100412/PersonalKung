@@ -15,29 +15,58 @@ public class PlayerHealth : MonoBehaviour
     private bool _isInvincible;
     private float _invincibleTime = 1.0f;
 
-    [Header("Head¶û Body ¾Ö´Ï¸ÞÀÌÅÍ ¿¬°á")]
-    public Animator headAnimator;
-    public Animator bodyAnimator;
+    [HideInInspector] public bool isDamaged;
+
+    [Header("Headëž‘ Body ì• ë‹ˆë©”ì´í„° ì—°ê²°")]
+    [SerializeField] private Animator _headAnimator;
+    [SerializeField] private Animator _bodyAnimator;
+
+    [Header("Damage Object ì—°ê²°")]
+    [SerializeField] private Rigidbody2D _playerRigid;
+    [SerializeField] private Animator _damageAnimator;
+    [SerializeField] private GameObject _damageObject;
+    [SerializeField] private GameObject _headObject;
+    [SerializeField] private GameObject _bodyObject;
 
     public Health hp;
     public Air air;
 
+    [SerializeField] private PlayerStats _playerStats;
+
+    public int MaxHp => _maxhp;
+    public int MaxAir
+    {
+        get => _maxair;
+        set => _maxair = value;
+    }
+    
+
+    private void OnEnable()
+    {
+        _playerStats.OnAirCapacityChanged += HandleAirCapacityChanged;
+    }
+
+    private void OnDisable()
+    {
+        _playerStats.OnAirCapacityChanged -= HandleAirCapacityChanged;
+    }
+
     private void Awake()
     {
         hp = Health.New(_maxhp, _maxhp);
-        air = Air.New(_maxair, _maxair);
+        air = Air.New(MaxAir, MaxAir);
     }
 
     void Update()
     {
         if (hp.IsDead) return;
 
-        if(transform.position.y >= -4 && air.Current < _maxair)
+        if(transform.position.y >= -1 && air.Current < MaxAir)
         {
-            air = air.Heal(_maxair);
+            air = air.Heal(MaxAir);
         }
 
-        if(transform.position.y < -4 && !_isAirDecrease)
+        if(transform.position.y < -1 && !_isAirDecrease)
         {
             StartCoroutine(airDecrease());
         }
@@ -54,7 +83,7 @@ public class PlayerHealth : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             air = air.AirDecrease(5);
-            Debug.Log($"ÇöÀç »ê¼Ò :{air}");
+            Debug.Log($"í˜„ìž¬ ì‚°ì†Œ :{air.Amount}");
         }
     }
 
@@ -63,7 +92,7 @@ public class PlayerHealth : MonoBehaviour
         _isHpDecrease = true;
         yield return new WaitForSeconds(_hpDecreaseInterval);
         hp = hp.TakeDamage(1);
-        Debug.Log($"ÇöÀç Ã¼·Â : {hp}");
+        Debug.Log($"í˜„ìž¬ ì²´ë ¥ : {hp.Amount}");
 
         if (hp.IsDead)
         {
@@ -79,26 +108,29 @@ public class PlayerHealth : MonoBehaviour
         hp = hp.TakeDamage(amount);
         if(hp.IsDead)
         {
-            Die();
+            Die();  
             return;
         }
-        headAnimator.SetTrigger("isDamaged");
-        bodyAnimator.SetTrigger("isDamaged");
+
+        StartCoroutine(playerAttacked());
+        // ì½”ë£¨í‹´ì´ ì‹œìž‘ë˜ë©´ í”Œë ˆì´ì–´ë¥¼ ì´ë™ì‹œí‚¬ ìˆ˜ ì—†ê³ , ë¬´ì  ìƒíƒœê°€ ë¨
+
+
         StartCoroutine(Invincible());
-        Debug.Log($"ÇöÀç Ã¼·Â : {hp}");
+        Debug.Log($"í˜„ìž¬ ì²´ë ¥ : {hp.Amount}");
     }
 
     public void Die()
     {
-        headAnimator.SetTrigger("isDead");
-        bodyAnimator.SetTrigger("isDead");
-        Debug.Log("»ç¸Á");
+        _headAnimator.SetTrigger("isDead");
+        _bodyAnimator.SetTrigger("isDead");
+        Debug.Log("ì‚¬ë§");
     }
 
     IEnumerator Invincible()
     {
         _isInvincible = true;
-        Debug.Log("¹«Àû");
+        Debug.Log("ë¬´ì ");
         yield return new WaitForSeconds(_invincibleTime);
         _isInvincible = false;
     }
@@ -107,7 +139,42 @@ public class PlayerHealth : MonoBehaviour
     {
         _isAirDecrease = true;
         air = air.AirDecrease(1);
+        Debug.Log($"í˜„ìž¬ ì‚°ì†Œ :{air.Amount}");
         yield return new WaitForSeconds(_decreaseAirTime);
         _isAirDecrease = false;
+    }
+
+
+    IEnumerator playerAttacked()
+    {
+        isDamaged = true;
+        _damageObject.SetActive(true);
+        _damageAnimator.SetBool("isDamaged", true);
+        SetPlayerObjectsActive(false);
+        _playerRigid.linearVelocity = new Vector2(0, 2);
+        yield return new WaitForSeconds(0.8f);
+        _damageAnimator.SetBool("isDamaged", false);
+        _damageObject.SetActive(false);
+        SetPlayerObjectsActive(true);
+        isDamaged = false;
+    }
+
+    private void SetPlayerObjectsActive(bool isActive)
+    {
+        _headObject.SetActive(isActive);
+        _bodyObject.SetActive(isActive);
+    }
+
+    private void HandleAirCapacityChanged(float newCapacity)
+    {
+        MaxAir = Mathf.FloorToInt(newCapacity);
+        if(air.Amount > MaxAir)
+        {
+            air = Air.New(MaxAir, MaxAir);
+        }
+        else
+        {
+            air = Air.New(air.Amount, MaxAir);
+        }
     }
 }

@@ -9,65 +9,37 @@ public class TileManager : MonoBehaviour
     [SerializeField] private GameObject backGroundTIleMap;
     [SerializeField] private GameObject frontMiniMapTilemap;
     [SerializeField] private GameObject backMiniMapTilemap;
-    [SerializeField] private GameObject mineralTilemap;
 
-    [SerializeField] private Player _player;
+    [SerializeField] private Drilling _drilling;
 
-    public Tilemap brokenabelTileMap;
-    public int width;
-    public int height;
-    public int offsetX;
-    public int offsetY;
-    public int spriteIndex;
-    public float[,] tiles;
-    public Sprite[] brokenTileSprites;
 
+    private Tilemap brokenTileMapInstance;
+
+
+    [SerializeField] private Tile mineralTile;
+
+    public int width = 60;
+    public int height = 666;
 
     void Awake()
     {
         Instantiate(backGroundTIleMap, par);
-        Instantiate(frontMiniMapTilemap, par);
         Instantiate(backMiniMapTilemap, par);
-        Instantiate(mineralTilemap, par);
-        brokenabelTileMap = Instantiate(brokenTileMap, par).GetComponent<Tilemap>();
-        tileArrayInit();
+        _drilling._brokenableTilemap = Instantiate(brokenTileMap, par).GetComponent<Tilemap>();
+        _drilling._miniMapFrontTilemap = Instantiate(frontMiniMapTilemap, par).GetComponent<Tilemap>();
     }
 
-    private void tileArrayInit()
+
+    void FillGround(Tilemap tilemap, Tile tile)
     {
-        BoundsInt bounds = brokenabelTileMap.cellBounds;
-        width = bounds.xMax - bounds.xMin;
-        height = bounds.yMax - bounds.yMin;
-        offsetX = -bounds.xMin;
-        offsetY = -bounds.yMin;
-        tiles = new float[width, height];
-        for (int x = bounds.xMin; x < bounds.xMax; x++)
+        for (int x = -width / 2; x < width / 2; x++)
         {
-            for (int y = bounds.yMin; y < bounds.yMax; y++)
+            for (int y = -height / 2; y < height / 2; y++)
             {
-                Vector3Int pos = new Vector3Int(x, y);
-                tiles[TryCellToIndex(pos).x, TryCellToIndex(pos).y] = 100;
+                tilemap.SetTile(new Vector3Int(x, y -333, 0), tile);
             }
         }
-        spriteIndex = 100 / brokenTileSprites.Length;
     }
 
-
-    /// <summary>
-    /// 들어온 Vector3Int를 음수가 나오지 않도록 오프셋으로 조절해서 배열에서 사용할 인덱스 반환
-    /// </summary>
-    /// <param name="cellPos"></param>
-    /// <returns>배열 범위 안의 좌표인지, 2차원 배열에서 사용할 x,y</returns>
-    public (int x, int y) TryCellToIndex(Vector3Int cellPos)
-    {
-        int x = cellPos.x + offsetX;
-        int y = cellPos.y + offsetY;
-        if (x < 0 || y < 0 || x >= width || y >= height)
-            return (0, 0);
-
-        return (x, y);
-    }
-
-    
     
 }

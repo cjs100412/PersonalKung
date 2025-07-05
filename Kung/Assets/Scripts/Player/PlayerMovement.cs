@@ -42,10 +42,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Sprite _drillingBodySprite;
 
     [Header("이동 속도")]
-    [SerializeField] private float _playerSpeed;
+    //public float playerSpeed;
 
     [Header("부스트 설정")]
-    public float boostRisePower = 7f;
+    //public float boostRisePower = 7f;
     public float maxBoostSpeed = 2f;
 
     [Header("낙하 제한")]
@@ -59,6 +59,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("스크립트")]
     [SerializeField] private PlayerHealth _playerHealth;
+    [SerializeField] private PlayerStats _playerStats;
 
     private Coroutine _drillCoroutine;
 
@@ -119,6 +120,7 @@ public class PlayerMovement : MonoBehaviour
     // === 이동 로직 ===
     private void Update()
     {
+        if (_playerHealth.isDamaged == true) return;
 
         if (IsMovementLocked) 
         {
@@ -229,7 +231,7 @@ public class PlayerMovement : MonoBehaviour
 
         currentState = lockState;
         _drilling.currentDirectionState = drillDir;
-        rigidBody.linearVelocity = new Vector2(direction * _playerSpeed, rigidBody.linearVelocity.y);
+        rigidBody.linearVelocity = new Vector2(direction * _playerStats.movementSpeed, rigidBody.linearVelocity.y);
 
         ChangeAnimation("Move", _bodyAnimator);
         ChangeAnimation("Move", _headAnimator);
@@ -302,7 +304,7 @@ public class PlayerMovement : MonoBehaviour
         if ((_isBoost || Input.GetKey(KeyCode.UpArrow)) && rigidBody.linearVelocity.y < maxBoostSpeed)
         {
             OnDrillKeyUp();
-            rigidBody.AddForce(Vector2.up * boostRisePower * Time.deltaTime * 100, ForceMode2D.Force);
+            rigidBody.AddForce(Vector2.up * _playerStats.baseBoosterSpeed * Time.deltaTime * 100, ForceMode2D.Force);
         }
     }
 
