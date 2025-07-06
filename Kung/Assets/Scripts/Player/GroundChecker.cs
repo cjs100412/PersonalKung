@@ -67,6 +67,6 @@ public class GroundChecker : MonoBehaviour
     void OnGUI()
     {
         GUI.color = _isGrounded ? Color.green : Color.red;
-        GUI.Label(new Rect(10, 10, 200, 20), "Is Grounded: " + _isGrounded);
+        GUI.Label(new Rect(10, 10, 200, 20), "Is Grounded: " + IsGrounded);
     }
 }

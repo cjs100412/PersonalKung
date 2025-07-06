@@ -11,10 +11,16 @@ public class TileManager : MonoBehaviour
     [SerializeField] private GameObject backGroundTIleMap;
     [SerializeField] private GameObject frontMiniMapTilemap;
     [SerializeField] private GameObject backMiniMapTilemap;
+    [SerializeField] private Tile mineralTile;
+    
+    [SerializeField] private GameObject Level1;
+    [SerializeField] private GameObject Level2;
+    
+    [SerializeField] private Drilling _drilling;
 
     public Tilemap brokenableTilemap;
     public Tilemap miniMapFrontTilemap;
-    [SerializeField] private Drilling _drilling;
+    
     public Sprite[] brokenTileSprites;
 
     private int _width;
@@ -26,7 +32,6 @@ public class TileManager : MonoBehaviour
     float secondThreshold;
     public float[,] tiles;
     public int baseHp;
-    [SerializeField] private Tile mineralTile;
 
 
     void Awake()
@@ -36,6 +41,10 @@ public class TileManager : MonoBehaviour
         brokenableTilemap = Instantiate(brokenTileMap, par).GetComponent<Tilemap>();
         miniMapFrontTilemap = Instantiate(frontMiniMapTilemap, par).GetComponent<Tilemap>();
         tileArrayInit();
+        GameObject lv1 = Instantiate(Level1, new Vector2(0, firstThreshold * 0.45f), Quaternion.identity);    
+        GameObject lv2 = Instantiate(Level2, new Vector2(0, firstThreshold * 0.75f), Quaternion.identity);
+        lv1.GetComponent<Transform>().localScale = new Vector2(_width, _height / 3) * 0.3f; 
+        lv2.GetComponent<Transform>().localScale = new Vector2(_width, _height / 3) * 0.3f;
 
     }
 

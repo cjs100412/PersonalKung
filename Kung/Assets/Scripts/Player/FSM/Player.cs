@@ -6,6 +6,9 @@ using UnityEngine.Tilemaps;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private GroundChecker groundChecker;
+
+
     public Rigidbody2D rigid;
 
     public Animator bodyAnimator;
@@ -79,7 +82,16 @@ public class Player : MonoBehaviour
         {
             _moveStateMachine.ChangeState(new IdleState(this));
         }
-        
+
+        if (groundChecker.IsGrounded == false)
+        {
+            if (!(_drillStateMachine.CurrentState is DrillOffState))
+            {
+                _drillStateMachine.ChangeState(new DrillOffState(this));
+            }
+            return;
+        }
+
         // === 드릴 FSM 상태 전이 ===
         if (Input.GetKey(KeyCode.X))
         {
