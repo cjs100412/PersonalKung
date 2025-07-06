@@ -16,7 +16,7 @@ public class ShopUI : MonoBehaviour
 
     [SerializeField] private GameObject _shopUI;
     [SerializeField] private GameObject InventoryUI;
-    [SerializeField] private PlayerMovement playerMovement;
+    //[SerializeField] private PlayerMovement playerMovement;
 
 
     private Coroutine _shopOpenCoroutine; 
@@ -34,7 +34,7 @@ public class ShopUI : MonoBehaviour
         _shopUI.transform.DOLocalMove(quitShopTarget.localPosition, _UIspeed);
         InventoryUI.transform.DOLocalMove(quitInventoryTarget.localPosition, _UIspeed);
 
-        playerMovement.IsMovementLocked = false;
+        //playerMovement.IsMovementLocked = false;
         _isPlayerInsideTrigger = false; 
     }
 
@@ -74,7 +74,7 @@ public class ShopUI : MonoBehaviour
             _shopUI.transform.DOLocalMove(enterShopTarget.localPosition, _UIspeed);
             InventoryUI.transform.DOLocalMove(enterInventoryTarget.localPosition, _UIspeed);
 
-            playerMovement.IsMovementLocked = true;
+            //playerMovement.IsMovementLocked = true;
         }
         _shopOpenCoroutine = null;
     }

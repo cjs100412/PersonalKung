@@ -4209,7 +4209,7 @@ MonoBehaviour:
   _inventoryServiceLocator: {fileID: 11400000, guid: 9e305352b541900459714187f962477e, type: 2}
   _inventoryRepositoryLocator: {fileID: 11400000, guid: 6066df244f63c054987255406f157c4f, type: 2}
   _inventoryItemServiceLocator: {fileID: 11400000, guid: c0e7431e0933d3b4da50bc33bd4bc5d6, type: 2}
-  _shortCutServiceLocator: {fileID: 0}
+  _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
 --- !u!1 &642223360
 GameObject:
   m_ObjectHideFlags: 0
@@ -6865,10 +6865,19 @@ MonoBehaviour:
   backGroundTIleMap: {fileID: 7722810659767422271, guid: fda6f51d41f7b354fb8058867be53147, type: 3}
   frontMiniMapTilemap: {fileID: 2309226482527555018, guid: 1fad8ea99ff49bd449709ac01c55a7ba, type: 3}
   backMiniMapTilemap: {fileID: 2303514913464902789, guid: 223914b5c1adfff42a88c5f136c28f5d, type: 3}
+  brokenableTilemap: {fileID: 0}
+  miniMapFrontTilemap: {fileID: 0}
   _drilling: {fileID: 1513979809}
+  brokenTileSprites:
+  - {fileID: 1070474674, guid: 54c2b95de1068b3469467905763a1502, type: 3}
+  - {fileID: -2015241995, guid: 54c2b95de1068b3469467905763a1502, type: 3}
+  - {fileID: -925142561, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
+  - {fileID: -2925485, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
+  - {fileID: 732927775, guid: 54c2b95de1068b3469467905763a1502, type: 3}
+  - {fileID: -527295955, guid: 54c2b95de1068b3469467905763a1502, type: 3}
+  - {fileID: 339111017, guid: 54c2b95de1068b3469467905763a1502, type: 3}
+  baseHp: 36
   mineralTile: {fileID: 11400000, guid: e136ee3231310bd46bdb084291014996, type: 2}
-  width: 60
-  height: 666
 --- !u!4 &1010459573
 Transform:
   m_ObjectHideFlags: 0
@@ -29393,6 +29402,8 @@ GameObject:
   - component: {fileID: 1513979813}
   - component: {fileID: 1513979814}
   - component: {fileID: 1513979815}
+  - component: {fileID: 1513979816}
+  - component: {fileID: 1513979817}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -29407,7 +29418,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1513979804}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 6200000, guid: 1ebecec058b404046b344898884471ff, type: 2}
@@ -29434,8 +29445,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.000000059604645, y: 0.04}
-  m_Size: {x: 0.23612773, y: 0.23}
+  m_Offset: {x: -0.0023252964, y: 0.03999999}
+  m_Size: {x: 0.172858, y: 0.23612773}
   m_Direction: 0
 --- !u!50 &1513979806
 Rigidbody2D:
@@ -29492,11 +29503,20 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1513979804}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0d68d7e474324234ebc4f09d98554cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentState: 1
+  _isBoost: 0
+  _isDirectionMoving: 0
+  _isGround: 0
+  _isGroundTimer: 0
+  _boostTimer: 0
+  rigidBody: {fileID: 0}
+  _drilling: {fileID: 0}
+  _groundChecker: {fileID: 0}
   _headAnimator: {fileID: 9124900276528244639}
   _bodyAnimator: {fileID: 7415238218699116900}
   _boostAnimator: {fileID: 1021303699}
@@ -29510,8 +29530,10 @@ MonoBehaviour:
   maxFallSpeed: -5
   impulseSource: {fileID: 1513979811}
   shakeInterval: 0.1
+  _shakeTimer: 0
   _playerHealth: {fileID: 1513979810}
   _playerStats: {fileID: 1513979813}
+  <IsMovementLocked>k__BackingField: 0
 --- !u!114 &1513979809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29524,9 +29546,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 916f99d1c07e9f9449a0ca3b26b8fe03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mineralTilemap: {fileID: 5158903276033226228}
+  tileManager: {fileID: 1010459572}
   _miniMapFrontTilemap: {fileID: 0}
   _depthText: {fileID: 1605316423028757233}
+  playerStats: {fileID: 1513979813}
   brokenTileSprites:
   - {fileID: -865568635, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
   - {fileID: 420710795, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
@@ -29535,11 +29558,11 @@ MonoBehaviour:
   - {fileID: -884930898, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
   - {fileID: -1613704672, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
   - {fileID: 1962809639, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
-  _playerState: {fileID: 1513979813}
-  drillCoolTime: 0.1
-  _brokenableTilemap: {fileID: 0}
-  _rockTilemap: {fileID: 4170200343735213604}
-  currentDirectionState: 3
+  brokenTileLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  lastDrillTime: 0
+  drillCoolTime: 0.01
   isDrilling: 0
 --- !u!114 &1513979810
 MonoBehaviour:
@@ -29683,6 +29706,81 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerHealth: {fileID: 1513979810}
   _damageSpriteRenderer: {fileID: 173633143271778165}
+--- !u!114 &1513979816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1513979804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2869a95200ede645a7ecddca91a144b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rigid: {fileID: 1513979806}
+  bodyAnimator: {fileID: 7415238218699116900}
+  headAnimator: {fileID: 9124900276528244639}
+  boosterAnimator: {fileID: 1021303699}
+  drillSideAnimator: {fileID: 4997683932734676999}
+  drillDownAnimator: {fileID: 2755904900462524098}
+  headSpriteRanderer: {fileID: 5941268308110666890}
+  bodySpriteRanderer: {fileID: 357169930265790604}
+  sideBodyDrillSprite: {fileID: 5965510306319525891, guid: d05ec4acf7a271e44ad59dbe171471d3, type: 3}
+  frontHeadDrillSprite: {fileID: -1691205843395863381, guid: a39efebf269357740b2b714cb501d375, type: 3}
+  sideHeadDrillSprite: {fileID: 21300000, guid: dd24ef128360e234e85c8edc58307dc4, type: 3}
+  drilling: {fileID: 1513979809}
+  playerStats: {fileID: 1513979813}
+  tileManager: {fileID: 1010459572}
+  brokenableTilemap: {fileID: 0}
+  moveInput: {x: 0, y: 0}
+  isBoost: 0
+--- !u!61 &1513979817
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1513979804}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0.04}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.16, y: 0.2}
+  m_EdgeRadius: 0.02
 --- !u!1 &1537644013
 GameObject:
   m_ObjectHideFlags: 0
@@ -31158,9 +31256,9 @@ MonoBehaviour:
   _shopTextPanel: {fileID: 1554642043}
   _shopNotEnoughTextPanel: {fileID: 773295711}
   _inventoryServiceLocator: {fileID: 11400000, guid: 9e305352b541900459714187f962477e, type: 2}
-  _shortCutServiceLocator: {fileID: 0}
+  _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
   _inventoryUI: {fileID: 1714175652}
-  _shortcutKey: {fileID: 0}
+  _shortcutKey: {fileID: 1984737746879642997}
 --- !u!1001 &1824717299
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33761,7 +33859,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 398.09998, y: -529.66003}
+  m_AnchoredPosition: {x: 398.0996, y: -529.66016}
   m_SizeDelta: {x: 796.1001, y: 1059.31}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &634135267836327604
@@ -34900,8 +34998,8 @@ MonoBehaviour:
   _bigBomb: {fileID: 3760667090193064818, guid: 84ad226288774f144b665f514c7af2ba, type: 3}
   _dynamite: {fileID: 7076675715968345461, guid: fcc32e048211ba647812d437aafbdd44, type: 3}
   _rockTile: {fileID: 4170200343735213604}
-  _shortCutServiceLocator: {fileID: 0}
-  _itemServiceLocator: {fileID: 0}
+  _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
+  _itemServiceLocator: {fileID: 11400000, guid: c0e7431e0933d3b4da50bc33bd4bc5d6, type: 2}
 --- !u!224 &1994795649355190380
 RectTransform:
   m_ObjectHideFlags: 0
@@ -37781,7 +37879,7 @@ Animator:
   m_GameObject: {fileID: 7334562705714831501}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 01750648b2cf5fd4f8471f196747ab58, type: 2}
+  m_Controller: {fileID: 9100000, guid: fbdbc660b0c5e17489e6cebcd87c8e5d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -40480,7 +40578,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00024414062}
+  m_AnchoredPosition: {x: 0, y: -0.00048828125}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &6338334504277944886
@@ -43390,7 +43488,6 @@ MonoBehaviour:
   delayBeforeShopOpen: 0.5
   _shopUI: {fileID: 495144893}
   InventoryUI: {fileID: 1130738014}
-  playerMovement: {fileID: 1513979808}
 --- !u!19719996 &9216567639130638988
 TilemapCollider2D:
   m_ObjectHideFlags: 0

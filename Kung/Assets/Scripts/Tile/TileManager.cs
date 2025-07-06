@@ -1,45 +1,114 @@
+﻿using System.Buffers.Text;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEditor.PlayerSettings;
 
 public class TileManager : MonoBehaviour
 {
     [SerializeField] Transform par;
-    [Header("�̸� ���� Ÿ�ϸ� ����")]
+    [Header("미리 만든 타일맵 연결")]
     [SerializeField] private GameObject brokenTileMap;
     [SerializeField] private GameObject backGroundTIleMap;
     [SerializeField] private GameObject frontMiniMapTilemap;
     [SerializeField] private GameObject backMiniMapTilemap;
 
+    public Tilemap brokenableTilemap;
+    public Tilemap miniMapFrontTilemap;
     [SerializeField] private Drilling _drilling;
+    public Sprite[] brokenTileSprites;
 
+    private int _width;
+    private int _height;
+    private int _offsetX;
+    private int _offsetY;
 
-    private Tilemap brokenTileMapInstance;
-
-
+    float firstThreshold;
+    float secondThreshold;
+    public float[,] tiles;
+    public int baseHp;
     [SerializeField] private Tile mineralTile;
 
-    public int width = 60;
-    public int height = 666;
 
     void Awake()
     {
         Instantiate(backGroundTIleMap, par);
         Instantiate(backMiniMapTilemap, par);
-        _drilling._brokenableTilemap = Instantiate(brokenTileMap, par).GetComponent<Tilemap>();
-        _drilling._miniMapFrontTilemap = Instantiate(frontMiniMapTilemap, par).GetComponent<Tilemap>();
+        brokenableTilemap = Instantiate(brokenTileMap, par).GetComponent<Tilemap>();
+        miniMapFrontTilemap = Instantiate(frontMiniMapTilemap, par).GetComponent<Tilemap>();
+        tileArrayInit();
+
     }
 
-
-    void FillGround(Tilemap tilemap, Tile tile)
+    /// <summary>
+    /// 타일맵의 타일 하나하나 초기화
+    /// </summary>
+    private void tileArrayInit()
     {
-        for (int x = -width / 2; x < width / 2; x++)
+        BoundsInt bounds = brokenableTilemap.cellBounds;
+        _width = bounds.xMax - bounds.xMin;
+        _height = bounds.yMax - bounds.yMin;
+        tiles = new float[_width, _height];
+        _offsetX = -bounds.xMin;
+        _offsetY = -bounds.yMin;
+
+        firstThreshold = bounds.yMax - (_height / 3f);      
+        secondThreshold = bounds.yMax - (_height * 2f / 3f); 
+        for (int x = bounds.xMin; x < bounds.xMax; x++)
         {
-            for (int y = -height / 2; y < height / 2; y++)
+            for (int y = bounds.yMin; y < bounds.yMax; y++)
             {
-                tilemap.SetTile(new Vector3Int(x, y -333, 0), tile);
+                Vector3Int pos = new Vector3Int(x, y, 0);
+                if (brokenableTilemap.HasTile(pos))
+                {
+                    tiles[TryCellToIndex(pos).x, TryCellToIndex(pos).y] = GetTileMaxHp(y);
+                }
             }
         }
     }
 
-    
+    public void DamageTile(Vector3Int target, float damage)
+    {
+        (int x, int y) = TryCellToIndex(target);
+        tiles[x, y] -= damage;
+        Debug.Log($"{x} , {y} : 체력 {tiles[x, y]}");
+
+        if (tiles[x, y] <= 0)
+        {
+            brokenableTilemap.SetTile(target, null);
+            return;
+        }
+
+        Tile newTile = ScriptableObject.CreateInstance<Tile>();
+        int hp = GetTileMaxHp(target.y);
+        
+        int index = Mathf.Clamp((int)(tiles[x, y] / (hp / brokenTileSprites.Length)), 0, brokenTileSprites.Length - 1);
+        newTile.sprite = brokenTileSprites[index];
+        brokenableTilemap.SetTile(target, newTile);
+        
+        
+    }
+
+    /// <summary>
+    /// 들어온 Vector3Int를 음수가 나오지 않도록 오프셋으로 조절해서 배열에서 사용할 인덱스 반환
+    /// </summary>
+    /// <param name="cellPos"></param>
+    /// <returns>배열 범위 안의 좌표인지, 2차원 배열에서 사용할 x,y</returns>
+    public (int x, int y) TryCellToIndex(Vector3Int cellPos)
+    {
+        int x = cellPos.x + _offsetX;
+        int y = cellPos.y + _offsetY;
+        if (x < 0 || y < 0 || x >= _width || y >= _height)
+            throw new System.Exception("범위 초과");
+
+        return (x, y);
+    }
+    private int GetTileMaxHp(int y)
+    {
+        if (y < firstThreshold && y >= secondThreshold) return baseHp * 2;
+        if (y < secondThreshold) return baseHp * 3;
+        return baseHp;
+    }
+
+
+
 }

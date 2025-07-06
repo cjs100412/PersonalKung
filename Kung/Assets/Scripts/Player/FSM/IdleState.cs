@@ -2,19 +2,18 @@ using UnityEngine;
 
 public class IdleState : IState
 {
-    //private Animator _headAnimator;
-    //private Animator _bodyAnimator;
-    //public IdleState(Animator head, Animator body)
-    //{
-    //    _headAnimator = head;
-    //    _bodyAnimator = body;
-    //}
+    private Player player; 
+
+    public IdleState(Player player) 
+    {
+        this.player = player;
+    }
 
     public void Enter()
     {
-        //_headAnimator.SetBool("Move", false);
-        //_bodyAnimator.SetBool("Move", false);
+        player.headAnimator.SetBool("Move", false); 
+        player.bodyAnimator.SetBool("Move", false); 
     }
-    public void Update() { /* 입력 들어오면 달리기로 전이 예정 */ }
+    public void Update() { }
     public void Exit() { Debug.Log("Idle 종료"); }
 }

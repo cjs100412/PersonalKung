@@ -1,83 +1,140 @@
-﻿using UnityEditor;
+﻿using TMPro.EditorUtilities;
+using Unity.Jobs;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class Player : MonoBehaviour
 {
-    [Header("드릴 성능")]
-    public float drillDamage;
-    public float drillCoolTime;
-
-
-    //private Coroutine _drillCoroutine;
-
     public Rigidbody2D rigid;
-    public Animator _bodyAnimator;
-    public Animator _headAnimator;
-    public Animator _drillSide;
-    public Animator _drillDown;
-    public Drilling _drilling;
-    public TileManager tileManager;
 
-    public float[,] tiles = new float[0,0];
-    public Sprite[] brokenTileSprites;
+    public Animator bodyAnimator;
+    public Animator headAnimator;
+    public Animator boosterAnimator; 
+    public Animator drillSideAnimator;
+    public Animator drillDownAnimator;
+    
+    public SpriteRenderer headSpriteRanderer;
+    public SpriteRenderer bodySpriteRanderer;
+    public Sprite sideBodyDrillSprite;
+    public Sprite frontHeadDrillSprite;
+    public Sprite sideHeadDrillSprite;
+
+    public Drilling drilling;
+    public PlayerStats playerStats;
+
+    public TileManager tileManager;
     public Tilemap brokenableTilemap;
 
-    private StateMachine moveStateMachine;
-    private StateMachine drillStateMachine;
-    public InputLockState InputLockState = InputLockState.Any;
-    public int currentDirection = 0;
-    public bool isDrilling;
+    private StateMachine _moveStateMachine;
+    private StateMachine _drillStateMachine;
+    private int _drillDirection = 0;
+
+    public Vector2 moveInput;
+    public float[,] tiles = new float[0,0];
+    public bool isBoost;
+    
     void Start()
     {
-        moveStateMachine = new StateMachine();
-        drillStateMachine = new StateMachine();
-        tiles = tileManager.tiles;
-        brokenTileSprites = tileManager.brokenTileSprites;
-        brokenableTilemap = tileManager.brokenabelTileMap;
-        moveStateMachine.ChangeState(new IdleState());
-    }
+        _moveStateMachine = new StateMachine();
+        _drillStateMachine = new StateMachine();
 
+        brokenableTilemap = tileManager.brokenableTilemap;
+        tiles = tileManager.tiles;
+
+        _moveStateMachine.ChangeState(new IdleState(this));
+        _drillStateMachine.ChangeState(new DrillOffState(this));
+    }
 
     void Update()
     {
-        moveStateMachine.Update();
-        drillStateMachine.Update();
+        _moveStateMachine.Update();
+        _drillStateMachine.Update();
+
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            if (!(_moveStateMachine.CurrentState is BoostState))
+                _moveStateMachine.ChangeState(new BoostState(this));
+            _drillStateMachine.ChangeState(new DrillOffState(this));
+        }
+        if (Input.GetKeyUp(KeyCode.UpArrow))
+        {
+            if (!(_moveStateMachine.CurrentState is IdleState))
+            _moveStateMachine.ChangeState(new IdleState(this));
+        }
+        
+
+        // === 입력 처리 ===
+        moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
+        if (isBoost)
+        {
+            return;
+        }
+        // === 이동 FSM 상태 전이 ===
+        if (moveInput.x != 0 && !(_moveStateMachine.CurrentState is RunState))
+        {
+            _moveStateMachine.ChangeState(new RunState(this));
+        }
+        else if (moveInput.x == 0 && !(_moveStateMachine.CurrentState is IdleState))
+        {
+            _moveStateMachine.ChangeState(new IdleState(this));
+        }
+        
+        // === 드릴 FSM 상태 전이 ===
         if (Input.GetKey(KeyCode.X))
         {
-            if (drillStateMachine.currentState is DrillState)
+            _drillDirection = (int)moveInput.x;
+            bool canDrillCurrentDirection = drilling.CanDrill(_drillDirection);
+
+            if (canDrillCurrentDirection)
             {
-                return;
+                if (_drillDirection == 0) // 아래 드릴
+                {
+                    if (!(_drillStateMachine.CurrentState is DrillDownState))
+                    {
+                        _drillStateMachine.ChangeState(new DrillDownState(this));
+                    }
+                }
+                else 
+                {
+                    if (!(_drillStateMachine.CurrentState is DrillSideState))
+                    {
+                        _drillStateMachine.ChangeState(new DrillSideState(this, _drillDirection));
+                    }
+                }
             }
-            drillStateMachine.ChangeState(new DrillState(this));
+            else 
+            {
+                if (!(_drillStateMachine.CurrentState is DrillOffState))
+                {
+                    _drillStateMachine.ChangeState(new DrillOffState(this));
+                }
+            }
         }
-
-        if (Input.GetKeyUp(KeyCode.X))
+        else if (Input.GetKeyUp(KeyCode.X))
         {
-            drillStateMachine.ChangeState(new IdleState());
+            if (!(_drillStateMachine.CurrentState is DrillOffState))
+            {
+                _drillStateMachine.ChangeState(new DrillOffState(this));
+            }
         }
 
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            currentDirection = -1;
-            if (moveStateMachine.currentState is RunState) return;
-            moveStateMachine.ChangeState(new RunState(this));
-        }
-
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            currentDirection = 1;
-
-            if (moveStateMachine.currentState is RunState) return;
-            moveStateMachine.ChangeState(new RunState(this));
-        }
-
-        else if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
-        {
-            currentDirection = 0;
-            moveStateMachine.ChangeState(new IdleState());
-        }
+        
     }
 
+   
 
+    // === 공용 기능 ===
+
+    
+    public void PlayDrillSideAnim(bool on)
+    {
+        drillSideAnimator.SetBool("Start", on);
+    }
+
+    public void PlayDrillDownAnim(bool on)
+    {
+        drillDownAnimator.SetBool("Start", on);
+    }
+   
 }

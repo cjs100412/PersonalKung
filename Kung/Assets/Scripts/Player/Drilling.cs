@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -16,164 +16,102 @@ public enum CurrentDirectionState
 }
 public class Drilling : MonoBehaviour
 {
-    [Header("Ã¤±¼ Å¸ÀÏ¸Ê")]
-    public Tilemap _brokenableTilemap;
+    [Header("ì±„êµ´ íƒ€ì¼ë§µ")]
+    [SerializeField] private TileManager tileManager;
+    private Tilemap _brokenableTilemap;
     
-    [Header("¹Ì´Ï¸Ê °ü·Ã")]
-    [SerializeField] private Tilemap _miniMapFrontTilemap;   //Ãß°¡
-    [SerializeField] private TextMeshProUGUI _depthText;    //Ãß°¡
-    [Header("ÇÃ·¹ÀÌ¾î ¿¬°á")]
-    [SerializeField] private PlayerMovement _player;
+    [Header("ë¯¸ë‹ˆë§µ ê´€ë ¨")]
+    [SerializeField] private Tilemap _miniMapFrontTilemap;   
+    [SerializeField] private TextMeshProUGUI _depthText; 
+    
+    [Header("í”Œë ˆì´ì–´ ì—°ê²°")]
+    [SerializeField] private PlayerStats playerStats;
 
-    private int _surfaceY; // Áö¸é³ôÀÌ.Ãß°¡
 
-    [Header("ºÎ¼ÅÁö´Â Å¸ÀÏ¸Ê ½ºÇÁ¶óÀÌÆ® ¹è¿­")]
+    [Header("ë¶€ì…”ì§€ëŠ” íƒ€ì¼ë§µ ìŠ¤í”„ë¼ì´íŠ¸ ë°°ì—´")]
     public Sprite[] brokenTileSprites;
 
-    [Header("µå¸± ¼º´É")]
-    public float drillDamage;
+    private int _surfaceY; 
+
+    public LayerMask brokenTileLayer;
+    public float lastDrillTime;
     public float drillCoolTime;
-    private Coroutine _drillCoroutine;
-
-
-    public CurrentDirectionState currentDirectionState = CurrentDirectionState.Down; // ÇöÀç ±¼ÂøÇÒ ¹æÇâ
-
+    private int currentDrillDirection = int.MinValue;
     public bool isDrilling = false;
-
-    private int _width;
-    private int _height;
-    private int _offsetX;
-    private int _offsetY;
-    private int _spriteIndex;
-
-    public float[,] _tiles;
-
 
     private void Start()
     {
-        tileArrayInit();
+        _brokenableTilemap = tileManager.brokenableTilemap;
     }
 
     private void Update()
     {
-        Vector3Int currentCell = _brokenableTilemap.WorldToCell(transform.position); //Ãß°¡
-        int depth = Mathf.Max(0, _surfaceY - currentCell.y);    // Áö¸éÀÏ ¶§´Â 0m.Ãß°¡
+        Vector3Int currentCell = _brokenableTilemap.WorldToCell(transform.position); 
+        int depth = Mathf.Max(0, _surfaceY - currentCell.y);   
         //_depthText.text = depth + "m";
     }
-
-    /// <summary>
-    /// Å¸ÀÏ¸ÊÀÇ Å¸ÀÏ ÇÏ³ªÇÏ³ª ÃÊ±âÈ­
-    /// </summary>
-    private void tileArrayInit()
+    public void StartDrilling(int dir)
     {
-        BoundsInt bounds = _brokenableTilemap.cellBounds;
-        _width = bounds.xMax - bounds.xMin;
-        _height = bounds.yMax - bounds.yMin;
-        _tiles = new float[_width, _height];
-        _offsetX = -bounds.xMin;
-        _offsetY = -bounds.yMin;
-        for (int x = bounds.xMin; x < bounds.xMax; x++)
+        if (dir != currentDrillDirection)
         {
-            for (int y = bounds.yMin; y < bounds.yMax; y++)
-            {
-                Vector3Int pos = new Vector3Int(x, y);
-                _tiles[TryCellToIndex(pos).x, TryCellToIndex(pos).y] = 100;
-            }
-        }
-        _spriteIndex = 100 / brokenTileSprites.Length;
-    }
-
-
-    /// <summary>
-    /// µé¾î¿Â Vector3Int¸¦ À½¼ö°¡ ³ª¿ÀÁö ¾Êµµ·Ï ¿ÀÇÁ¼ÂÀ¸·Î Á¶ÀıÇØ¼­ ¹è¿­¿¡¼­ »ç¿ëÇÒ ÀÎµ¦½º ¹İÈ¯
-    /// </summary>
-    /// <param name="cellPos"></param>
-    /// <returns>¹è¿­ ¹üÀ§ ¾ÈÀÇ ÁÂÇ¥ÀÎÁö, 2Â÷¿ø ¹è¿­¿¡¼­ »ç¿ëÇÒ x,y</returns>
-    private (bool valid, int x, int y) TryCellToIndex(Vector3Int cellPos)
-    {
-        int x = cellPos.x + _offsetX;
-        int y = cellPos.y + _offsetY;
-        if (x < 0 || y < 0 || x >= _width || y >= _height)
-            return (false, 0, 0);
-
-        return (true, x, y);
-    }
-
-    public void C_StartDrilling(int dir)
-    {
-        if (_drillCoroutine == null)
-            _drillCoroutine = StartCoroutine(DrillingRoutine(dir));
-    }
-    public void C_StopDrilling(int dir)
-    {
-        if (_drillCoroutine != null)
-        {
-            StopCoroutine(_drillCoroutine);
-            _drillCoroutine = null;
-        }
-    }
-    /// <summary>
-    /// µå¸± Å°¸¦ ´­·¶À» ¶§ µ¿ÀÛÇÒ ÄÚ·çÆ¾
-    /// </summary>
-    /// <returns>µå¸± ÄğÅ¸ÀÓ¸¸Å­ ±â´Ù¸²</returns>
-    public IEnumerator DrillingRoutine(int dir)
-    {
-
-        while (true)
-        {
-            Vector3Int currentPos = _brokenableTilemap.WorldToCell(transform.position);
-            Vector3Int pos = currentPos;
-            switch (dir)
-            {
-                case -1:
-                    pos = new Vector3Int(currentPos.x - 1, currentPos.y);
-                    break;
-                case 1:
-                    pos = new Vector3Int(currentPos.x + 1, currentPos.y);
-
-                    break;
-                case 0:
-                    pos = new Vector3Int(currentPos.x, currentPos.y - 1);
-                    break;
-            }
-
-            (bool valid, int x, int y) = TryCellToIndex(pos);
-            if (!_brokenableTilemap.HasTile(pos))
-            {
-                isDrilling = false;
-
-            }
-            else
-            {
-                isDrilling = true;
-
-                _tiles[x, y] -= drillDamage;
-                if (_brokenableTilemap.GetTile(pos) != null)
-                {
-                    if (_tiles[x, y] <= 0)
-                    {
-                        _brokenableTilemap.SetTile(pos, null);
-                        if (_miniMapFrontTilemap != null && _miniMapFrontTilemap.HasTile(pos))    //Ãß°¡
-                        {
-                            _miniMapFrontTilemap.SetTile(pos, null); //Ãß°¡
-                        }
-                        isDrilling = false;
-                        yield return new WaitForSeconds(drillCoolTime);
-                    }
-                    else
-                    {
-                        Tile newTile = ScriptableObject.CreateInstance<Tile>();
-                        int index = Mathf.Clamp((int)(_tiles[x, y] / _spriteIndex), 0, brokenTileSprites.Length - 1);
-                        newTile.sprite = brokenTileSprites[index];
-                        _brokenableTilemap.SetTile(pos, newTile);
-                    }
-                }
-                
-            }
-            
-
-                yield return new WaitForSeconds(drillCoolTime);
+            currentDrillDirection = dir;
+            lastDrillTime = Time.time; 
         }
     }
 
+    public void StopDrilling()
+    {
+        currentDrillDirection = int.MinValue; 
+    }
+
+    public void ProcessDrilling()
+    {
+        if (currentDrillDirection != int.MinValue)
+        {
+            if (Time.time - lastDrillTime >= drillCoolTime)
+            {
+                // ë“œë¦´ ë™ì‘ ìˆ˜í–‰
+                ExecuteDrillAction(currentDrillDirection);
+                lastDrillTime = Time.time; 
+            }
+        }
+    }
+
+    public bool CanDrill(int dir)
+    {
+        Vector2 origin = transform.position;
+        Vector2 direction = dir == 0 ? Vector2.down : (dir == 1 ? Vector2.right : Vector2.left);
+        return Physics2D.Raycast(origin, direction, 0.2f, brokenTileLayer);
+    }
+
+
+    public void ExecuteDrillAction(int dir)
+    {
+        Vector3Int cell = _brokenableTilemap.WorldToCell(transform.position);
+        Vector3Int target = dir switch
+        {
+            -1 => new Vector3Int(cell.x - 1, cell.y), // ì¢Œ
+            1 => new Vector3Int(cell.x + 1, cell.y),  // ìš°
+            0 => new Vector3Int(cell.x, cell.y - 1),  // ì•„ë˜
+            _ => cell 
+        };
+
+        if (!_brokenableTilemap.HasTile(target))
+        {
+            StopDrilling(); 
+            Debug.Log($"ExecuteDrillAction: No tile at target {target}. Stopping drill.");
+
+            return; 
+        }
+
+        tileManager.DamageTile(target, playerStats.drillDamage);
+
+    }
+
+    
+
+
+    
+
+    
 }
