@@ -204,7 +204,7 @@ public class PlayerHealth : MonoBehaviour
         ls.y = Mathf.Abs(ls.y);
         transform.localScale = ls;
 
-        // 물리·충돌 복원
+        // 물리 충돌 복원
         _playerColider.enabled = true;
         _playerRigid.simulated = true;
         _playerRigid.linearVelocity = Vector2.zero;  // 이전 관성 제거

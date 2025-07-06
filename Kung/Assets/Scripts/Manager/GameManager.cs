@@ -15,12 +15,7 @@ public class PlayerData
     public List<UserInventoryItemDto> inventoryItems = new List<UserInventoryItemDto>();
     public List<UserShortCutItemDto> shortCutItems = new List<UserShortCutItemDto>();
 
-    // 적 처치 여부를 저장할 리스트
-    public List<string> defeatedEnemies = new List<string>();
-    // 벽 파괴 여부를 저장할 리스트
-    public List<string> destroyedWalls = new List<string>();
-
-    // 쇼핑 아이템 구매 여부
+    // 가방 증가 아이템 구매 여부
     public bool boughtExpandBag1 = false;
     public bool boughtExpandBag2 = false;
 }
@@ -55,12 +50,7 @@ public class GameManager : MonoBehaviour
             string json = File.ReadAllText(savePath);
             data = JsonUtility.FromJson<PlayerData>(json);
 
-            // 데이터 중 리스트가 null로 내려올 경우 대비
-            if (data.defeatedEnemies == null) data.defeatedEnemies = new List<string>();
-            if (data.destroyedWalls == null) data.destroyedWalls = new List<string>();
             if (data.inventoryItems == null) data.inventoryItems = new List<UserInventoryItemDto>();
-            //if (data.shortCutItems == null) data.shortCutItems = new List<UserShortCutItemDto>();
-
         }
         else
         {
@@ -69,19 +59,17 @@ public class GameManager : MonoBehaviour
         }
         //LoadGame();
     }
+
     private void Start()
     {
         LoadGame();
-
     }
+
     void InitializeDefaultSave()
     {
         data.hp = 100;         // 기본 HP
         data.coins = 0;           // 기본 동전
-        data.defeatedEnemies = new List<string>();
-        data.destroyedWalls = new List<string>();
         data.inventoryItems = new List<UserInventoryItemDto>();
-        //data.shortCutItems = new List<UserShortCutItemDto>();
         data.shortCutItems = _shortCutServiceLocator.Service.Items;
         data.equippedHelmetId = 0;
         data.equippedBootsId = 0;
@@ -117,18 +105,14 @@ public class GameManager : MonoBehaviour
         string json = File.ReadAllText(savePath);
         data = JsonUtility.FromJson<PlayerData>(json);
 
-        if (data.defeatedEnemies == null) data.defeatedEnemies = new List<string>();
-        if (data.destroyedWalls == null) data.destroyedWalls = new List<string>();
         if (data.inventoryItems == null) data.inventoryItems = new List<UserInventoryItemDto>();
         if (data.shortCutItems == null) data.shortCutItems = new List<UserShortCutItemDto>();
-        // 씬을 비동기로 로드하고, 로드 완료 후에 위치·상태 복원
+
         StartCoroutine(LoadAndRestore());
     }
 
     IEnumerator LoadAndRestore()
     {
-
-        // 플레이어 오브젝트 찾기
         var playerGO = GameObject.FindWithTag("Player");
         if (playerGO == null)
         {
@@ -137,6 +121,7 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log($"LoadAndRestore hp : {data.hp}");
+
         // 상태 복원
         int hp = data.hp;
         int coins = data.coins;
@@ -163,45 +148,8 @@ public class GameManager : MonoBehaviour
         yield return null;
     }
 
-    // 보스가 이미 처치되었는지를 확인
-    public bool IsBossDefeated(string bossID)
-    {
-        return data.defeatedEnemies.Contains(bossID);
-    }
 
-    // 보스를 처치했음을 기록하고 저장까지 수행
-    public void SetBossDefeated(string bossID)
-    {
-        if (!data.defeatedEnemies.Contains(bossID))
-        {
-            data.defeatedEnemies.Add(bossID);
-            // 변화된 상태를 파일에 바로 저장
-            string json = JsonUtility.ToJson(data, true);
-            File.WriteAllText(savePath, json);
-            Debug.Log($"[GameManager] Boss defeated recorded: {bossID}");
-        }
-    }
-
-    // 벽이 이미 파괴되었는지를 확인
-    public bool IsWallDestroyed(string wallID)
-    {
-        return data.destroyedWalls.Contains(wallID);
-    }
-
-    // 벽 파괴를 기록하고 저장까지 수행
-    public void SetWallDestroyed(string wallID)
-    {
-        if (!data.destroyedWalls.Contains(wallID))
-        {
-            data.destroyedWalls.Add(wallID);
-            // 변화된 상태를 파일에 바로 저장
-            string json = JsonUtility.ToJson(data, true);
-            File.WriteAllText(savePath, json);
-            Debug.Log($"[GameManager] Wall destroyed recorded: {wallID}");
-        }
-    }
-
-    // 상점 아이템 상태
+    // 가방 증가 아이템 상태
     public bool IsBoughtExpandBag1() { return data.boughtExpandBag1; }
     public bool IsBoughtExpandBag2() { return data.boughtExpandBag2; }
 
