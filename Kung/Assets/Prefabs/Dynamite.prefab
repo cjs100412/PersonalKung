@@ -102,6 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Effect: {fileID: 182193043561762302, guid: ead66fc44a7fac84fb6f8702108cfdd4, type: 3}
+  _miniMapFrontTilemap: {fileID: 0}
 --- !u!95 &8716885207484315742
 Animator:
   serializedVersion: 7

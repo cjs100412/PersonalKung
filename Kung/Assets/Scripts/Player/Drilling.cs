@@ -19,9 +19,9 @@ public class Drilling : MonoBehaviour
     [Header("잘 연결해야 함")]
     [SerializeField] private Tilemap _mineralTilemap;
     [Header("미니맵 관련")]
-    public Tilemap _miniMapFrontTilemap;   //추가
-    [SerializeField] private TextMeshProUGUI _depthText;    //추가
-    private int _surfaceY; // 지면높이.추가
+    public Tilemap _miniMapFrontTilemap;   
+    [SerializeField] private TextMeshProUGUI _depthText;    
+    private int _surfaceY; 
 
     [Header("부셔지는 타일맵 스프라이트 배열")]
     public Sprite[] brokenTileSprites;
@@ -59,8 +59,8 @@ public class Drilling : MonoBehaviour
     private void Update()
     {
         //이다혜 코드 합치고 주석 풀 것
-        Vector3Int currentCell = _brokenableTilemap.WorldToCell(transform.position); //추가
-        int depth = Mathf.Max(0, _surfaceY - currentCell.y);    // 지면일 때는 0m.추가
+        Vector3Int currentCell = _brokenableTilemap.WorldToCell(transform.position); 
+        int depth = Mathf.Max(0, _surfaceY - currentCell.y);    
         _depthText.text = depth + "m";
     }
 
@@ -152,9 +152,9 @@ public class Drilling : MonoBehaviour
                     if (_tiles[x, y] <= 0)
                     {
                         _brokenableTilemap.SetTile(pos, null);
-                        if (_miniMapFrontTilemap != null && _miniMapFrontTilemap.HasTile(pos))    //추가
+                        if (_miniMapFrontTilemap != null && _miniMapFrontTilemap.HasTile(pos))    
                         {
-                            _miniMapFrontTilemap.SetTile(pos, null); //추가
+                            _miniMapFrontTilemap.SetTile(pos, null); 
                         }
                         isDrilling = false;
                         yield return new WaitForSeconds(drillCoolTime);

@@ -18,4 +18,9 @@ public class EquipmentData : ScriptableObject
     public float drillDamage = 0;
     public float airCapacity = 0;
 
+    public AnimationClip headIdleAni; //정지
+    public AnimationClip headMoveAni; //이동
+
+    public AnimationClip bobyIdleAni;
+    public AnimationClip bodyMoveAni; 
 }
