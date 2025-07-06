@@ -14,12 +14,12 @@ public class PlayerEquipment : MonoBehaviour
 
     private PlayerStats playerStats;
 
-    private void Start()
+    private void Awake()
     {
         playerStats = GetComponent<PlayerStats>();
+
     }
 
-  
     public void EquipItem(EquipmentData equipment)
     {
         switch (equipment.equipmentType)
@@ -40,10 +40,9 @@ public class PlayerEquipment : MonoBehaviour
 
     }
 
-    private void ApplyEquipment(EquipmentData data)
+    public void ApplyEquipment(EquipmentData data)
     {
         if (data == null) return;
-
 
         switch (data.equipmentType)
         {

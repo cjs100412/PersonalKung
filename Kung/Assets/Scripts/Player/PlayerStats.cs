@@ -27,11 +27,10 @@ public class PlayerStats : MonoBehaviour
 
     public event Action<float> OnAirCapacityChanged;
 
-    private void Start()
+    private void Awake()
     {
         ResetStats();
     }
-
     public void ResetStats()
     {
         movementSpeed = baseMovementSpeed;

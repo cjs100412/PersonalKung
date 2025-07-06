@@ -9,6 +9,9 @@ public class PlayerData
 {
     public int hp;
     public int coins;
+    public int equippedHelmetId;
+    public int equippedBootsId;
+    public int equippedDrillId;
     public List<UserInventoryItemDto> inventoryItems = new List<UserInventoryItemDto>();
     public List<UserShortCutItemDto> shortCutItems = new List<UserShortCutItemDto>();
 
@@ -64,33 +67,43 @@ public class GameManager : MonoBehaviour
             // 세이브 파일이 없을 때만 초기값 세팅
             InitializeDefaultSave();
         }
-        LoadGame();
+        //LoadGame();
     }
+    private void Start()
+    {
+        LoadGame();
 
+    }
     void InitializeDefaultSave()
     {
         data.hp = 100;         // 기본 HP
         data.coins = 0;           // 기본 동전
-
         data.defeatedEnemies = new List<string>();
         data.destroyedWalls = new List<string>();
         data.inventoryItems = new List<UserInventoryItemDto>();
         //data.shortCutItems = new List<UserShortCutItemDto>();
         data.shortCutItems = _shortCutServiceLocator.Service.Items;
+        data.equippedHelmetId = 0;
+        data.equippedBootsId = 0;
+        data.equippedDrillId = 0;
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(savePath, json);
         Debug.Log($"[GameManager] Save initialized: {savePath}");
     }
 
-    public void SaveGame(Vector2 pos, int hp,int coins, List<UserInventoryItemDto> inventoryItems, List<UserShortCutItemDto> shortCutItems)
+    public void SaveGame(Vector2 pos, int hp,int coins, List<UserInventoryItemDto> inventoryItems, List<UserShortCutItemDto> shortCutItems,
+                         int equippedHelmetId, int equippedBootsId, int equippedDrillId)
     {
         data.hp = hp;
         data.coins = coins;
         data.inventoryItems = inventoryItems;
         data.shortCutItems = shortCutItems;
+        data.equippedHelmetId = equippedHelmetId;
+        data.equippedBootsId = equippedBootsId;
+        data.equippedDrillId = equippedDrillId;
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(savePath, json);
-        Debug.Log("Game Saved → " + savePath + ")" + data.shortCutItems[0].ItemId.ToString());
+        Debug.Log("Game Saved → " + savePath + ")");
     }
 
     public void LoadGame()
@@ -103,6 +116,7 @@ public class GameManager : MonoBehaviour
 
         string json = File.ReadAllText(savePath);
         data = JsonUtility.FromJson<PlayerData>(json);
+
         if (data.defeatedEnemies == null) data.defeatedEnemies = new List<string>();
         if (data.destroyedWalls == null) data.destroyedWalls = new List<string>();
         if (data.inventoryItems == null) data.inventoryItems = new List<UserInventoryItemDto>();
@@ -128,17 +142,16 @@ public class GameManager : MonoBehaviour
         int coins = data.coins;
         List<UserInventoryItemDto> inventoryItems = data.inventoryItems;
         List<UserShortCutItemDto> shortCutItems = data.shortCutItems;
-
-        //var inv = playerGO.GetComponent<PlayerInventory>();
-        //if (inv != null) inv.SpendCoins(inv.CoinCount); // 0으로 초기화
-        //if (inv != null) inv.AddCoins(data.coins);
+        int equippedHelmetId = data.equippedHelmetId;
+        int equippedBootsId = data.equippedBootsId;
+        int equippedDrillId = data.equippedDrillId;
 
         Debug.Log("Player state restored: HP=" + data.hp + " Coins=" + data.coins);
 
         var ph = playerGO.GetComponent<PlayerHealth>();
         if (ph != null)
         {
-            ph.Respawn(hp, coins, inventoryItems, shortCutItems);
+            ph.Respawn(hp, coins, inventoryItems, shortCutItems, equippedHelmetId, equippedBootsId, equippedDrillId);
         }
         else
         {

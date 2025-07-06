@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -31,11 +34,19 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private GameObject _bodyObject;
     [SerializeField] private InventoryServiceLocatorSO _inventoryServiceLocator;
     [SerializeField] private ShortCutServiceLocatorSO _shortCutServiceLocator;
+    [SerializeField] private InventoryItemServiceLocatorSO _itemServiceLocator;
 
     public Health hp;
     public Air air;
     public Gold gold;
     [SerializeField] private PlayerStats _playerStats;
+    [SerializeField] private PlayerEquipment _playerEquipment;
+    [SerializeField] private List<EquipmentData> equipmentDatas;
+    [SerializeField] private InventoryUI _inventoryUI;
+    [SerializeField] private ShortcutKey _shortcutKey;
+    [SerializeField] private Image _helmetEquipment;
+    [SerializeField] private Image _bootsEquipment;
+    [SerializeField] private Image _drillEquipment;
 
     public int MaxHp => _maxhp;
     public int MaxAir
@@ -181,33 +192,66 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    public void Respawn(int savedhp,int savedcoin, List<UserInventoryItemDto> savedInventoryItems, List<UserShortCutItemDto> savedShortCutItems)
+    public void Respawn(int savedhp,int savedcoin, List<UserInventoryItemDto> savedInventoryItems, List<UserShortCutItemDto> savedShortCutItems,
+                        int equippedHelmetId, int equippedBootsId, int equippedDrillId)
     {
-        // 1) 위치 복원
+        // 위치 복원
         transform.position = new Vector3(-1, 0, 0);
 
-        // 2) 회전/스케일 초기화 (바닥에 똑바로 세우기)
+        // 회전/스케일 초기화 (바닥에 똑바로 세우기)
         transform.rotation = Quaternion.identity;
         var ls = transform.localScale;
         ls.y = Mathf.Abs(ls.y);
         transform.localScale = ls;
 
-        // 3) 물리·충돌 복원
+        // 물리·충돌 복원
         _playerColider.enabled = true;
         _playerRigid.simulated = true;
         _playerRigid.linearVelocity = Vector2.zero;  // 이전 관성 제거
 
-        // 4) 이동 스크립트 재활성화
+        // 이동 스크립트 재활성화
         var pm = GetComponent<PlayerMovement>();
         if (pm != null) pm.enabled = true;
 
-        // 5) 체력복원
+        // 각종 상태 복원
         hp = Health.New(savedhp, _maxhp);
         gold = Gold.New(savedcoin);
         _inventoryServiceLocator.Service.SetItems(savedInventoryItems);
         _shortCutServiceLocator.Service.SetShortCut(savedShortCutItems);
+        if(equippedHelmetId > 2000)
+        {
+            _helmetEquipment.sprite = Resources.Load<Sprite>(_itemServiceLocator.ItemService.GetIconPath(equippedHelmetId));
+            EquipmentData equipmentHelmetData = equipmentDatas.First(equipment => equipment.itemId == equippedHelmetId);
+            _playerEquipment.EquipItem(equipmentHelmetData);
+        }
+        else
+        {
+            _playerEquipment.equippedHelmet = new EquipmentData();
+        }
+        if (equippedHelmetId > 2000)
+        {
+            _bootsEquipment.sprite = Resources.Load<Sprite>(_itemServiceLocator.ItemService.GetIconPath(equippedBootsId));
+            EquipmentData equipmentBootsData = equipmentDatas.First(equipment => equipment.itemId == equippedBootsId);
+            _playerEquipment.EquipItem(equipmentBootsData);
+        }
+        else
+        {
+            _playerEquipment.equippedBoots = new EquipmentData();
+        }
+        if (equippedHelmetId > 2000)
+        {
+            _drillEquipment.sprite = Resources.Load<Sprite>(_itemServiceLocator.ItemService.GetIconPath(equippedDrillId));
+            EquipmentData equipmentDrillData = equipmentDatas.First(equipment => equipment.itemId == equippedDrillId);
+            _playerEquipment.EquipItem(equipmentDrillData);
+        }
+        else
+        {
+            _playerEquipment.equippedDrill = new EquipmentData();
+        }
+        _inventoryUI.Refresh();
+        _shortcutKey.Refresh();
 
-        // 6) 애니메이터 상태 리셋
+        // 애니메이터 상태 리셋
         _headAnimator.ResetTrigger("isDead");
         _bodyAnimator.ResetTrigger("isDead");
         _headAnimator.Play("Idle");

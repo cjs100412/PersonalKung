@@ -557,7 +557,7 @@ GameObject:
   - component: {fileID: 106044861}
   - component: {fileID: 106044860}
   m_Layer: 5
-  m_Name: Image
+  m_Name: DrillImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1306,6 +1306,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerHealth: {fileID: 1513979810}
+  _playerEquipment: {fileID: 1513979814}
   _inventoryServiceLocator: {fileID: 11400000, guid: 9e305352b541900459714187f962477e, type: 2}
   _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
 --- !u!1 &218482189
@@ -1982,7 +1983,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: All Sell
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5741,7 +5742,7 @@ GameObject:
   - component: {fileID: 841511354}
   - component: {fileID: 841511353}
   m_Layer: 5
-  m_Name: Button
+  m_Name: AllSellButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27549,7 +27550,7 @@ GameObject:
   - component: {fileID: 1198936562}
   - component: {fileID: 1198936561}
   m_Layer: 5
-  m_Name: Image
+  m_Name: HelmetImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29625,7 +29626,30 @@ MonoBehaviour:
   _bodyObject: {fileID: 1139374735612442843}
   _inventoryServiceLocator: {fileID: 11400000, guid: 9e305352b541900459714187f962477e, type: 2}
   _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
+  _itemServiceLocator: {fileID: 11400000, guid: c0e7431e0933d3b4da50bc33bd4bc5d6, type: 2}
   _playerStats: {fileID: 1513979813}
+  _playerEquipment: {fileID: 1513979814}
+  equipmentDatas:
+  - {fileID: 11400000, guid: e7f604b3752ba004aa107a8d25a73be9, type: 2}
+  - {fileID: 11400000, guid: 8b8c83cfd97e5ad46b049f6b91ef6daf, type: 2}
+  - {fileID: 11400000, guid: 84ef496129518ce44b0447e63f65a846, type: 2}
+  - {fileID: 11400000, guid: bf6f5f6b06175224890027e8dbf46a74, type: 2}
+  - {fileID: 11400000, guid: 4ac54c18aff68a04d9d2ac888e0614b3, type: 2}
+  - {fileID: 11400000, guid: e0040844bd6bad54ca4620f595a26acf, type: 2}
+  - {fileID: 11400000, guid: fa6dc82728f6a8c45ad8fb2c77fb3878, type: 2}
+  - {fileID: 11400000, guid: 4de73d5e0e3d56e41aad6bafc22de05c, type: 2}
+  - {fileID: 11400000, guid: 56dc52b23eb39614d98d6effe18b3a36, type: 2}
+  - {fileID: 11400000, guid: 941e4a7b7b0e2bf4eaa2e58b96bc67bd, type: 2}
+  - {fileID: 11400000, guid: 8f2ce391a9c54b741b784a765dfacdca, type: 2}
+  - {fileID: 11400000, guid: a2f122673d2c073479110d98544dcb32, type: 2}
+  - {fileID: 11400000, guid: a3518939d77189c429525d0cd00ee737, type: 2}
+  - {fileID: 11400000, guid: 33ace0164e18abd41932c214d837d970, type: 2}
+  - {fileID: 11400000, guid: cd2014476bbc61f41b218ea63fe2cdde, type: 2}
+  _inventoryUI: {fileID: 1714175652}
+  _shortcutKey: {fileID: 1984737746879642997}
+  _helmetEquipment: {fileID: 1198936561}
+  _bootsEquipment: {fileID: 1921226186}
+  _drillEquipment: {fileID: 106044860}
 --- !u!114 &1513979811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31607,7 +31631,7 @@ GameObject:
   - component: {fileID: 1921226187}
   - component: {fileID: 1921226186}
   m_Layer: 5
-  m_Name: Image
+  m_Name: BootsImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
