@@ -7,6 +7,7 @@ using static UnityEditor.PlayerSettings;
 public class TileManager : MonoBehaviour
 {
     [SerializeField] Transform par;
+    [SerializeField] Transform _playerTransform;
     [Header("미리 만든 타일맵 연결")]
     [SerializeField] private GameObject brokenTileMap;
     [SerializeField] private GameObject backGroundTIleMap;
@@ -38,7 +39,7 @@ public class TileManager : MonoBehaviour
     float secondThreshold;
     public float[,] tiles;
     public int baseHp;
-
+    public UI ui;
     [HideInInspector] public List<DestroiedTiles> destroiedTiles;
     void Awake()
     {
@@ -109,6 +110,10 @@ public class TileManager : MonoBehaviour
             brokenableTilemap.SetTile(target, null);
             miniMapFrontTilemap.SetTile(target, null);
             destroiedTiles.Add(new DestroiedTiles(target.x, target.y));
+
+            Vector3Int currentCell = brokenableTilemap.WorldToCell(_playerTransform.position);
+            int depth = Mathf.Max(0, 0 - currentCell.y);
+            ui.score += depth;
             return;
         }
 
