@@ -12,14 +12,17 @@ public class PlayerEquipment : MonoBehaviour
     [SerializeField] TextMeshProUGUI defenseText;
     [SerializeField] TextMeshProUGUI airCapacityText;
 
+    [SerializeField] Animator headAnimator;
+    [SerializeField] Animator bodyAnimator;
+
     private PlayerStats playerStats;
 
-    private void Start()
+    private void Awake()
     {
         playerStats = GetComponent<PlayerStats>();
+
     }
 
-  
     public void EquipItem(EquipmentData equipment)
     {
         switch (equipment.equipmentType)
@@ -40,10 +43,9 @@ public class PlayerEquipment : MonoBehaviour
 
     }
 
-    private void ApplyEquipment(EquipmentData data)
+    public void ApplyEquipment(EquipmentData data)
     {
         if (data == null) return;
-
 
         switch (data.equipmentType)
         {
@@ -53,7 +55,15 @@ public class PlayerEquipment : MonoBehaviour
                 playerStats.defense = data.defance;
                 playerStats.airCapacity = data.airCapacity;
                 defenseText.text = playerStats.defense.ToString();
-                airCapacityText.text = playerStats.airCapacity.ToString(); 
+                airCapacityText.text = playerStats.airCapacity.ToString();
+
+                var overrideHeadController = new AnimatorOverrideController(headAnimator.runtimeAnimatorController);
+
+                if (data.headIdleAni != null)
+                    overrideHeadController["HeadIdleAni"] = data.headIdleAni; 
+                if (data.headMoveAni != null)
+                    overrideHeadController["HeadMoveAni"] = data.headMoveAni;
+                headAnimator.runtimeAnimatorController = overrideHeadController;
 
                 break;
             case EquipmentData.EquipmentType.Boots:
@@ -61,10 +71,20 @@ public class PlayerEquipment : MonoBehaviour
                 playerStats.movementSpeed = data.movementSpeed;
                 moveMentSpeedText.text = playerStats.boosterSpeed.ToString();
 
+                var overrideShoesController = new AnimatorOverrideController(bodyAnimator.runtimeAnimatorController);
+
+                if (data.bobyIdleAni != null)
+                    overrideShoesController["BodyIdleAni"] = data.bobyIdleAni;
+                if (data.bodyMoveAni != null)
+                    overrideShoesController["BodyMoveAni"] = data.bodyMoveAni;
+
+                bodyAnimator.runtimeAnimatorController = overrideShoesController;
+
                 break;
             case EquipmentData.EquipmentType.Drill:
                 playerStats.drillDamage = data.drillDamage;
-                drillDamageText.text = playerStats.drillDamage.ToString(); 
+                drillDamageText.text = playerStats.drillDamage.ToString();
+
                 break;
             default:
                 break;

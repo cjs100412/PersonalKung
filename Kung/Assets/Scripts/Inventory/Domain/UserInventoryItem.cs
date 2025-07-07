@@ -34,7 +34,7 @@ public class UserInventoryItem
             );    
     }
 
-    private UserInventoryItem(long serialNumber, int itemId, int quantity, bool isStackable)
+    public UserInventoryItem(long serialNumber, int itemId, int quantity, bool isStackable)
     {
         SerialNumber = serialNumber;
         ItemId = itemId;

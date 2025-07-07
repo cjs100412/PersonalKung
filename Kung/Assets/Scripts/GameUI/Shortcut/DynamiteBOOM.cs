@@ -5,6 +5,8 @@ using static UnityEditor.PlayerSettings;
 public class DynamiteBOOM : MonoBehaviour
 {
     [SerializeField] private GameObject _Effect;
+    public Tilemap _miniMapRockTile;
+
     private Tilemap _rockTile;
     private void Awake()
     {
@@ -25,6 +27,9 @@ public class DynamiteBOOM : MonoBehaviour
         Debug.Log($"Explosion at cell {DynamiteCell}, hasTile? {_rockTile.HasTile(DynamiteCell)}");
         if (_rockTile.HasTile(DynamiteCell))
             _rockTile.SetTile(DynamiteCell, null);
+
+        if (_miniMapRockTile != null && _miniMapRockTile.HasTile(DynamiteCell))
+            _miniMapRockTile.SetTile(DynamiteCell, null);
 
         Destroy(Instantiate(_Effect, transform.position, Quaternion.identity), 3);
     }

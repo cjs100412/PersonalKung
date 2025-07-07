@@ -8,9 +8,11 @@ using System;
 
 public interface IUserInventroyService
 {
-    IReadOnlyList<UserInventoryItemDto> Items { get; }
+    public List<UserInventoryItemDto> Items { get; }
+    public void SetItems(List<UserInventoryItemDto> setItems);
+
     void AcquireItem(int itemId);
-    void SellAllMineral();
+    int SellAllMineral();
     bool CanAcquireItem(int itemId);
 
     void RemoveItem(int itemId);
@@ -31,7 +33,7 @@ public class UserInventoryService : IUserInventroyService
         //_itemRepository = new ItemRepository(new Parser<ShopItemList>());
     }
 
-    public IReadOnlyList<UserInventoryItemDto> Items
+    public List<UserInventoryItemDto> Items
     {
         get
         {
@@ -39,6 +41,13 @@ public class UserInventoryService : IUserInventroyService
                 .Select(item => new UserInventoryItemDto(item))
                 .ToList();
         }
+    }
+
+    public void SetItems(List<UserInventoryItemDto> setItems)
+    {
+        _inventory.SetItems(setItems
+                .Select(item => new UserInventoryItem(item.SerialNumber,item.ItemId,item.Quantity,item.IsStackable))
+                .ToList());
     }
 
     public void AcquireItem(int itemId)
@@ -53,7 +62,8 @@ public class UserInventoryService : IUserInventroyService
         return _inventory.CanAddItem(itemId);
     }
 
-    public void SellAllMineral()
+    // 급해서 반환을 int로 만들어서 쓰는중;; 이렇게하면 안되는데 나중에 여유있을때 정리함
+    public int SellAllMineral()
     {
         int allprice = 0;
 
@@ -73,8 +83,8 @@ public class UserInventoryService : IUserInventroyService
                 }
             }
         }
-
         Debug.Log("모든 광물을 판매하여 얻은 금액: " + allprice);
+        return allprice;
     }
 
     public void RemoveItem(int itemId)

@@ -6,6 +6,7 @@ public class Gold
 {
     private int _gold;
 
+    public int gold => _gold;
     private Gold(int gold)
     {
         _gold = gold;
@@ -19,7 +20,7 @@ public class Gold
         {
             throw new ArgumentException("Invalid amount : {amoun}");
         }
-        return new Gold(_gold + amount);
+        return Gold.New(_gold + amount);
     }
 
     public Gold RemoveGold(int amount)

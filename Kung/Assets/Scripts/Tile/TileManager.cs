@@ -16,12 +16,18 @@ public class TileManager : MonoBehaviour
     [SerializeField] private GameObject Level1;
     [SerializeField] private GameObject Level2;
     
+    [SerializeField] private GameObject miniMapRockTile;
+
     [SerializeField] private Drilling _drilling;
 
     public Tilemap brokenableTilemap;
     public Tilemap miniMapFrontTilemap;
     
     public Sprite[] brokenTileSprites;
+    [SerializeField] private Tile mineralTile;
+    [SerializeField] private DynamiteBOOM _boom;
+    
+    private Tilemap brokenTileMapInstance;
 
     private int _width;
     private int _height;
@@ -46,6 +52,9 @@ public class TileManager : MonoBehaviour
         lv1.GetComponent<Transform>().localScale = new Vector2(_width, _height / 3) * 0.3f; 
         lv2.GetComponent<Transform>().localScale = new Vector2(_width, _height / 3) * 0.3f;
 
+        _drilling._brokenableTilemap = Instantiate(brokenTileMap, par).GetComponent<Tilemap>();
+        _drilling._miniMapFrontTilemap = Instantiate(frontMiniMapTilemap, par).GetComponent<Tilemap>();
+        _boom._miniMapRockTile = Instantiate(miniMapRockTile, par).GetComponent<Tilemap>();
     }
 
     /// <summary>
