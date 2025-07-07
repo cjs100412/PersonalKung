@@ -24,7 +24,7 @@ public class UserInventoryService : IUserInventroyService
     private readonly Inventory _inventory;
     private readonly ItemService _itemService;
     private readonly IItemRepository _itemRepository;
-
+    //public Dictionary<int, int> mineralDict = new Dictionary<int, int>();
     public UserInventoryService(IItemRepository itemRepository)
     {
         _inventory = new Inventory();
@@ -74,6 +74,7 @@ public class UserInventoryService : IUserInventroyService
                 var repoItem = _itemRepository.FindById(item.ItemId);
                 if (repoItem != null)
                 {
+                    //mineralDict[item.ItemId] += item.Quantity;
                     allprice += repoItem.Price * item.Quantity;
                     _inventory.RemoveItem(item.ItemId);
                 }

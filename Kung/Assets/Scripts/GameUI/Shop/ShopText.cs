@@ -1,3 +1,6 @@
+using NUnit.Framework.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,13 +17,25 @@ public class ShopText : MonoBehaviour
     [SerializeField] GameObject _shopNotEnoughTextPanel;
 
     [SerializeField] PlayerHealth _playerHealth;
+    [SerializeField] GameObject _billImage;
 
     private int _price;
     [SerializeField] private InventoryServiceLocatorSO _inventoryServiceLocator;
+    [SerializeField] private InventoryRepositoryLocatorSO _inventoryRepositoryLocator;
     [SerializeField] private ShortCutServiceLocatorSO _shortCutServiceLocator;
+    [SerializeField] private InventoryItemServiceLocatorSO inventoryItemServiceLocatorSO;
+
     private int id;
     [SerializeField] private InventoryUI _inventoryUI;
     [SerializeField] private ShortcutKey _shortcutKey;
+    public Dictionary<int, int> mineralDict = new Dictionary<int, int>();
+
+    [SerializeField] GameObject _billLine;
+    //[SerializeField] Image _billmineralImage;
+    //[SerializeField] TextMeshProUGUI _billmineralCount;
+    //[SerializeField] TextMeshProUGUI _billmineralTotal;
+    [SerializeField] Transform _par;
+
     public void SetText(string name, int price, string dis)
     {
         _price = price;
@@ -62,6 +77,44 @@ public class ShopText : MonoBehaviour
     {
         _shopNotEnoughTextPanel.SetActive(true);
 
+    }
+
+    public void OnClickMineralBillButton()
+    {
+        mineralDict.Clear();
+
+        _billImage.SetActive(true);
+        _shopTextPanel.SetActive(false);
+        _shopNotEnoughTextPanel.SetActive(false);
+        List<UserInventoryItemDto> items = _inventoryServiceLocator.Service.Items
+            .Where(item => item.ItemId >= 3000)
+            .ToList();
+
+        foreach (UserInventoryItemDto item in items)
+        {
+            if (mineralDict.ContainsKey(item.ItemId))
+            {
+                mineralDict[item.ItemId] += item.Quantity;
+            }
+            else
+            {
+                mineralDict.Add(item.ItemId, item.Quantity);
+            }
+        }
+
+        float yPos = 0;
+        foreach (var item in mineralDict)
+        {
+            GameObject go = Instantiate(_billLine,_par);
+            go.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, yPos, 0);
+            go.GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>(inventoryItemServiceLocatorSO.ItemService.GetIconPath(item.Key));
+            TextMeshProUGUI[] texts = go.GetComponentsInChildren<TextMeshProUGUI>();
+            int price = _inventoryRepositoryLocator.Repository.FindById(item.Key).Price;
+            texts[0].text = price.ToString();
+            texts[1].text = item.Value.ToString();
+            texts[2].text = (item.Value * price).ToString();
+            yPos -= 120f;
+        }
     }
 
     public void OnClickMineralSellButton()
