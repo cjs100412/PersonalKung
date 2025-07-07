@@ -63,7 +63,7 @@
 
 //    private Coroutine _drillCoroutine;
 
-    
+
 //    // === 생명주기 ===
 //    private void Awake()
 //    {
@@ -103,14 +103,14 @@
 //    {
 //        if (IsMovementLocked) return;
 //        _isDirectionMoving = true;
-//        MoveHorizontal(-1,  InputLockState.Right, CurrentDirectionState.Left);
+//        MoveHorizontal(-1, InputLockState.Right, CurrentDirectionState.Left);
 //    }
 
 //    private void HandleRightInput()
 //    {
 //        if (IsMovementLocked) return;
 //        _isDirectionMoving = true;
-//        MoveHorizontal(1,  InputLockState.Left, CurrentDirectionState.Right);
+//        MoveHorizontal(1, InputLockState.Left, CurrentDirectionState.Right);
 //    }
 
 //    private void HandleLeftRelease() => _isDirectionMoving = false;
@@ -122,7 +122,7 @@
 //    {
 //        if (_playerHealth.isDamaged == true) return;
 
-//        if (IsMovementLocked) 
+//        if (IsMovementLocked)
 //        {
 //            IdleState(); // 정지 상태로 만들고
 //            OnDrillKeyUp(); // 드릴 정지 상태
@@ -196,19 +196,19 @@
 
 //        if (Input.GetKey(KeyCode.LeftArrow) && currentState != InputLockState.Left)
 //        {
-            
+
 //            MoveHorizontal(-1, InputLockState.Right, CurrentDirectionState.Left);
 //            if (_drilling.isDrilling) StartDrillingSide(); else StopDrilling();
 //        }
 //        else if (Input.GetKey(KeyCode.RightArrow) && currentState != InputLockState.Right)
 //        {
-            
+
 //            MoveHorizontal(1, InputLockState.Left, CurrentDirectionState.Right);
 //            if (_drilling.isDrilling) StartDrillingRight(); else StopDrilling();
 //        }
 //        else
 //        {
-//            if (_drilling.currentDirectionState == CurrentDirectionState.Left || _drilling.currentDirectionState == CurrentDirectionState.Right) 
+//            if (_drilling.currentDirectionState == CurrentDirectionState.Left || _drilling.currentDirectionState == CurrentDirectionState.Right)
 //            {
 //                OnDrillKeyUp();
 //            }
