@@ -19,3 +19,5 @@ MonoBehaviour:
   defance: 6
   drillDamage: 0
   airCapacity: 700
+  headIdleAni: {fileID: 7400000, guid: 4e8e1e69d73d281418105c7ba48041c7, type: 2}
+  headMoveAni: {fileID: 7400000, guid: 55f5b13a1343d4f40a8063e0deb0c3c0, type: 2}

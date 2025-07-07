@@ -2311,7 +2311,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 7
+  m_SortingOrder: 8
   m_Sprite: {fileID: -855298285791758126, guid: 1bd847bb26b35a44a95c398b8c9b49cb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -3761,6 +3761,7 @@ GameObject:
   - component: {fileID: 558528365}
   - component: {fileID: 558528364}
   - component: {fileID: 558528363}
+  - component: {fileID: 558528366}
   m_Layer: 5
   m_Name: Mineral_Text_Canvas
   m_TagString: Untagged
@@ -3850,6 +3851,28 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!95 &558528366
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558528361}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7e24f08b7a0241342bcaafcef2285d35, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &559650013
 GameObject:
   m_ObjectHideFlags: 0
@@ -6925,10 +6948,12 @@ MonoBehaviour:
   par: {fileID: 253173585724144189}
   brokenTileMap: {fileID: 749716576902982719, guid: e697a780a9bdcdc40acc74c5b9c2b9ac, type: 3}
   backGroundTIleMap: {fileID: 7722810659767422271, guid: fda6f51d41f7b354fb8058867be53147, type: 3}
-  frontMiniMapTilemap: {fileID: 2309226482527555018, guid: 1fad8ea99ff49bd449709ac01c55a7ba, type: 3}
+  frontMiniMapTilemap: {fileID: 2430947847880533454, guid: 1fad8ea99ff49bd449709ac01c55a7ba, type: 3}
   backMiniMapTilemap: {fileID: 2303514913464902789, guid: 223914b5c1adfff42a88c5f136c28f5d, type: 3}
+  miniMapRockTile: {fileID: 6465404622400827120, guid: 3693fc6a470ba3c46abf8278d4531cd9, type: 3}
   _drilling: {fileID: 1513979809}
   mineralTile: {fileID: 11400000, guid: e136ee3231310bd46bdb084291014996, type: 2}
+  _boom: {fileID: 7286142019167745156, guid: fcc32e048211ba647812d437aafbdd44, type: 3}
   width: 60
   height: 666
 --- !u!4 &1010459573
@@ -29757,6 +29782,8 @@ MonoBehaviour:
   moveMentSpeedText: {fileID: 1034563619}
   defenseText: {fileID: 676011827}
   airCapacityText: {fileID: 1961466925}
+  headAnimator: {fileID: 9124900276528244639}
+  bodyAnimator: {fileID: 7415238218699116900}
 --- !u!114 &1513979815
 MonoBehaviour:
   m_ObjectHideFlags: 0

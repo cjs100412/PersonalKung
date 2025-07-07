@@ -9,14 +9,14 @@ public class TileManager : MonoBehaviour
     [SerializeField] private GameObject backGroundTIleMap;
     [SerializeField] private GameObject frontMiniMapTilemap;
     [SerializeField] private GameObject backMiniMapTilemap;
+    [SerializeField] private GameObject miniMapRockTile;
 
     [SerializeField] private Drilling _drilling;
-
-
+    [SerializeField] private Tile mineralTile;
+    [SerializeField] private DynamiteBOOM _boom;
+    
     private Tilemap brokenTileMapInstance;
 
-
-    [SerializeField] private Tile mineralTile;
 
     public int width = 60;
     public int height = 666;
@@ -27,6 +27,7 @@ public class TileManager : MonoBehaviour
         Instantiate(backMiniMapTilemap, par);
         _drilling._brokenableTilemap = Instantiate(brokenTileMap, par).GetComponent<Tilemap>();
         _drilling._miniMapFrontTilemap = Instantiate(frontMiniMapTilemap, par).GetComponent<Tilemap>();
+        _boom._miniMapRockTile = Instantiate(miniMapRockTile, par).GetComponent<Tilemap>();
     }
 
 

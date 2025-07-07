@@ -19,3 +19,7 @@ MonoBehaviour:
   defance: 0
   drillDamage: 0
   airCapacity: 0
+  headIdleAni: {fileID: 0}
+  headMoveAni: {fileID: 0}
+  bobyIdleAni: {fileID: 7400000, guid: ee3322c56e616724b83a464b0f0618c9, type: 2}
+  bodyMoveAni: {fileID: 7400000, guid: df5d269ebca0d334796a8945488388f7, type: 2}
