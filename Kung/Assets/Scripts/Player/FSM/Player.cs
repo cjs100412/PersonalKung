@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
 
 
     public Rigidbody2D rigid;
+    public GameObject glowOutlineObj;
 
     public Animator bodyAnimator;
     public Animator headAnimator;
@@ -48,9 +49,12 @@ public class Player : MonoBehaviour
 
         _moveStateMachine.ChangeState(new IdleState(this));
         _drillStateMachine.ChangeState(new DrillOffState(this));
-    }
 
-    void Update()
+        glowOutlineObj.SetActive(false);
+
+}
+
+void Update()
     {
         _moveStateMachine.Update();
         _drillStateMachine.Update();
@@ -83,7 +87,7 @@ public class Player : MonoBehaviour
             {
                 _moveStateMachine.ChangeState(new IdleState(this));
             }
-        }
+            }
         if (isBoost)
         {
             return;

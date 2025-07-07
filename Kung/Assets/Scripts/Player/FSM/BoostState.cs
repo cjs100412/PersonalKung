@@ -11,12 +11,14 @@ public class BoostState : IState
     public void Enter()
     {
         player.isBoost = true;
+        player.glowOutlineObj.SetActive(true);
         player.boosterAnimator.SetBool("isBoost", true);
     }
 
     public void Exit()
     {
         player.isBoost = false;
+        player.glowOutlineObj.SetActive(false);
         player.boosterAnimator.SetBool("isBoost", false);
 
     }
@@ -27,6 +29,7 @@ public class BoostState : IState
         {
             player.rigid.AddForce(Vector2.up * player.playerStats.boosterSpeed * Time.deltaTime * 100, ForceMode2D.Force);
         }
+        player.glowOutlineObj.transform.rotation = Quaternion.identity;
         player.rigid.linearVelocity = new Vector2(player.moveInput.x * player.playerStats.movementSpeed * 100 * Time.deltaTime, player.rigid.linearVelocity.y);
     }
 }
