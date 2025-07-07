@@ -42,13 +42,14 @@ public class Drilling : MonoBehaviour
     private void Start()
     {
         _brokenableTilemap = tileManager.brokenableTilemap;
+        _miniMapFrontTilemap = tileManager.miniMapFrontTilemap;
     }
 
     private void Update()
     {
         Vector3Int currentCell = _brokenableTilemap.WorldToCell(transform.position); 
         int depth = Mathf.Max(0, _surfaceY - currentCell.y);   
-        //_depthText.text = depth + "m";
+        _depthText.text = depth + "m";
     }
     public void StartDrilling(int dir)
     {
@@ -107,11 +108,4 @@ public class Drilling : MonoBehaviour
         tileManager.DamageTile(target, playerStats.drillDamage);
 
     }
-
-    
-
-
-    
-
-    
 }

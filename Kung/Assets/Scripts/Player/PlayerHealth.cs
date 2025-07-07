@@ -69,6 +69,7 @@ public class PlayerHealth : MonoBehaviour
     private void Awake()
     {
         air = Air.New(MaxAir, MaxAir);
+        hp = Health.New(_maxhp, _maxhp);
     }
 
     void Update()
@@ -210,7 +211,7 @@ public class PlayerHealth : MonoBehaviour
         _playerRigid.linearVelocity = Vector2.zero;  // 이전 관성 제거
 
         // 이동 스크립트 재활성화
-        var pm = GetComponent<PlayerMovement>();
+        var pm = GetComponent<Player>();
         if (pm != null) pm.enabled = true;
 
         // 각종 상태 복원
@@ -228,7 +229,7 @@ public class PlayerHealth : MonoBehaviour
         {
             _playerEquipment.equippedHelmet = new EquipmentData();
         }
-        if (equippedHelmetId > 2000)
+        if (equippedBootsId > 2000)
         {
             _bootsEquipment.sprite = Resources.Load<Sprite>(_itemServiceLocator.ItemService.GetIconPath(equippedBootsId));
             EquipmentData equipmentBootsData = equipmentDatas.First(equipment => equipment.itemId == equippedBootsId);
@@ -238,7 +239,7 @@ public class PlayerHealth : MonoBehaviour
         {
             _playerEquipment.equippedBoots = new EquipmentData();
         }
-        if (equippedHelmetId > 2000)
+        if (equippedDrillId > 2000)
         {
             _drillEquipment.sprite = Resources.Load<Sprite>(_itemServiceLocator.ItemService.GetIconPath(equippedDrillId));
             EquipmentData equipmentDrillData = equipmentDatas.First(equipment => equipment.itemId == equippedDrillId);

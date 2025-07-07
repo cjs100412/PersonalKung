@@ -400,6 +400,51 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 976dd751ef1c4644c9dabb3e6e2ee6f4, type: 3}
+--- !u!1 &23490172
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 23490174}
+  - component: {fileID: 23490173}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &23490173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23490172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a689bbbe0477464cbbaa3a0488a102a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
+--- !u!4 &23490174
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23490172}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &30304250
 GameObject:
   m_ObjectHideFlags: 0
@@ -1881,51 +1926,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 268566934}
   m_CullTransparentMesh: 1
---- !u!1 &295966865
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 295966867}
-  - component: {fileID: 295966866}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &295966866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 295966865}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a689bbbe0477464cbbaa3a0488a102a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
---- !u!4 &295966867
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 295966865}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -846.6371, y: 114.16666, z: -0.73038876}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &303196305
 GameObject:
   m_ObjectHideFlags: 0
@@ -2485,7 +2485,7 @@ Transform:
   m_GameObject: {fileID: 347582018}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.9549999, y: -0.4981402, z: -4}
+  m_LocalPosition: {x: 1.9549999, y: 0.00000008940697, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3761,7 +3761,6 @@ GameObject:
   - component: {fileID: 558528365}
   - component: {fileID: 558528364}
   - component: {fileID: 558528363}
-  - component: {fileID: 558528366}
   m_Layer: 5
   m_Name: Mineral_Text_Canvas
   m_TagString: Untagged
@@ -3851,28 +3850,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!95 &558528366
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 558528361}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 7e24f08b7a0241342bcaafcef2285d35, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &559650013
 GameObject:
   m_ObjectHideFlags: 0
@@ -6950,12 +6927,23 @@ MonoBehaviour:
   backGroundTIleMap: {fileID: 7722810659767422271, guid: fda6f51d41f7b354fb8058867be53147, type: 3}
   frontMiniMapTilemap: {fileID: 2430947847880533454, guid: 1fad8ea99ff49bd449709ac01c55a7ba, type: 3}
   backMiniMapTilemap: {fileID: 2303514913464902789, guid: 223914b5c1adfff42a88c5f136c28f5d, type: 3}
+  mineralTile: {fileID: 11400000, guid: e136ee3231310bd46bdb084291014996, type: 2}
+  Level1: {fileID: 8645582583582966866, guid: 38b337d093352a941b5ad0c50a9e247e, type: 3}
+  Level2: {fileID: 3241135567367499975, guid: 2f82c95ec8da7a74c8f8cded2af1bd01, type: 3}
   miniMapRockTile: {fileID: 6465404622400827120, guid: 3693fc6a470ba3c46abf8278d4531cd9, type: 3}
   _drilling: {fileID: 1513979809}
-  mineralTile: {fileID: 11400000, guid: e136ee3231310bd46bdb084291014996, type: 2}
+  brokenableTilemap: {fileID: 0}
+  miniMapFrontTilemap: {fileID: 0}
+  brokenTileSprites:
+  - {fileID: -865568635, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
+  - {fileID: -2015241995, guid: 54c2b95de1068b3469467905763a1502, type: 3}
+  - {fileID: -1681435312, guid: 54c2b95de1068b3469467905763a1502, type: 3}
+  - {fileID: 2139316681, guid: 54c2b95de1068b3469467905763a1502, type: 3}
+  - {fileID: 732927775, guid: 54c2b95de1068b3469467905763a1502, type: 3}
+  - {fileID: -527295955, guid: 54c2b95de1068b3469467905763a1502, type: 3}
+  - {fileID: 1962809639, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
   _boom: {fileID: 7286142019167745156, guid: fcc32e048211ba647812d437aafbdd44, type: 3}
-  width: 60
-  height: 666
+  baseHp: 36
 --- !u!4 &1010459573
 Transform:
   m_ObjectHideFlags: 0
@@ -29472,7 +29460,6 @@ GameObject:
   - component: {fileID: 1513979807}
   - component: {fileID: 1513979806}
   - component: {fileID: 1513979805}
-  - component: {fileID: 1513979808}
   - component: {fileID: 1513979809}
   - component: {fileID: 1513979810}
   - component: {fileID: 1513979811}
@@ -29480,6 +29467,7 @@ GameObject:
   - component: {fileID: 1513979813}
   - component: {fileID: 1513979814}
   - component: {fileID: 1513979815}
+  - component: {fileID: 1513979816}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -29572,33 +29560,6 @@ Transform:
   - {fileID: 1768113649535571781}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1513979808
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1513979804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d68d7e474324234ebc4f09d98554cb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _headAnimator: {fileID: 9124900276528244639}
-  _bodyAnimator: {fileID: 7415238218699116900}
-  _boostAnimator: {fileID: 1021303699}
-  _drillSide: {fileID: 4997683932734676999}
-  _drillDown: {fileID: 2755904900462524098}
-  _bodySprite: {fileID: 357169930265790604}
-  _headSprite: {fileID: 5941268308110666890}
-  _drillingHeadSprite: {fileID: -1691205843395863381, guid: a39efebf269357740b2b714cb501d375, type: 3}
-  _drillingBodySprite: {fileID: 5965510306319525891, guid: d05ec4acf7a271e44ad59dbe171471d3, type: 3}
-  maxBoostSpeed: 2
-  maxFallSpeed: -5
-  impulseSource: {fileID: 1513979811}
-  shakeInterval: 0.1
-  _playerHealth: {fileID: 1513979810}
-  _playerStats: {fileID: 1513979813}
 --- !u!114 &1513979809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29611,9 +29572,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 916f99d1c07e9f9449a0ca3b26b8fe03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mineralTilemap: {fileID: 5158903276033226228}
+  tileManager: {fileID: 1010459572}
   _miniMapFrontTilemap: {fileID: 0}
   _depthText: {fileID: 1605316423028757233}
+  playerStats: {fileID: 1513979813}
   brokenTileSprites:
   - {fileID: -865568635, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
   - {fileID: 420710795, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
@@ -29622,11 +29584,11 @@ MonoBehaviour:
   - {fileID: -884930898, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
   - {fileID: -1613704672, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
   - {fileID: 1962809639, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
-  _playerState: {fileID: 1513979813}
+  brokenTileLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  lastDrillTime: 0
   drillCoolTime: 0.1
-  _brokenableTilemap: {fileID: 0}
-  _rockTilemap: {fileID: 4170200343735213604}
-  currentDirectionState: 3
   isDrilling: 0
 --- !u!114 &1513979810
 MonoBehaviour:
@@ -29798,6 +29760,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerHealth: {fileID: 1513979810}
   _damageSpriteRenderer: {fileID: 173633143271778165}
+--- !u!114 &1513979816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1513979804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2869a95200ede645a7ecddca91a144b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundChecker: {fileID: 1513979812}
+  rigid: {fileID: 1513979806}
+  bodyAnimator: {fileID: 7415238218699116900}
+  headAnimator: {fileID: 9124900276528244639}
+  boosterAnimator: {fileID: 1021303699}
+  drillSideAnimator: {fileID: 4997683932734676999}
+  drillDownAnimator: {fileID: 2755904900462524098}
+  headSpriteRanderer: {fileID: 5941268308110666890}
+  bodySpriteRanderer: {fileID: 357169930265790604}
+  sideBodyDrillSprite: {fileID: 5965510306319525891, guid: d05ec4acf7a271e44ad59dbe171471d3, type: 3}
+  frontHeadDrillSprite: {fileID: -1691205843395863381, guid: a39efebf269357740b2b714cb501d375, type: 3}
+  sideHeadDrillSprite: {fileID: 21300000, guid: dd24ef128360e234e85c8edc58307dc4, type: 3}
+  drilling: {fileID: 1513979809}
+  playerStats: {fileID: 1513979813}
+  tileManager: {fileID: 1010459572}
+  brokenableTilemap: {fileID: 0}
+  moveInput: {x: 0, y: 0}
+  isBoost: 0
 --- !u!1 &1537644013
 GameObject:
   m_ObjectHideFlags: 0
@@ -31902,10 +31894,10 @@ MonoBehaviour:
   CameraDistance: 4
   DeadZoneDepth: 0
   Composition:
-    ScreenPosition: {x: 0, y: -0.1}
+    ScreenPosition: {x: 0, y: 0}
     DeadZone:
       Enabled: 1
-      Size: {x: 0.4, y: 0.4}
+      Size: {x: 0.2, y: 0.2}
     HardLimits:
       Enabled: 0
       Size: {x: 0.8, y: 0.8}
@@ -31970,7 +31962,7 @@ Transform:
   m_GameObject: {fileID: 1963921879}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.9549999, y: -0.4981402, z: -4}
+  m_LocalPosition: {x: 1.9549999, y: 0.00000008940697, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -35874,7 +35866,7 @@ Transform:
   m_GameObject: {fileID: 579465196160206606}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.9549999, y: -0.4981402, z: -4}
+  m_LocalPosition: {x: 1.9549999, y: 0.00000008940697, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -37899,7 +37891,7 @@ Animator:
   m_GameObject: {fileID: 7334562705714831501}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 01750648b2cf5fd4f8471f196747ab58, type: 2}
+  m_Controller: {fileID: 9100000, guid: fbdbc660b0c5e17489e6cebcd87c8e5d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -41781,7 +41773,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1919
+    m_Bits: 3967
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -43508,7 +43500,6 @@ MonoBehaviour:
   delayBeforeShopOpen: 0.5
   _shopUI: {fileID: 495144893}
   InventoryUI: {fileID: 1130738014}
-  playerMovement: {fileID: 1513979808}
 --- !u!19719996 &9216567639130638988
 TilemapCollider2D:
   m_ObjectHideFlags: 0
@@ -43572,4 +43563,4 @@ SceneRoots:
   - {fileID: 1513979807}
   - {fileID: 1010459573}
   - {fileID: 612670528}
-  - {fileID: 295966867}
+  - {fileID: 23490174}

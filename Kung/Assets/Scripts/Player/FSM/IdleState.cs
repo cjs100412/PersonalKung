@@ -15,5 +15,5 @@ public class IdleState : IState
         player.bodyAnimator.SetBool("Move", false); 
     }
     public void Update() { }
-    public void Exit() { Debug.Log("Idle Á¾·á"); }
+    public void Exit() {  }
 }

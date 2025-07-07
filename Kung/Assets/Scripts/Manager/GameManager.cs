@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 [System.Serializable]
 public class PlayerData
@@ -28,6 +29,11 @@ public class GameManager : MonoBehaviour
     public int SavedHp => data.hp;
     public int SavedCoins => data.coins;
     [SerializeField] private ShortCutServiceLocatorSO _shortCutServiceLocator;
+
+    //public GameManager(ShortCutServiceLocatorSO shortCutServiceLocator)
+    //{
+    //    _shortCutServiceLocator = shortCutServiceLocator;
+    //}
 
     void Awake()
     {

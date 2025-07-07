@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2758899409042721620}
   - component: {fileID: 7286142019167745156}
   - component: {fileID: 8716885207484315742}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Dynamite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Effect: {fileID: 182193043561762302, guid: ead66fc44a7fac84fb6f8702108cfdd4, type: 3}
-  _miniMapFrontTilemap: {fileID: 0}
+  _miniMapRockTile: {fileID: 0}
 --- !u!95 &8716885207484315742
 Animator:
   serializedVersion: 7

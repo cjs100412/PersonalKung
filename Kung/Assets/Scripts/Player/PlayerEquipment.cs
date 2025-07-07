@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class PlayerEquipment : MonoBehaviour
 {
-    public EquipmentData equippedHelmet;
-    public EquipmentData equippedBoots;
-    public EquipmentData equippedDrill;
+    [HideInInspector] public EquipmentData equippedHelmet;
+    [HideInInspector] public EquipmentData equippedBoots;
+    [HideInInspector] public EquipmentData equippedDrill;
 
     [SerializeField] TextMeshProUGUI drillDamageText;
     [SerializeField] TextMeshProUGUI moveMentSpeedText;

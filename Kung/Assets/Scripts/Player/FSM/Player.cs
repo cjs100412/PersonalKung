@@ -27,11 +27,12 @@ public class Player : MonoBehaviour
     public PlayerStats playerStats;
 
     public TileManager tileManager;
-    public Tilemap brokenableTilemap;
+    [HideInInspector] public Tilemap brokenableTilemap;
 
     private StateMachine _moveStateMachine;
     private StateMachine _drillStateMachine;
     private int _drillDirection = 0;
+    public const float maxFallSpeed = -4f;
 
     public Vector2 moveInput;
     public float[,] tiles = new float[0,0];
@@ -56,6 +57,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetKey(KeyCode.UpArrow))
         {
+            Debug.Log("Up Arrow Pressed");
             if (!(_moveStateMachine.CurrentState is BoostState))
                 _moveStateMachine.ChangeState(new BoostState(this));
             _drillStateMachine.ChangeState(new DrillOffState(this));
@@ -69,6 +71,11 @@ public class Player : MonoBehaviour
 
         // === 입력 처리 ===
         moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
+        if (!isBoost && !groundChecker.IsGrounded)
+        {
+            _moveStateMachine.ChangeState(new FallingState(this));
+            return;
+        }
         if (isBoost)
         {
             return;
