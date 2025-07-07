@@ -14,6 +14,9 @@ public class UI : MonoBehaviour
     public Image airRedImage;
     public Image airNeedle;
     public PlayerHealth playerHealth;
+    public int score = 0;
+    public TextMeshProUGUI scoreText;
+
 
     public Transform enterTarget;
     [SerializeField] private InventoryUI _inventoryUI;
@@ -27,7 +30,9 @@ public class UI : MonoBehaviour
 
     private void Update()
     {
-        if(playerHealth.hp.Amount <= 0)
+        scoreText.text = score.ToString();
+
+        if (playerHealth.hp.Amount <= 0)
         {
             hpImage.fillAmount = 0f;
             hpText.text = "0 / 100";
@@ -37,9 +42,9 @@ public class UI : MonoBehaviour
             hpImage.fillAmount = Mathf.InverseLerp(0f, 100f, playerHealth.hp.Amount);
             hpText.text = $"{playerHealth.hp.Amount} / 100";
         }
+
         float z = (playerHealth.air.Amount / (float)playerHealth.air.MaxAmount) * 180f;
         airNeedle.transform.rotation = Quaternion.Euler(new Vector3(0, 0, z - 90));
-
 
         if (playerHealth.air.Amount > playerHealth.air.MaxAmount / 2 )
         {

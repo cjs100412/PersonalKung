@@ -26,6 +26,8 @@ public class MineralTile : MonoBehaviour
     private Camera mainCamera;
     private HashSet<Vector3Int> removedCells = new HashSet<Vector3Int>();
 
+    public UI ui;
+
     [HideInInspector] public List<DestroiedTiles> destroiedMineralTiles;
 
     [SerializeField] private InventoryServiceLocatorSO _inventoryServiceLocator;
@@ -72,6 +74,7 @@ public class MineralTile : MonoBehaviour
             {
                 _inventoryServiceLocator.Service.AcquireItem(customTile.id);
                 StartCoroutine(ExprotPrice(customTile.price, tilePos));
+                ui.score += customTile.price;
                 mineralTilemap.SetTile(cellPos, null);
                 destroiedMineralTiles.Add(new DestroiedTiles(cellPos.x, cellPos.y));
                 removedCells.Add(cellPos);
