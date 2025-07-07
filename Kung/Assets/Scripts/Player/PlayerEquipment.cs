@@ -5,7 +5,7 @@ public class PlayerEquipment : MonoBehaviour
 {
     [HideInInspector] public EquipmentData equippedHelmet;
     [HideInInspector] public EquipmentData equippedBoots;
-    [HideInInspector] public EquipmentData equippedDrill;
+    public EquipmentData equippedDrill;
 
     [SerializeField] TextMeshProUGUI drillDamageText;
     [SerializeField] TextMeshProUGUI moveMentSpeedText;
@@ -14,12 +14,16 @@ public class PlayerEquipment : MonoBehaviour
 
     [SerializeField] Animator headAnimator;
     [SerializeField] Animator bodyAnimator;
+    [SerializeField] Animator drillDownAnimator;
+    [SerializeField] Animator drillMoveAnimator;
+    [SerializeField] Animator damageAnimator;
 
     private PlayerStats playerStats;
 
     private void Awake()
     {
         playerStats = GetComponent<PlayerStats>();
+        ApplyEquipment(equippedDrill);
 
     }
 
@@ -57,13 +61,16 @@ public class PlayerEquipment : MonoBehaviour
                 defenseText.text = playerStats.defense.ToString();
                 airCapacityText.text = playerStats.airCapacity.ToString();
 
-                var overrideHeadController = new AnimatorOverrideController(headAnimator.runtimeAnimatorController);
+                AnimatorOverrideController overrideHeadController = new AnimatorOverrideController(headAnimator.runtimeAnimatorController);
 
-                if (data.headIdleAni != null)
-                    overrideHeadController["HeadIdleAni"] = data.headIdleAni; 
-                if (data.headMoveAni != null)
-                    overrideHeadController["HeadMoveAni"] = data.headMoveAni;
+                overrideHeadController["HeadIdleAni"] = data.headIdleAni; 
+                overrideHeadController["HeadMoveAni"] = data.headMoveAni;
+                overrideHeadController["HeadSmileAni"] = data.headSmileAni;
                 headAnimator.runtimeAnimatorController = overrideHeadController;
+
+                AnimatorOverrideController overrideHeadDamageController = new AnimatorOverrideController(damageAnimator.runtimeAnimatorController);
+                overrideHeadDamageController["DamageAni"] = data.headDamageAni;
+                damageAnimator.runtimeAnimatorController = overrideHeadDamageController;
 
                 break;
             case EquipmentData.EquipmentType.Boots:
@@ -71,19 +78,23 @@ public class PlayerEquipment : MonoBehaviour
                 playerStats.movementSpeed = data.movementSpeed;
                 moveMentSpeedText.text = playerStats.boosterSpeed.ToString();
 
-                var overrideShoesController = new AnimatorOverrideController(bodyAnimator.runtimeAnimatorController);
-
-                if (data.bobyIdleAni != null)
-                    overrideShoesController["BodyIdleAni"] = data.bobyIdleAni;
-                if (data.bodyMoveAni != null)
-                    overrideShoesController["BodyMoveAni"] = data.bodyMoveAni;
-
+                AnimatorOverrideController overrideShoesController = new AnimatorOverrideController(bodyAnimator.runtimeAnimatorController);
+                overrideShoesController["BodyIdleAni"] = data.bodyIdleAni;
+                overrideShoesController["BodyMoveAni"] = data.bodyMoveAni;
+                overrideShoesController["BodyStopAni"] = data.bodyStopAni;
                 bodyAnimator.runtimeAnimatorController = overrideShoesController;
 
                 break;
             case EquipmentData.EquipmentType.Drill:
                 playerStats.drillDamage = data.drillDamage;
                 drillDamageText.text = playerStats.drillDamage.ToString();
+
+                AnimatorOverrideController overrideDrillDownController = new AnimatorOverrideController(drillDownAnimator.runtimeAnimatorController);
+                AnimatorOverrideController overrideDrillMoveController = new AnimatorOverrideController(drillMoveAnimator.runtimeAnimatorController);
+                overrideDrillDownController["DrillDownAni"] = data.drillDownAni;
+                overrideDrillMoveController["DrillMoveAni"] = data.drillMoveAni;
+                drillDownAnimator.runtimeAnimatorController = overrideDrillDownController;
+                drillMoveAnimator.runtimeAnimatorController = overrideDrillMoveController;
 
                 break;
             default:
