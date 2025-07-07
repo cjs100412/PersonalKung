@@ -38,7 +38,17 @@ public class Player : MonoBehaviour
     public Vector2 moveInput;
     public float[,] tiles = new float[0,0];
     public bool isBoost;
-    
+    public bool isBoostButtonClick;
+    public bool isLeftButtonClick;
+    public bool isRightButtonClick;
+
+
+    private float _horizontal = 0f;
+
+    public void OnLeftButtonDown() => _horizontal = -1f;
+    public void OnRightButtonDown() => _horizontal = 1f;
+    public void OnButtonUp() => _horizontal = 0f;
+
     void Start()
     {
         _moveStateMachine = new StateMachine();
@@ -59,14 +69,14 @@ void Update()
         _moveStateMachine.Update();
         _drillStateMachine.Update();
 
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.UpArrow) || isBoostButtonClick)
         {
             Debug.Log("Up Arrow Pressed");
             if (!(_moveStateMachine.CurrentState is BoostState))
                 _moveStateMachine.ChangeState(new BoostState(this));
             _drillStateMachine.ChangeState(new DrillOffState(this));
         }
-        if (Input.GetKeyUp(KeyCode.UpArrow))
+        if (Input.GetKeyUp(KeyCode.UpArrow) || !isBoostButtonClick)
         {
             if (!(_moveStateMachine.CurrentState is IdleState))
             _moveStateMachine.ChangeState(new IdleState(this));
@@ -154,10 +164,29 @@ void Update()
     }
 
    
+    public void OnClickBoost()
+    {
+        isBoostButtonClick = true;
+    }
+    public void OnReleaseBoost()
+    {
+        isBoostButtonClick = false;
+    }
+
+    public void OnClickLeft()
+    {
+        isBoostButtonClick = true;
+    }
+    public void OnReleaseRight()
+    {
+        isBoostButtonClick = false;
+    }
+
+
 
     // === 공용 기능 ===
 
-    
+
     public void PlayDrillSideAnim(bool on)
     {
         drillSideAnimator.SetBool("Start", on);
