@@ -16,7 +16,10 @@ public class ShopUI : MonoBehaviour
 
     [SerializeField] private GameObject _shopUI;
     [SerializeField] private GameObject InventoryUI;
-    [SerializeField] private GameObject _mineralSellButton;
+    [SerializeField] private GameObject _mineralBillButton;
+    [SerializeField] private GameObject _mineralSellPanel;
+    [SerializeField] private GameObject _mineralNotThingSellPanel;
+    [SerializeField] private GameObject _mineralBillImange;
     //[SerializeField] private PlayerMovement playerMovement;
 
 
@@ -31,7 +34,10 @@ public class ShopUI : MonoBehaviour
             _shopOpenCoroutine = null;
         }
 
-        _mineralSellButton.SetActive(false);
+        _mineralSellPanel.SetActive(false);
+        _mineralBillButton.SetActive(false);
+        _mineralBillImange.SetActive(false);
+        _mineralNotThingSellPanel.SetActive(false);
         _shopUI.transform.DOLocalMove(quitShopTarget.localPosition, _UIspeed);
         InventoryUI.transform.DOLocalMove(quitInventoryTarget.localPosition, _UIspeed);
         //playerMovement.IsMovementLocked = false;
@@ -71,7 +77,7 @@ public class ShopUI : MonoBehaviour
 
         if (_isPlayerInsideTrigger)
         {
-            _mineralSellButton.SetActive(true);
+            _mineralBillButton.SetActive(true);
             _shopUI.transform.DOLocalMove(enterShopTarget.localPosition, _UIspeed);
             InventoryUI.transform.DOLocalMove(enterInventoryTarget.localPosition, _UIspeed);
 

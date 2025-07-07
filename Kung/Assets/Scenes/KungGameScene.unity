@@ -5195,7 +5195,7 @@ MonoBehaviour:
   - {fileID: 7028616704906629411, guid: 5dc150d5fe2592645aa49c32693dd7a3, type: 3}
   - {fileID: 8288426215254106694, guid: 0edd97acb2ed1a04ba4d213b1e776796, type: 3}
   - {fileID: 4113829005332862926, guid: 7d6860f1ebbefec4ba187fc827c2499f, type: 3}
-  frameRate: 0.1
+  frameRate: 0.03
 --- !u!1 &656644658
 GameObject:
   m_ObjectHideFlags: 0
@@ -115173,7 +115173,10 @@ MonoBehaviour:
   delayBeforeShopOpen: 0.5
   _shopUI: {fileID: 495144893}
   InventoryUI: {fileID: 1130738014}
-  _mineralSellButton: {fileID: 865848307}
+  _mineralBillButton: {fileID: 865848307}
+  _mineralSellPanel: {fileID: 1793180498}
+  _mineralNotThingSellPanel: {fileID: 621785178}
+  _mineralBillImange: {fileID: 653063739}
 --- !u!19719996 &9216567639130638988
 TilemapCollider2D:
   m_ObjectHideFlags: 0
