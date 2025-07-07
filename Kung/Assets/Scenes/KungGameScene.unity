@@ -400,51 +400,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 976dd751ef1c4644c9dabb3e6e2ee6f4, type: 3}
---- !u!1 &23490172
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 23490174}
-  - component: {fileID: 23490173}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &23490173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 23490172}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a689bbbe0477464cbbaa3a0488a102a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
---- !u!4 &23490174
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 23490172}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &30304250
 GameObject:
   m_ObjectHideFlags: 0
@@ -1354,6 +1309,7 @@ MonoBehaviour:
   _playerEquipment: {fileID: 1513979814}
   _inventoryServiceLocator: {fileID: 11400000, guid: 9e305352b541900459714187f962477e, type: 2}
   _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
+  _gameManagerSO: {fileID: 11400000, guid: 09b9fa12309b4e342bafe3bc8693912f, type: 2}
 --- !u!1 &218482189
 GameObject:
   m_ObjectHideFlags: 0
@@ -4272,6 +4228,7 @@ MonoBehaviour:
   _inventoryRepositoryLocator: {fileID: 11400000, guid: 6066df244f63c054987255406f157c4f, type: 2}
   _inventoryItemServiceLocator: {fileID: 11400000, guid: c0e7431e0933d3b4da50bc33bd4bc5d6, type: 2}
   _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
+  _gameManagerSO: {fileID: 11400000, guid: 09b9fa12309b4e342bafe3bc8693912f, type: 2}
 --- !u!1 &642223360
 GameObject:
   m_ObjectHideFlags: 0
@@ -43563,4 +43520,3 @@ SceneRoots:
   - {fileID: 1513979807}
   - {fileID: 1010459573}
   - {fileID: 612670528}
-  - {fileID: 23490174}

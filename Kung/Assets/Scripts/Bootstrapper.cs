@@ -6,7 +6,7 @@ public class Bootstrapper : MonoBehaviour
     [SerializeField] private InventoryRepositoryLocatorSO _inventoryRepositoryLocator;
     [SerializeField] private InventoryItemServiceLocatorSO _inventoryItemServiceLocator;
     [SerializeField] private ShortCutServiceLocatorSO _shortCutServiceLocator;
-    //[SerializeField] private GameManagerSO _gameManagerSO;
+    [SerializeField] private GameManagerSO _gameManagerSO;
 
     void Awake()
     {
@@ -14,6 +14,6 @@ public class Bootstrapper : MonoBehaviour
         _inventoryServiceLocator.Bootstrap();
         _inventoryItemServiceLocator.Bootstrap();
         _shortCutServiceLocator.Bootstrap();
-        //_gameManagerSO.Bootstrap();
+        _gameManagerSO.Bootstrap();
     }
 }

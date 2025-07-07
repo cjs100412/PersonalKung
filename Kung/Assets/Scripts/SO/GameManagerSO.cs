@@ -8,6 +8,15 @@ public class GameManagerSO : ScriptableObject
 
     public void Bootstrap()
     {
-        //GameManager = new GameManager(_shortCutServiceLocator);
+        if (GameManager != null) return;
+
+        var gameObjecct = new GameObject("GameManager");
+        var gameManager = gameObjecct.AddComponent<GameManager>();
+
+        gameManager.Init(_shortCutServiceLocator);
+
+        DontDestroyOnLoad(gameObjecct);
+
+        GameManager = gameManager;
     }
 }
