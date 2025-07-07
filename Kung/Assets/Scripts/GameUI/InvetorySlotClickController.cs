@@ -1,15 +1,16 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InvetorySlotClickContoller : MonoBehaviour
+public class InvetorySlotClickController : MonoBehaviour
 {
 
     [SerializeField] private Button[] slots;
     private InventoryItemSlotUI[] slotUIs;
-    [SerializeField] private GameObject _panel;
+    [SerializeField] private GameObject _SlotPanel;
     [SerializeField] private Image _headEq;
     [SerializeField] private Image _drillEq;
     [SerializeField] private Image _shoesEq;
@@ -17,6 +18,12 @@ public class InvetorySlotClickContoller : MonoBehaviour
     [SerializeField] private InventoryUI _inventoryUI;
     [SerializeField] private List<EquipmentData> equipmentDatas;
     [SerializeField] private PlayerEquipment _playerEquipment;
+    [SerializeField] private InventoryRepositoryLocatorSO _itemRepositoryLocator;
+
+    [SerializeField] private Text _itemNameText;
+    [SerializeField] private Text _itemDescriptionText;
+    [SerializeField] private TextMeshProUGUI _itemPriceText;
+
     private int currentIndex;
 
     private void Start()
@@ -37,15 +44,20 @@ public class InvetorySlotClickContoller : MonoBehaviour
         if (slot.isItem)
         {
             Debug.Log(slot._itemId);
-            _panel.transform.position = slots[index].transform.position + new Vector3(0,-250,0);
-            _panel.SetActive(true);
+            _SlotPanel.transform.position = slots[index].transform.position + new Vector3(0, -250, 0);
+            _SlotPanel.SetActive(true);
             currentIndex = index;
+
+            Item item = _itemRepositoryLocator.Repository.FindById(slot._itemId);
+            _itemNameText.text = item.DevName;
+            _itemPriceText.text = item.Price.ToString();
+            _itemDescriptionText.text = item.Discription;
         }
     }
 
     public void OnClickEqiupmentButton()
     {
-        _panel.SetActive(false);
+        _SlotPanel.SetActive(false);
         if (slotUIs[currentIndex]._itemId > 2000 && slotUIs[currentIndex]._itemId < 3000)
         {
             EquipmentData data = null;
@@ -76,7 +88,7 @@ public class InvetorySlotClickContoller : MonoBehaviour
             }
             _inventoryServiceLocator.Service.RemoveItem(slotUIs[currentIndex]._itemId);
             _inventoryUI.Refresh();
-            
+
         }
         currentIndex = -1;
 
@@ -86,7 +98,7 @@ public class InvetorySlotClickContoller : MonoBehaviour
     {
         _inventoryServiceLocator.Service.RemoveItem(slotUIs[currentIndex]._itemId);
         _inventoryUI.Refresh();
-        _panel.SetActive(false);
+        _SlotPanel.SetActive(false);
         currentIndex = -1;
 
     }

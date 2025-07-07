@@ -21,6 +21,7 @@ public class ShopText : MonoBehaviour
     private int id;
     [SerializeField] private InventoryUI _inventoryUI;
     [SerializeField] private ShortcutKey _shortcutKey;
+
     public void SetText(string name, int price, string dis)
     {
         _price = price;
