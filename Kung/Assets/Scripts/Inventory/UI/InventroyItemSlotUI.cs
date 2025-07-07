@@ -16,9 +16,6 @@ public class InventoryItemSlotUI : MonoBehaviour
     public bool isItem;
     public int _itemId;
     public int buttonIndex;
-    private void Start()
-    {
-    }
     public void SetData(InventoryItemSlotUIData data)
     {
         Debug.Log(data.Quantity.ToString());
@@ -36,8 +33,4 @@ public class InventoryItemSlotUI : MonoBehaviour
         isItem = false;
         _itemId = 0;
     }
-
-    
-
-    
 }

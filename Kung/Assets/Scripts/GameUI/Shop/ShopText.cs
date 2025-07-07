@@ -13,18 +13,14 @@ public class ShopText : MonoBehaviour
     [SerializeField] GameObject _shopTextPanel;
     [SerializeField] GameObject _shopNotEnoughTextPanel;
 
-    private Gold playerGold;
+    [SerializeField] PlayerHealth _playerHealth;
+
     private int _price;
     [SerializeField] private InventoryServiceLocatorSO _inventoryServiceLocator;
     [SerializeField] private ShortCutServiceLocatorSO _shortCutServiceLocator;
     private int id;
     [SerializeField] private InventoryUI _inventoryUI;
     [SerializeField] private ShortcutKey _shortcutKey;
-    private void Start()
-    {
-        playerGold = Gold.New(1000000);
-
-    }
     public void SetText(string name, int price, string dis)
     {
         _price = price;
@@ -41,9 +37,9 @@ public class ShopText : MonoBehaviour
 
     public void OnClickYesButton()
     {
-        if (playerGold.IsEnough(_price))
+        if (_playerHealth.gold.IsEnough(_price))
         {
-            playerGold = playerGold.RemoveGold(_price);
+            _playerHealth.gold = _playerHealth.gold.RemoveGold(_price);
             if(id < 2000)
             {
                 _shortCutServiceLocator.Service.AddShortCutItemQuantity(id);
@@ -70,6 +66,7 @@ public class ShopText : MonoBehaviour
 
     public void OnClickMineralSellButton()
     {
-        _inventoryServiceLocator.Service.SellAllMineral();
+        _playerHealth.gold = _playerHealth.gold.AddGold(_inventoryServiceLocator.Service.SellAllMineral());
+        _inventoryUI.Refresh();
     }
 }

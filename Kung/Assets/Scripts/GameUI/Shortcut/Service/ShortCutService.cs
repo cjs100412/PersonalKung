@@ -3,11 +3,12 @@ using System.Linq;
 using UnityEngine;
 public interface IShortCutService
 {
-    IReadOnlyList<UserShortCutItemDto> Items { get; }
+    public List<UserShortCutItemDto> Items { get; }
     void AddShortCutItem(int itemId);
     public void AddShortCutItemQuantity(int itemId);
     public void RemoveShortCutItemQuantity(int itemId);
     public bool CanUseShortCutItem(int itemId);
+    public void SetShortCut(List<UserShortCutItemDto> setShortCutItems);
 }
 public class ShortCutService : IShortCutService
 {
@@ -19,7 +20,7 @@ public class ShortCutService : IShortCutService
         _shortCut = new ShortCut();
         _itemRepository = itemRepository;
     }
-    public IReadOnlyList<UserShortCutItemDto> Items
+    public List<UserShortCutItemDto> Items
     {
         get
         {
@@ -28,6 +29,12 @@ public class ShortCutService : IShortCutService
                 .ToList();
         }
     }
+    public void SetShortCut(List<UserShortCutItemDto> setShortCutItems)
+    {
+        _shortCut.SetShortCut(setShortCutItems.Select(item => new UserShortCutItem(item.ItemId,item.Quantity))
+                .ToList());
+    }
+
     public void AddShortCutItem(int itemId)
     {
         UserShortCutItem newItem = UserShortCutItem.Acquire(itemId);
@@ -48,4 +55,6 @@ public class ShortCutService : IShortCutService
     {
         _shortCut.RemoveQuantity(itemId);
     }
+
+    
 }
