@@ -19,3 +19,11 @@ MonoBehaviour:
   defance: 0
   drillDamage: 2
   airCapacity: 0
+  headIdleAni: {fileID: 0}
+  headMoveAni: {fileID: 0}
+  headSmileAni: {fileID: 0}
+  bodyIdleAni: {fileID: 0}
+  bodyMoveAni: {fileID: 0}
+  bodyStopAni: {fileID: 0}
+  drillMoveAni: {fileID: 7400000, guid: 337cf72627d82b34d8ed82dd86e2176c, type: 2}
+  drillDownAni: {fileID: 7400000, guid: 127729f96fd14a54a8555d3ee1914d70, type: 2}

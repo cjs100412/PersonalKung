@@ -21,5 +21,7 @@ MonoBehaviour:
   airCapacity: 0
   headIdleAni: {fileID: 0}
   headMoveAni: {fileID: 0}
-  bobyIdleAni: {fileID: 7400000, guid: d5d967aa4c5980a47add1bb2782e75f6, type: 2}
+  headSmileAni: {fileID: 0}
+  bodyIdleAni: {fileID: 7400000, guid: d5d967aa4c5980a47add1bb2782e75f6, type: 2}
   bodyMoveAni: {fileID: 7400000, guid: 280bb0c6a5ebad741be4afbc4097af71, type: 2}
+  bodyStopAni: {fileID: 7400000, guid: 978ec8d5c5d5707409e12ec63582d3db, type: 2}

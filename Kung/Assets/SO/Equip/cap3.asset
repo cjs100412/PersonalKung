@@ -21,3 +21,10 @@ MonoBehaviour:
   airCapacity: 500
   headIdleAni: {fileID: 7400000, guid: 7473439aee26d5f4eb04f0dd4feb69f4, type: 2}
   headMoveAni: {fileID: 7400000, guid: ee4f0109f03f6b04c8c2e417149e2afb, type: 2}
+  headSmileAni: {fileID: 7400000, guid: ec99fb6bae189a04f8128e7da20aa0de, type: 2}
+  headDamageAni: {fileID: 7400000, guid: 5d95c9616e6fc7c4bb135b1ec0eaea42, type: 2}
+  bodyIdleAni: {fileID: 0}
+  bodyMoveAni: {fileID: 0}
+  bodyStopAni: {fileID: 0}
+  drillMoveAni: {fileID: 0}
+  drillDownAni: {fileID: 0}
