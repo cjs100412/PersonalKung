@@ -400,51 +400,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 976dd751ef1c4644c9dabb3e6e2ee6f4, type: 3}
---- !u!1 &23490172
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 23490174}
-  - component: {fileID: 23490173}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &23490173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 23490172}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a689bbbe0477464cbbaa3a0488a102a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
---- !u!4 &23490174
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 23490172}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &30304250
 GameObject:
   m_ObjectHideFlags: 0
@@ -1352,8 +1307,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerHealth: {fileID: 1513979810}
   _playerEquipment: {fileID: 1513979814}
+  _tileManager: {fileID: 1010459572}
+  _mineralTile: {fileID: 3720436310463514964}
+  _rockTile: {fileID: 9216567639130638989}
   _inventoryServiceLocator: {fileID: 11400000, guid: 9e305352b541900459714187f962477e, type: 2}
   _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
+  _gameManagerSO: {fileID: 11400000, guid: 09b9fa12309b4e342bafe3bc8693912f, type: 2}
 --- !u!1 &218482189
 GameObject:
   m_ObjectHideFlags: 0
@@ -4272,6 +4231,7 @@ MonoBehaviour:
   _inventoryRepositoryLocator: {fileID: 11400000, guid: 6066df244f63c054987255406f157c4f, type: 2}
   _inventoryItemServiceLocator: {fileID: 11400000, guid: c0e7431e0933d3b4da50bc33bd4bc5d6, type: 2}
   _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
+  _gameManagerSO: {fileID: 11400000, guid: 09b9fa12309b4e342bafe3bc8693912f, type: 2}
 --- !u!1 &642223360
 GameObject:
   m_ObjectHideFlags: 0
@@ -6942,8 +6902,9 @@ MonoBehaviour:
   - {fileID: 732927775, guid: 54c2b95de1068b3469467905763a1502, type: 3}
   - {fileID: -527295955, guid: 54c2b95de1068b3469467905763a1502, type: 3}
   - {fileID: 1962809639, guid: 146459a3f6290d74b8cb745380c851f7, type: 3}
-  _boom: {fileID: 7286142019167745156, guid: fcc32e048211ba647812d437aafbdd44, type: 3}
+  _rockTile: {fileID: 9216567639130638989}
   baseHp: 36
+  destroiedTiles: []
 --- !u!4 &1010459573
 Transform:
   m_ObjectHideFlags: 0
@@ -36149,6 +36110,7 @@ MonoBehaviour:
   pool: {fileID: 2015925899}
   _textdissapperTime: 2
   repeatCycle: 0.07
+  destroiedMineralTiles: []
   _inventoryServiceLocator: {fileID: 11400000, guid: 9e305352b541900459714187f962477e, type: 2}
 --- !u!114 &3721974257884538816
 MonoBehaviour:
@@ -40386,6 +40348,7 @@ GameObject:
   - component: {fileID: 9216567639130638988}
   - component: {fileID: 3727595075217079224}
   - component: {fileID: 7129644372322884853}
+  - component: {fileID: 9216567639130638989}
   m_Layer: 10
   m_Name: RockTile
   m_TagString: Untagged
@@ -43627,6 +43590,21 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 100
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
+--- !u!114 &9216567639130638989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5949380994101697198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 855e68f580cc3b0458c476024137f86a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _miniMapRockTile: {fileID: 0}
+  _rockTile: {fileID: 4170200343735213604}
+  destroiedRockTiles: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -43652,4 +43630,3 @@ SceneRoots:
   - {fileID: 1513979807}
   - {fileID: 1010459573}
   - {fileID: 612670528}
-  - {fileID: 23490174}

@@ -1,9 +1,8 @@
 using System.IO;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
-using JetBrains.Annotations;
+using UnityEngine;
+using UnityEditor.Overlays;
 
 [System.Serializable]
 public class PlayerData
@@ -15,155 +14,130 @@ public class PlayerData
     public int equippedDrillId;
     public List<UserInventoryItemDto> inventoryItems = new List<UserInventoryItemDto>();
     public List<UserShortCutItemDto> shortCutItems = new List<UserShortCutItemDto>();
-
-    // 가방 증가 아이템 구매 여부
+    public List<DestroiedTiles> destroiedTiles = new List<DestroiedTiles>();
+    public List<DestroiedTiles> destroiedMineralTiles = new List<DestroiedTiles>();
+    public List<DestroiedTiles> destroiedRockTiles = new List<DestroiedTiles>();
     public bool boughtExpandBag1 = false;
     public bool boughtExpandBag2 = false;
 }
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager I { get; private set; }
-    string savePath;
-    PlayerData data;
-    public int SavedHp => data.hp;
-    public int SavedCoins => data.coins;
-    [SerializeField] private ShortCutServiceLocatorSO _shortCutServiceLocator;
+    private ShortCutServiceLocatorSO _shortCutServiceLocator;
 
-    //public GameManager(ShortCutServiceLocatorSO shortCutServiceLocator)
-    //{
-    //    _shortCutServiceLocator = shortCutServiceLocator;
-    //}
+    private string _savePath;
+    private PlayerData _data;
+    private TileManager _tileManager;
+    private MineralTile _mineralTile;
+    private RockTile _rockTile;
+    public int SavedHp => _data.hp;
+    public int SavedCoins => _data.coins;
 
-    void Awake()
+    public void Init(ShortCutServiceLocatorSO shortCutServiceLocator)
     {
-        if (I != null) { Destroy(gameObject); return; }
-        I = this;
-        DontDestroyOnLoad(gameObject);
-
-        savePath = Path.Combine(Application.persistentDataPath, "save.json");
-        data = new PlayerData();
-
-        //에디터에선 테스트용으로 삭제
-//#if UNITY_EDITOR
-//        if (File.Exists(savePath))
-//            File.Delete(savePath);
-//#endif
-
-        if (File.Exists(savePath))
+        _shortCutServiceLocator = shortCutServiceLocator;
+        _tileManager = FindAnyObjectByType<TileManager>();
+        _mineralTile = FindAnyObjectByType<MineralTile>();
+        _rockTile = FindAnyObjectByType<RockTile>();
+        _savePath = Path.Combine(Application.persistentDataPath, "save.json");
+        if (File.Exists(_savePath))
         {
-            // 기존 파일이 있으면 삭제하지 않고 로드만 한다
-            string json = File.ReadAllText(savePath);
-            data = JsonUtility.FromJson<PlayerData>(json);
-
-            if (data.inventoryItems == null) data.inventoryItems = new List<UserInventoryItemDto>();
+            var json = File.ReadAllText(_savePath);
+            _data = JsonUtility.FromJson<PlayerData>(json);
+            if (_data.inventoryItems == null) _data.inventoryItems = new();
+            if (_data.shortCutItems == null) _data.shortCutItems = new();
         }
         else
         {
-            // 세이브 파일이 없을 때만 초기값 세팅
             InitializeDefaultSave();
         }
-        //LoadGame();
     }
 
     private void Start()
     {
         LoadGame();
+        DontDestroyOnLoad(gameObject);
     }
 
-    void InitializeDefaultSave()
+    private void InitializeDefaultSave()
     {
-        data.hp = 100;         // 기본 HP
-        data.coins = 0;           // 기본 동전
-        data.inventoryItems = new List<UserInventoryItemDto>();
-        data.shortCutItems = _shortCutServiceLocator.Service.Items;
-        data.equippedHelmetId = 0;
-        data.equippedBootsId = 0;
-        data.equippedDrillId = 0;
-        string json = JsonUtility.ToJson(data, true);
-        File.WriteAllText(savePath, json);
-        Debug.Log($"[GameManager] Save initialized: {savePath}");
+        _data = new PlayerData
+        {
+            hp = 100,
+            coins = 0,
+            destroiedTiles = new List<DestroiedTiles>(),
+            destroiedMineralTiles = new List<DestroiedTiles>(),
+            destroiedRockTiles = new List<DestroiedTiles>(),
+            inventoryItems = new(),
+            shortCutItems = _shortCutServiceLocator.Service.Items,
+            equippedHelmetId = 0,
+            equippedBootsId = 0,
+            equippedDrillId = 0
+        };
+        File.WriteAllText(_savePath, JsonUtility.ToJson(_data, true));
+        Debug.Log($"[GameManager] Default save created at {_savePath}");
     }
 
-    public void SaveGame(Vector2 pos, int hp,int coins, List<UserInventoryItemDto> inventoryItems, List<UserShortCutItemDto> shortCutItems,
-                         int equippedHelmetId, int equippedBootsId, int equippedDrillId)
+    public void SaveGame(Vector2 pos, int hp, int coins,List<DestroiedTiles> destroiedTiles,
+                         List<DestroiedTiles> destroiedMineralTiles,
+                         List<DestroiedTiles> destroiedRockTiles,
+                         List<UserInventoryItemDto> inv, List<UserShortCutItemDto> sc,
+                         int helmId, int bootsId, int drillId)
     {
-        data.hp = hp;
-        data.coins = coins;
-        data.inventoryItems = inventoryItems;
-        data.shortCutItems = shortCutItems;
-        data.equippedHelmetId = equippedHelmetId;
-        data.equippedBootsId = equippedBootsId;
-        data.equippedDrillId = equippedDrillId;
-        string json = JsonUtility.ToJson(data);
-        File.WriteAllText(savePath, json);
-        Debug.Log("Game Saved → " + savePath + ")");
+        _data.hp = hp;
+        _data.coins = coins;
+        _data.destroiedTiles = destroiedTiles;
+        _data.destroiedMineralTiles = destroiedMineralTiles;
+        _data.destroiedRockTiles = destroiedRockTiles;
+        _data.inventoryItems = inv;
+        _data.shortCutItems = sc;
+        _data.equippedHelmetId = helmId;
+        _data.equippedBootsId = bootsId;
+        _data.equippedDrillId = drillId;
+        File.WriteAllText(_savePath, JsonUtility.ToJson(_data, true));
+        Debug.Log("[GameManager] Saved");
     }
 
     public void LoadGame()
     {
-        if (!File.Exists(savePath))
+        if (!File.Exists(_savePath))
         {
-            Debug.Log("No save file.");
+            Debug.Log("[GameManager] No save file found.");
             return;
         }
 
-        string json = File.ReadAllText(savePath);
-        data = JsonUtility.FromJson<PlayerData>(json);
-
-        if (data.inventoryItems == null) data.inventoryItems = new List<UserInventoryItemDto>();
-        if (data.shortCutItems == null) data.shortCutItems = new List<UserShortCutItemDto>();
-
+        var json = File.ReadAllText(_savePath);
+        _data = JsonUtility.FromJson<PlayerData>(json);
         StartCoroutine(LoadAndRestore());
     }
 
-    IEnumerator LoadAndRestore()
+    private IEnumerator LoadAndRestore()
     {
         var playerGO = GameObject.FindWithTag("Player");
-        if (playerGO == null)
-        {
-            Debug.LogError("Player not found after load!");
-            yield break;
-        }
-
-        Debug.Log($"LoadAndRestore hp : {data.hp}");
-
-        // 상태 복원
-        int hp = data.hp;
-        int coins = data.coins;
-        List<UserInventoryItemDto> inventoryItems = data.inventoryItems;
-        List<UserShortCutItemDto> shortCutItems = data.shortCutItems;
-        int equippedHelmetId = data.equippedHelmetId;
-        int equippedBootsId = data.equippedBootsId;
-        int equippedDrillId = data.equippedDrillId;
-
-        Debug.Log("Player state restored: HP=" + data.hp + " Coins=" + data.coins);
+        if (playerGO == null) yield break;
 
         var ph = playerGO.GetComponent<PlayerHealth>();
         if (ph != null)
         {
-            ph.Respawn(hp, coins, inventoryItems, shortCutItems, equippedHelmetId, equippedBootsId, equippedDrillId);
+            ph.Respawn(
+                _data.hp, _data.coins,
+                _data.inventoryItems, _data.shortCutItems,
+                _data.equippedHelmetId, _data.equippedBootsId, _data.equippedDrillId
+            );
         }
-        else
-        {
-            // fallback: 직접 복원
-            var rb = playerGO.GetComponent<Rigidbody2D>();
-            rb.linearVelocity = Vector2.zero;
-        }
-
+        _tileManager.LoadDestroiedTiles(_data.destroiedTiles);
+        _mineralTile.LoadDestroiedTiles(_data.destroiedMineralTiles);
+        _rockTile.LoadDestroiedTiles(_data.destroiedRockTiles);
         yield return null;
     }
-
-
-    // 가방 증가 아이템 상태
-    public bool IsBoughtExpandBag1() { return data.boughtExpandBag1; }
-    public bool IsBoughtExpandBag2() { return data.boughtExpandBag2; }
+    public bool IsBoughtExpandBag1() { return _data.boughtExpandBag1; }
+    public bool IsBoughtExpandBag2() { return _data.boughtExpandBag2; }
 
     public void SetBoughtExpandBag1()
     {
-        if (!data.boughtExpandBag1)
+        if (!_data.boughtExpandBag1)
         {
-            data.boughtExpandBag1 = true;
+            _data.boughtExpandBag1 = true;
             SaveJSON();
             Debug.Log("[GameManager] Bought ExpandBag1");
         }
@@ -172,18 +146,17 @@ public class GameManager : MonoBehaviour
 
     public void SetBoughtExpandBag2()
     {
-        if (!data.boughtExpandBag2)
+        if (!_data.boughtExpandBag2)
         {
-            data.boughtExpandBag2 = true;
+            _data.boughtExpandBag2 = true;
             SaveJSON();
             Debug.Log("[GameManager] Bought ExpandBag2");
         }
     }
 
-
     public void SetCoins(int newCoinCount)
     {
-        data.coins = newCoinCount;
+        _data.coins = newCoinCount;
         SaveJSON();
         Debug.Log($"[GameManager] Coins updated to: {newCoinCount}");
     }
@@ -192,7 +165,7 @@ public class GameManager : MonoBehaviour
     // JSON 갱신만 담당하는 내부 함수
     void SaveJSON()
     {
-        string json = JsonUtility.ToJson(data, true);
-        File.WriteAllText(savePath, json);
+        string json = JsonUtility.ToJson(_data, true);
+        File.WriteAllText(_savePath, json);
     }
 }
