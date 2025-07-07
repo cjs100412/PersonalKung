@@ -74,7 +74,15 @@ public class Player : MonoBehaviour
         if (!isBoost && !groundChecker.IsGrounded)
         {
             _moveStateMachine.ChangeState(new FallingState(this));
+            _drillStateMachine.ChangeState(new DrillOffState(this));
             return;
+        }
+        else
+        {
+            if (_moveStateMachine.CurrentState is FallingState)
+            {
+                _moveStateMachine.ChangeState(new IdleState(this));
+            }
         }
         if (isBoost)
         {

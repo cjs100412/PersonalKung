@@ -15,10 +15,9 @@ public class DrillSideState : IState
         player.PlayDrillSideAnim(true);
         player.drilling.StartDrilling(direction);
         // 드릴 시작 시 이동 애니메이션 끄기
-        player.headAnimator.enabled = false;
-        player.bodyAnimator.enabled = false;
-        player.bodySpriteRanderer.sprite = player.sideBodyDrillSprite;
-        player.headSpriteRanderer.sprite = player.sideHeadDrillSprite;
+        player.headAnimator.SetBool("Move", true);
+        player.bodyAnimator.SetBool("Move", false);
+        player.bodyAnimator.SetBool("isDrilling", true);
 
     }
 
@@ -31,8 +30,8 @@ public class DrillSideState : IState
     {
         player.PlayDrillSideAnim(false);
         player.drilling.StopDrilling();
-        player.bodyAnimator.enabled = true;
-        player.headAnimator.enabled = true;
+        player.headAnimator.SetBool("Move", false);
+        player.bodyAnimator.SetBool("isDrilling", false);
 
 
     }
