@@ -1,4 +1,4 @@
-using NUnit.Framework.Interfaces;
+Ôªøusing NUnit.Framework.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -7,12 +7,12 @@ using UnityEngine.UI;
 
 public class ShopText : MonoBehaviour
 {
-    [Header("∏ﬁΩ√¡ˆ π⁄Ω∫ø°º≠ √‚∑¬¿ª ¿ß«— UI ø¨∞·")]
+    [Header("Î©îÏãúÏßÄ Î∞ïÏä§ÏóêÏÑú Ï∂úÎ†•ÏùÑ ÏúÑÌïú UI Ïó∞Í≤∞")]
     [SerializeField] Text _itemName;
     [SerializeField] Text _itemDiscription;
     [SerializeField] TextMeshProUGUI _itemPrice;
 
-    [Header("∞¢ ∆–≥Œ ø¨∞·")]
+    [Header("Í∞Å Ìå®ÎÑê Ïó∞Í≤∞")]
     [SerializeField] GameObject _shopTextPanel;
     [SerializeField] GameObject _shopNotEnoughTextPanel;
 
@@ -30,11 +30,11 @@ public class ShopText : MonoBehaviour
     [SerializeField] private ShortcutKey _shortcutKey;
     public Dictionary<int, int> mineralDict = new Dictionary<int, int>();
 
-    [SerializeField] GameObject _billLine;
-    //[SerializeField] Image _billmineralImage;
-    //[SerializeField] TextMeshProUGUI _billmineralCount;
-    //[SerializeField] TextMeshProUGUI _billmineralTotal;
-    [SerializeField] Transform _par;
+    [SerializeField] GameObject[] _billTexts;
+    [SerializeField] TextMeshProUGUI _totalPrice;
+    [SerializeField] private GameObject _mineralNotThingPanel;
+    [SerializeField] private GameObject _mineralSellPanel;
+
 
     public void SetText(string name, int price, string dis)
     {
@@ -81,14 +81,30 @@ public class ShopText : MonoBehaviour
 
     public void OnClickMineralBillButton()
     {
-        mineralDict.Clear();
-
-        _billImage.SetActive(true);
         _shopTextPanel.SetActive(false);
         _shopNotEnoughTextPanel.SetActive(false);
         List<UserInventoryItemDto> items = _inventoryServiceLocator.Service.Items
             .Where(item => item.ItemId >= 3000)
             .ToList();
+        if (items.Count <= 0)
+        {
+            _mineralNotThingPanel.SetActive(true);
+            return;
+        }
+
+
+        mineralDict.Clear();
+        foreach (GameObject go in _billTexts)
+        {
+            go.SetActive(false);
+        }
+        _billImage.SetActive(true);
+        _mineralSellPanel.SetActive(true);
+
+
+
+
+        items.Sort((a, b) => a.ItemId.CompareTo(b.ItemId));
 
         foreach (UserInventoryItemDto item in items)
         {
@@ -102,23 +118,27 @@ public class ShopText : MonoBehaviour
             }
         }
 
-        float yPos = 0;
+        int index = 0;
+        int totalPrice = 0;
         foreach (var item in mineralDict)
         {
-            GameObject go = Instantiate(_billLine,_par);
-            go.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, yPos, 0);
-            go.GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>(inventoryItemServiceLocatorSO.ItemService.GetIconPath(item.Key));
-            TextMeshProUGUI[] texts = go.GetComponentsInChildren<TextMeshProUGUI>();
+            _billTexts[index].GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>(inventoryItemServiceLocatorSO.ItemService.GetIconPath(item.Key));
+            TextMeshProUGUI[] texts = _billTexts[index].GetComponentsInChildren<TextMeshProUGUI>();
             int price = _inventoryRepositoryLocator.Repository.FindById(item.Key).Price;
-            texts[0].text = price.ToString();
+            texts[0].text = price.ToString() + " ‚Ç©";
             texts[1].text = item.Value.ToString();
-            texts[2].text = (item.Value * price).ToString();
-            yPos -= 120f;
+            texts[2].text = (item.Value * price).ToString() + " ‚Ç©";
+            totalPrice += item.Value * price;
+            _billTexts[index].SetActive(true);
+            index++;
         }
+
+        _totalPrice.text = totalPrice.ToString() + " ‚Ç©";
     }
 
     public void OnClickMineralSellButton()
     {
+        _billImage.SetActive(false);
         _playerHealth.gold = _playerHealth.gold.AddGold(_inventoryServiceLocator.Service.SellAllMineral());
         _inventoryUI.Refresh();
     }

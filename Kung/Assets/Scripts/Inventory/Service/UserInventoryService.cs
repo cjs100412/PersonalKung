@@ -24,13 +24,11 @@ public class UserInventoryService : IUserInventroyService
     private readonly Inventory _inventory;
     private readonly ItemService _itemService;
     private readonly IItemRepository _itemRepository;
-    //public Dictionary<int, int> mineralDict = new Dictionary<int, int>();
     public UserInventoryService(IItemRepository itemRepository)
     {
         _inventory = new Inventory();
         _itemService = new ItemService();
         _itemRepository = itemRepository;
-        //_itemRepository = new ItemRepository(new Parser<ShopItemList>());
     }
 
     public List<UserInventoryItemDto> Items
@@ -62,7 +60,7 @@ public class UserInventoryService : IUserInventroyService
         return _inventory.CanAddItem(itemId);
     }
 
-    // 급해서 반환을 int로 만들어서 쓰는중;; 이렇게하면 안되는데 나중에 여유있을때 정리함
+    // 급해서 반환을 int로 만들어서 쓰는중;; 이렇게하면 안되는데 나중에 여유있을때 정리함 //영원히 정리가 안되었다고 한다...
     public int SellAllMineral()
     {
         int allprice = 0;
