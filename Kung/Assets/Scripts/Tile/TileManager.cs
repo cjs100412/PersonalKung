@@ -1,4 +1,5 @@
 ﻿using System.Buffers.Text;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using static UnityEditor.PlayerSettings;
@@ -24,7 +25,7 @@ public class TileManager : MonoBehaviour
     [HideInInspector] public Tilemap miniMapFrontTilemap;
     
     public Sprite[] brokenTileSprites;
-    [SerializeField] private DynamiteBOOM _boom;
+    [SerializeField] private RockTile _rockTile;
     
     private Tilemap brokenTileMapInstance;
 
@@ -38,7 +39,7 @@ public class TileManager : MonoBehaviour
     public float[,] tiles;
     public int baseHp;
 
-
+    [HideInInspector] public List<DestroiedTiles> destroiedTiles;
     void Awake()
     {
         Instantiate(backGroundTIleMap, par);
@@ -51,7 +52,23 @@ public class TileManager : MonoBehaviour
         lv1.GetComponent<Transform>().localScale = new Vector2(_width, _height / 3) * 0.3f; 
         lv2.GetComponent<Transform>().localScale = new Vector2(_width, _height / 3) * 0.3f;
 
-        _boom._miniMapRockTile = Instantiate(miniMapRockTile, par).GetComponent<Tilemap>();
+        _rockTile._miniMapRockTile = Instantiate(miniMapRockTile, par).GetComponent<Tilemap>();
+    }
+    private void Start()
+    {
+        if (destroiedTiles != null)
+        {
+            foreach (DestroiedTiles tile in destroiedTiles)
+            {
+                Vector3Int pos = new Vector3Int(tile.x, tile.y, 0);
+                brokenableTilemap.SetTile(pos, null);
+                miniMapFrontTilemap.SetTile(pos, null);
+            }
+        }
+    }
+    public void LoadDestroiedTiles(List<DestroiedTiles> LoadDestroiedTiles)
+    {
+        destroiedTiles = LoadDestroiedTiles;
     }
 
     /// <summary>
@@ -91,6 +108,7 @@ public class TileManager : MonoBehaviour
         {
             brokenableTilemap.SetTile(target, null);
             miniMapFrontTilemap.SetTile(target, null);
+            destroiedTiles.Add(new DestroiedTiles(target.x, target.y));
             return;
         }
 

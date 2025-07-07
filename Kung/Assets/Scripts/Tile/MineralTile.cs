@@ -26,15 +26,29 @@ public class MineralTile : MonoBehaviour
     private Camera mainCamera;
     private HashSet<Vector3Int> removedCells = new HashSet<Vector3Int>();
 
+    [HideInInspector] public List<DestroiedTiles> destroiedMineralTiles;
+
     [SerializeField] private InventoryServiceLocatorSO _inventoryServiceLocator;
     private void Start()
     {
         mainCamera = Camera.main;
-
+        if (destroiedMineralTiles != null)
+        {
+            foreach (DestroiedTiles tile in destroiedMineralTiles)
+            {
+                Vector3Int pos = new Vector3Int(tile.x, tile.y, 0);
+                mineralTilemap.SetTile(pos, null);
+            }
+        }
         //for (int count = 1; count <= 24; ++count)
         //{
         //    _inventoryServiceLocator.Service.AcquireItem(1003);
         //}
+    }
+
+    public void LoadDestroiedTiles(List<DestroiedTiles> LoadDestroiedTiles)
+    {
+        destroiedMineralTiles = LoadDestroiedTiles;
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -59,6 +73,7 @@ public class MineralTile : MonoBehaviour
                 _inventoryServiceLocator.Service.AcquireItem(customTile.id);
                 StartCoroutine(ExprotPrice(customTile.price, tilePos));
                 mineralTilemap.SetTile(cellPos, null);
+                destroiedMineralTiles.Add(new DestroiedTiles(cellPos.x, cellPos.y));
                 removedCells.Add(cellPos);
             }
             

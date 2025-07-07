@@ -12,7 +12,6 @@ public class GameManagerSO : ScriptableObject
 
         var gameObjecct = new GameObject("GameManager");
         var gameManager = gameObjecct.AddComponent<GameManager>();
-
         gameManager.Init(_shortCutServiceLocator);
 
         DontDestroyOnLoad(gameObjecct);
