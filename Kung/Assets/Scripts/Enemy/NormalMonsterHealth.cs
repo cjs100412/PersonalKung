@@ -10,12 +10,13 @@ public class NormalMonsterHealth : MonoBehaviour
 
     public Animator animator;
     [SerializeField] private GameObject _treasureChest;
-
+    private Collider2D _collider;
     const float TreasureChestOffset = 0.07f;
     const int DestroyTime = 2;
 
     private void Awake()
     {
+        _collider = GetComponent<Collider2D>();
         hp = Health.New(_maxHp, _maxHp);
     }
 
@@ -46,7 +47,7 @@ public class NormalMonsterHealth : MonoBehaviour
     {
         animator.SetTrigger("isDead");
         Debug.Log("일반몬스터 사망");
-
+        _collider.enabled = false;
         Vector2 TreasureChestPosition = transform.position;
         TreasureChestPosition.y -= TreasureChestOffset;
         Instantiate(_treasureChest, TreasureChestPosition, Quaternion.identity);

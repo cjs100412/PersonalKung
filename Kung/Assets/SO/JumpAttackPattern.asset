@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18356a014a5307740bf895f58294e954, type: 3}
   m_Name: JumpAttackPattern
   m_EditorClassIdentifier: 
-  maxDistance: 50
+  maxDistance: 20
   cooldown: 5
   jumpForce: 12
   horizontalSpeed: 20

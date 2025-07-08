@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: SummonPattern
   m_EditorClassIdentifier: 
   summonPrefab: {fileID: 7522068113383888539, guid: fe5e228ed92acb94b9c99c6dd258e4b4, type: 3}
+  maxDistance: 20
   cooldown: 20
   summonCount: 5
   spawnInterval: 0.1
   launchForce: 10
-  angleRange: 90
+  angleRange: 150

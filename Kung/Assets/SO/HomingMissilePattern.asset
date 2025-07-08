@@ -16,7 +16,6 @@ MonoBehaviour:
   missileSpeed: 3
   turnSpeed: 200
   missileCount: 1
-  spawnInterval: 0.2
   minDistance: 1
-  maxDistance: 50
+  maxDistance: 20
   cooldown: 3
