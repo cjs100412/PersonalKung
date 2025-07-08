@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class DrillSideState : IState
@@ -5,9 +6,9 @@ public class DrillSideState : IState
     private Player player;
     public int Direction { get; private set; }
     private int direction;
-    private const float _drillDuration = 0.3f;
-    private float _checkTime = 0f;
+    public float interval = 0.3f;
 
+    private float timer = 0f;
     public DrillSideState(Player player, int direction)
     {
         this.player = player;
@@ -18,6 +19,8 @@ public class DrillSideState : IState
     {
         player.PlayDrillSideAnim(true);
         player.drilling.StartDrilling(direction);
+        SoundManager.Instance.PlaySFX(SFX.Drilling);
+        player.impulseSource.GenerateImpulse();
         // 드릴 시작 시 이동 애니메이션 끄기
         //player.headAnimator.SetBool("Move", true);
         //player.bodyAnimator.SetBool("Move", true);
@@ -27,12 +30,14 @@ public class DrillSideState : IState
 
     public void Update()
     {
-        _checkTime += Time.deltaTime;
-        if (_checkTime > _drillDuration)
+        timer += Time.deltaTime;
+        if (timer > interval)
         {
             SoundManager.Instance.PlaySFX(SFX.Drilling);
-            _checkTime = 0f;
+            player.impulseSource.GenerateImpulse();
+            timer = 0f;
         }
+
         player.drilling.ProcessDrilling();
     }
 

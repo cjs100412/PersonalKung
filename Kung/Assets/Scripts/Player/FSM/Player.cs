@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using Unity.Cinemachine;
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private GroundChecker groundChecker;
 
+    public CinemachineImpulseSource impulseSource;
 
     public Rigidbody2D rigid;
     public PlayerHealth playerHealth;

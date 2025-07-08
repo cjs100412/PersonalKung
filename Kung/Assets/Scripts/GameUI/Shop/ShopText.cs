@@ -34,6 +34,7 @@ public class ShopText : MonoBehaviour
     [SerializeField] TextMeshProUGUI _totalPrice;
     [SerializeField] private GameObject _mineralNotThingPanel;
     [SerializeField] private GameObject _mineralSellPanel;
+    [SerializeField] private GameObject _saveCheckPanel;
 
 
     public void SetText(string name, int price, string dis)
@@ -49,7 +50,10 @@ public class ShopText : MonoBehaviour
     {
         id = itemId;
     }
-
+    public void OnSaveCheckOkayButtonClick()
+    {
+        _saveCheckPanel.SetActive(false);
+    }
     public void OnClickYesButton()
     {
         if (_playerHealth.gold.IsEnough(_price))

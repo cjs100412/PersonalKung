@@ -15,7 +15,7 @@ public class Setting : MonoBehaviour
             pauseCanvas.SetActive(false);
     }
 
-    public void OnSettingButtonClick()
+    public void OnSettingButton()
     {
         PauseGame();
     }
@@ -47,11 +47,12 @@ public class Setting : MonoBehaviour
 
     public void OnTitleButton()
     {
+        Time.timeScale = 1f;
         pauseCanvas.SetActive(false);
         SceneManager.LoadScene("TitleScene");
     }
 
-    public void OnExitButtonEnter()
+    public void OnExitButton()
     {
 #if UNITY_EDITOR // 유니티 에디터 쪽에서의 작업
         UnityEditor.EditorApplication.isPlaying = false;
