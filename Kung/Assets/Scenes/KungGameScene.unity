@@ -8135,7 +8135,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1024365567
 RectTransform:
   m_ObjectHideFlags: 0
@@ -125787,7 +125787,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &8469285324322424501
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -126860,7 +126860,8 @@ MonoBehaviour:
   quitInventoryTarget: {fileID: 559650014}
   delayBeforeShopOpen: 0.5
   _shopUI: {fileID: 495144893}
-  InventoryUI: {fileID: 1130738014}
+  _inventoryUI: {fileID: 1714175648}
+  _inventoryUIQuitButton: {fileID: 880823725}
   _mineralBillButton: {fileID: 1024365566}
   _mineralSellPanel: {fileID: 930779193}
   _mineralNotThingSellPanel: {fileID: 567422573}
