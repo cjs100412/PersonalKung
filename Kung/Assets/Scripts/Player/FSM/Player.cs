@@ -69,14 +69,14 @@ void Update()
         _moveStateMachine.Update();
         _drillStateMachine.Update();
 
-        if (Input.GetKey(KeyCode.UpArrow) || isBoostButtonClick)
+        if (Input.GetKey(KeyCode.UpArrow))
         {
             Debug.Log("Up Arrow Pressed");
             if (!(_moveStateMachine.CurrentState is BoostState))
                 _moveStateMachine.ChangeState(new BoostState(this));
             _drillStateMachine.ChangeState(new DrillOffState(this));
         }
-        if (Input.GetKeyUp(KeyCode.UpArrow) || !isBoostButtonClick)
+        if (Input.GetKeyUp(KeyCode.UpArrow))
         {
             if (!(_moveStateMachine.CurrentState is IdleState))
             _moveStateMachine.ChangeState(new IdleState(this));
