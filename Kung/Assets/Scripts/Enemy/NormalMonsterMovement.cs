@@ -7,6 +7,8 @@ public class NormalMonster : MonoBehaviour
     [SerializeField] private NormalMonsterHealth _health;
     public float speed = 0.5f;
     public LayerMask groundLayer;
+    public LayerMask rockLayer;
+    public LayerMask groundAndRockLayer => groundLayer | rockLayer;
 
     private float _checkDistance = 0.1f;
     private bool _movingRight = true;
@@ -36,17 +38,17 @@ public class NormalMonster : MonoBehaviour
         }
 
         
-        bool isGroundAhead = Physics2D.Raycast(_groundCheck.position, Vector2.down, _checkDistance, groundLayer);
+        bool isGroundAhead = Physics2D.Raycast(_groundCheck.position, Vector2.down, _checkDistance, groundAndRockLayer);
 
         bool isWallAhead;
 
         if (_movingRight)
         {
-            isWallAhead = Physics2D.Raycast(_wallCheck.position, Vector2.right, _checkDistance, groundLayer);
+            isWallAhead = Physics2D.Raycast(_wallCheck.position, Vector2.right, _checkDistance, groundAndRockLayer);
         }
         else
         {
-            isWallAhead = Physics2D.Raycast(_wallCheck.position, Vector2.left, _checkDistance, groundLayer);
+            isWallAhead = Physics2D.Raycast(_wallCheck.position, Vector2.left, _checkDistance, groundAndRockLayer);
         }
 
 
