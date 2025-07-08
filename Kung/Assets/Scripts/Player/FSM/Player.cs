@@ -37,10 +37,9 @@ public class Player : MonoBehaviour
 
     public Vector2 moveInput;
     public float[,] tiles = new float[0,0];
-    public bool isBoost;
-    public bool isBoostButtonClick;
-    public bool isLeftButtonClick;
-    public bool isRightButtonClick;
+    [HideInInspector] public bool isBoost;
+    [HideInInspector] public bool isDrillButtonDown;
+    private bool _isDirectionMoving;
 
 
     private float _horizontal = 0f;
@@ -68,6 +67,8 @@ void Update()
     {
         _moveStateMachine.Update();
         _drillStateMachine.Update();
+
+        if (_isDirectionMoving) return;
 
         if (Input.GetKey(KeyCode.UpArrow))
         {
@@ -97,11 +98,13 @@ void Update()
             {
                 _moveStateMachine.ChangeState(new IdleState(this));
             }
-            }
+        }
+
         if (isBoost)
         {
             return;
         }
+
         // === 이동 FSM 상태 전이 ===
         if (moveInput.x != 0 && !(_moveStateMachine.CurrentState is RunState))
         {
@@ -122,7 +125,7 @@ void Update()
         }
 
         // === 드릴 FSM 상태 전이 ===
-        if (Input.GetKey(KeyCode.X))
+        if (Input.GetKey(KeyCode.X) || isDrillButtonDown)
         {
             _drillDirection = (int)moveInput.x;
             bool canDrillCurrentDirection = drilling.CanDrill(_drillDirection);
@@ -163,25 +166,88 @@ void Update()
         
     }
 
-   
-    public void OnClickBoost()
+
+    private void OnEnable()
     {
-        isBoostButtonClick = true;
-    }
-    public void OnReleaseBoost()
-    {
-        isBoostButtonClick = false;
+        Booster.OnBoostInput += HandleBoostInput;
+        Booster.OnBoostRelease += HandleBoostRelease;
+        DrillButton.OnDrillInput += HandleDrillInput;
+        DrillButton.OnDrillRelease += HandleDrillRelease;
+        Direction.OnLeftInput += HandleLeftInput;
+        Direction.OnLeftRelease += HandleLeftRelease;
+        Direction.OnRightInput += HandleRightInput;
+        Direction.OnRightRelease += HandleRightRelease;
     }
 
-    public void OnClickLeft()
+    private void OnDisable()
     {
-        isBoostButtonClick = true;
+        Booster.OnBoostInput -= HandleBoostInput;
+        Booster.OnBoostRelease -= HandleBoostRelease;
+        DrillButton.OnDrillInput -= HandleDrillInput;
+        DrillButton.OnDrillRelease -= HandleDrillRelease;
+        Direction.OnLeftInput -= HandleLeftInput;
+        Direction.OnLeftRelease -= HandleLeftRelease;
+        Direction.OnRightInput -= HandleRightInput;
+        Direction.OnRightRelease -= HandleRightRelease;
     }
-    public void OnReleaseRight()
+    private void HandleBoostInput()
     {
-        isBoostButtonClick = false;
+        if (!(_moveStateMachine.CurrentState is BoostState))
+            _moveStateMachine.ChangeState(new BoostState(this));
+        _drillStateMachine.ChangeState(new DrillOffState(this));
+    }
+    private void HandleBoostRelease()
+    {
+        if (!(_moveStateMachine.CurrentState is IdleState))
+            _moveStateMachine.ChangeState(new IdleState(this));
+    }
+    private void HandleDrillInput()
+    {
+        isDrillButtonDown = true;
+    }
+    private void HandleDrillRelease()
+    {
+        isDrillButtonDown = false;
     }
 
+
+    private void HandleLeftInput()
+    {
+        if(!(_moveStateMachine.CurrentState is RunState))
+        {
+            moveInput.x = -1f;
+            _moveStateMachine.ChangeState(new RunState(this));
+            _isDirectionMoving = true;
+        }
+    }
+
+    private void HandleRightInput()
+    {
+        if (!(_moveStateMachine.CurrentState is RunState))
+        {
+            moveInput.x = 1f;
+            _moveStateMachine.ChangeState(new RunState(this));
+            _isDirectionMoving = true;
+        }
+    }
+
+    private void HandleLeftRelease()
+    {
+        if(!(_moveStateMachine.CurrentState is IdleState)){
+            moveInput.x = 0f;
+            _moveStateMachine.ChangeState(new IdleState(this));
+            _isDirectionMoving = false;
+        }
+    }
+    private void HandleRightRelease()
+    {
+        if (!(_moveStateMachine.CurrentState is IdleState))
+        {
+            moveInput.x = 0f;
+            _moveStateMachine.ChangeState(new IdleState(this));
+            _isDirectionMoving = false;
+        }
+    }
 
 
     // === 공용 기능 ===

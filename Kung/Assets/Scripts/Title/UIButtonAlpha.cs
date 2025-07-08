@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class UIButtonAlpha : MonoBehaviour
 {
     private Image buttonImage;
-    [SerializeField] Scene scene;
+
     private void Start()
     {
         buttonImage = gameObject.GetComponent<Image>();
@@ -20,10 +20,5 @@ public class UIButtonAlpha : MonoBehaviour
     public void OnClickButton()
     {
         SetAlpha(1);
-    }
-
-    public void OnClickGameStart()
-    {
-        scene.ChangeScene();
     }
 }

@@ -83,7 +83,7 @@ public class ShortcutKey : MonoBehaviour
     }
     public void OnFirstAidKitButtonClick()
     {
-        if (_shortCutServiceLocator.Service.CanUseShortCutItem(1001) && _groundChecker.IsGrounded)
+        if (_shortCutServiceLocator.Service.CanUseShortCutItem(1001))
         {
             _shortCutServiceLocator.Service.RemoveShortCutItemQuantity(1001);
             _playerHealth.hp = _playerHealth.hp.Heal(_playerHealth.MaxHp);
@@ -92,7 +92,7 @@ public class ShortcutKey : MonoBehaviour
     }
     public void OnAirCapsuleButtonClick()
     {
-        if (_shortCutServiceLocator.Service.CanUseShortCutItem(1002) && _groundChecker.IsGrounded)
+        if (_shortCutServiceLocator.Service.CanUseShortCutItem(1002))
         {
             _shortCutServiceLocator.Service.RemoveShortCutItemQuantity(1002);
             _playerHealth.air = _playerHealth.air.Heal(_playerHealth.MaxAir);

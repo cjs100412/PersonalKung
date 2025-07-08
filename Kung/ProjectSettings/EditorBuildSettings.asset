@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/TitleScene.unity
     guid: 6bb2568c16cbb404c8ed81a79c982964
   - enabled: 1
+    path: Assets/Scenes/LoadingScene.unity
+    guid: fc3db3eccd770f64a86c7b952a61d43a
+  - enabled: 1
     path: Assets/Scenes/KungGameScene.unity
     guid: cd4b6d996ae685d4f9e9c71968b3bb62
   m_configObjects:

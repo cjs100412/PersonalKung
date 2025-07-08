@@ -11,6 +11,7 @@ public class SaveButton : MonoBehaviour
     [SerializeField] private InventoryServiceLocatorSO _inventoryServiceLocator;
     [SerializeField] private ShortCutServiceLocatorSO _shortCutServiceLocator;
     [SerializeField] private GameManagerSO _gameManagerSO;
+    [SerializeField] private UI _ui;
 
     public void OnSaveButtonClick()
     {
@@ -20,6 +21,7 @@ public class SaveButton : MonoBehaviour
             new Vector3(-1, 0, 0),
             _playerHealth.hp.Amount,
             _playerHealth.gold.gold,
+            _ui.score,
             _tileManager.destroiedTiles,
             _mineralTile.destroiedMineralTiles,
             _rockTile.destroiedRockTiles,
