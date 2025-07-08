@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,9 +30,11 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private Rigidbody2D _playerRigid;
     [SerializeField] private Collider2D _playerColider;
     [SerializeField] private Animator _damageAnimator;
+    [SerializeField] private Animator _playerDieAnimator;
     [SerializeField] private GameObject _damageObject;
     [SerializeField] private GameObject _headObject;
     [SerializeField] private GameObject _bodyObject;
+    [SerializeField] private GameObject _playerDieObject;
     [SerializeField] private InventoryServiceLocatorSO _inventoryServiceLocator;
     [SerializeField] private ShortCutServiceLocatorSO _shortCutServiceLocator;
     [SerializeField] private InventoryItemServiceLocatorSO _itemServiceLocator;
@@ -49,6 +52,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private Image _drillEquipment;
 
     [SerializeField] private GameObject boostLight;
+    [SerializeField] private GameObject _playerDiePanel;
 
     public int MaxHp => _maxhp;
     public int MaxAir
@@ -137,13 +141,6 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log($"현재 체력 : {hp.Amount}");
     }
 
-    public void Die()
-    {
-        _headAnimator.SetTrigger("isDead");
-        _bodyAnimator.SetTrigger("isDead");
-        SoundManager.Instance.PlaySFX(SFX.PlayerDead);
-        Debug.Log("사망");
-    }
 
     IEnumerator Invincible()
     {
@@ -160,6 +157,23 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log($"현재 산소 :{air.Amount}");
         yield return new WaitForSeconds(_decreaseAirTime);
         _isAirDecrease = false;
+    }
+
+    public void Die()
+    {
+        SoundManager.Instance.PlaySFX(SFX.PlayerDead);
+        StartCoroutine(playerDie());
+        Debug.Log("사망");
+    }
+
+    IEnumerator playerDie()
+    {
+        _playerDiePanel.SetActive(true);
+        _playerDieObject.SetActive(true);
+        _playerDieAnimator.SetBool("isDie", true);
+        SetPlayerObjectsActive(false);
+        gameObject.GetComponent<Player>().enabled = false;
+        yield return new WaitForSeconds(0.8f);
     }
 
 
