@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
 
 
     public Rigidbody2D rigid;
+    public PlayerHealth playerHealth;
     public GameObject glowOutlineObj;
 
     public Animator bodyAnimator;
@@ -65,6 +66,10 @@ public class Player : MonoBehaviour
 
 void Update()
     {
+        if (playerHealth.isDamaged)
+        {
+            return;
+        }
         _moveStateMachine.Update();
         _drillStateMachine.Update();
 
@@ -73,6 +78,7 @@ void Update()
         if (Input.GetKey(KeyCode.UpArrow))
         {
             Debug.Log("Up Arrow Pressed");
+            isBoost = true;
             if (!(_moveStateMachine.CurrentState is BoostState))
                 _moveStateMachine.ChangeState(new BoostState(this));
             _drillStateMachine.ChangeState(new DrillOffState(this));
@@ -88,8 +94,14 @@ void Update()
         moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
         if (!isBoost && !groundChecker.IsGrounded)
         {
-            _moveStateMachine.ChangeState(new FallingState(this));
-            _drillStateMachine.ChangeState(new DrillOffState(this));
+            if (!(_moveStateMachine.CurrentState is FallingState))
+            {
+                _moveStateMachine.ChangeState(new FallingState(this));
+            }   
+            if (!(_drillStateMachine.CurrentState is DrillOffState))
+            {
+                _drillStateMachine.ChangeState(new DrillOffState(this));
+            }
             return;
         }
         else

@@ -48,6 +48,8 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private Image _bootsEquipment;
     [SerializeField] private Image _drillEquipment;
 
+    [SerializeField] private GameObject boostLight;
+
     public int MaxHp => _maxhp;
     public int MaxAir
     {
@@ -119,7 +121,7 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int amount)
     {
         if (hp.IsDead || _isInvincible) return;
-
+        boostLight.SetActive(false); 
         hp = hp.TakeDamage(amount);
         if(hp.IsDead)
         {

@@ -37599,6 +37599,7 @@ MonoBehaviour:
   _helmetEquipment: {fileID: 1198936561}
   _bootsEquipment: {fileID: 1921226186}
   _drillEquipment: {fileID: 106044860}
+  boostLight: {fileID: 1116990105777262041}
 --- !u!4 &1423136308917769351
 Transform:
   m_ObjectHideFlags: 0
@@ -118669,6 +118670,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundChecker: {fileID: 4735759853329496053}
   rigid: {fileID: 2882545759769678278}
+  playerHealth: {fileID: 1413292370451342594}
   glowOutlineObj: {fileID: 1116990105777262041}
   bodyAnimator: {fileID: 8291817478194965304}
   headAnimator: {fileID: 6137514695942455356}
