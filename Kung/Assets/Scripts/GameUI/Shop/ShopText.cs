@@ -134,11 +134,14 @@ public class ShopText : MonoBehaviour
         }
 
         _totalPrice.text = totalPrice.ToString() + " ₩";
+        _totalPrice.gameObject.SetActive(true);
     }
 
     public void OnClickMineralSellButton()
     {
         _billImage.SetActive(false);
+        _totalPrice.gameObject.SetActive(false);
+        _mineralSellPanel.SetActive(false);
         _playerHealth.gold = _playerHealth.gold.AddGold(_inventoryServiceLocator.Service.SellAllMineral());
         _inventoryUI.Refresh();
     }
