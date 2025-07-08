@@ -10,6 +10,11 @@ public class TitleManager : MonoBehaviour
     [SerializeField] private Image _gameRuleDialog;
     [SerializeField] private Image _settingDialog;
 
+    private void Start()
+    {
+       // Application.targetFrameRate = 60;
+    }
+
     public void OnOkayButtonClick()
     {
         _savePath = Path.Combine(Application.persistentDataPath, "save.json");

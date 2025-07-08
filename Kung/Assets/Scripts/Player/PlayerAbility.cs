@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEditor.ShaderGraph.Internal;
-
-class PlayerAbility
+﻿class PlayerAbility
 {
     public float movementSpeed = 0;
     public float bosterSpeed = 0;

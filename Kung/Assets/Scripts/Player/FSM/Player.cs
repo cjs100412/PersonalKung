@@ -1,7 +1,4 @@
-﻿using TMPro.EditorUtilities;
-using Unity.Jobs;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class Player : MonoBehaviour
@@ -75,23 +72,23 @@ void Update()
 
         if (_isDirectionMoving) return;
 
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            Debug.Log("Up Arrow Pressed");
-            isBoost = true;
-            if (!(_moveStateMachine.CurrentState is BoostState))
-                _moveStateMachine.ChangeState(new BoostState(this));
-            _drillStateMachine.ChangeState(new DrillOffState(this));
-        }
-        if (Input.GetKeyUp(KeyCode.UpArrow))
-        {
-            if (!(_moveStateMachine.CurrentState is IdleState))
-            _moveStateMachine.ChangeState(new IdleState(this));
-        }
+        //if (Input.GetKey(KeyCode.UpArrow))
+        //{
+        //    Debug.Log("Up Arrow Pressed");
+        //    isBoost = true;
+        //    if (!(_moveStateMachine.CurrentState is BoostState))
+        //        _moveStateMachine.ChangeState(new BoostState(this));
+        //    _drillStateMachine.ChangeState(new DrillOffState(this));
+        //}
+        //if (Input.GetKeyUp(KeyCode.UpArrow))
+        //{
+        //    if (!(_moveStateMachine.CurrentState is IdleState))
+        //    _moveStateMachine.ChangeState(new IdleState(this));
+        //}
         
 
         // === 입력 처리 ===
-        moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
+        //moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
         if (!isBoost && !groundChecker.IsGrounded)
         {
             if (!(_moveStateMachine.CurrentState is FallingState))
@@ -137,7 +134,7 @@ void Update()
         }
 
         // === 드릴 FSM 상태 전이 ===
-        if (Input.GetKey(KeyCode.X) || isDrillButtonDown)
+        if (isDrillButtonDown)
         {
             _drillDirection = (int)moveInput.x;
             bool canDrillCurrentDirection = drilling.CanDrill(_drillDirection);
@@ -151,7 +148,7 @@ void Update()
                         _drillStateMachine.ChangeState(new DrillDownState(this));
                     }
                 }
-                else 
+                else
                 {
                     if (!(_drillStateMachine.CurrentState is DrillSideState))
                     {
@@ -159,7 +156,7 @@ void Update()
                     }
                 }
             }
-            else 
+            else
             {
                 if (!(_drillStateMachine.CurrentState is DrillOffState))
                 {
@@ -167,7 +164,7 @@ void Update()
                 }
             }
         }
-        else if (Input.GetKeyUp(KeyCode.X))
+        else
         {
             if (!(_drillStateMachine.CurrentState is DrillOffState))
             {
@@ -175,7 +172,7 @@ void Update()
             }
         }
 
-        
+
     }
 
 
