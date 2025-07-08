@@ -97,15 +97,15 @@ public class PlayerHealth : MonoBehaviour
             StartCoroutine(hpDecrease());
         }
 
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            TakeDamage(5);
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            air = air.AirDecrease(5);
-            Debug.Log($"현재 산소 :{air.Amount}");
-        }
+        //if (Input.GetKeyDown(KeyCode.A))
+        //{
+        //    TakeDamage(5);
+        //}
+        //if (Input.GetKeyDown(KeyCode.S))
+        //{
+        //    air = air.AirDecrease(5);
+        //    Debug.Log($"현재 산소 :{air.Amount}");
+        //}
     }
 
     IEnumerator hpDecrease()

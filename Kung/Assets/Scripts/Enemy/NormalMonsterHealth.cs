@@ -25,10 +25,10 @@ public class NormalMonsterHealth : MonoBehaviour
         if (hp.IsDead) return;
 
         // Test용 몬스터 죽이기
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            hp = hp.TakeDamage(_maxHp);
-        }
+        //if (Input.GetKeyDown(KeyCode.P))
+        //{
+        //    hp = hp.TakeDamage(_maxHp);
+        //}
     }
 
     public void TakeDamage(int amount)

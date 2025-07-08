@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using Unity.Cinemachine;
-using Unity.VisualScripting;
-using UnityEditor.ShaderGraph.Internal;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 public enum CurrentDirectionState
