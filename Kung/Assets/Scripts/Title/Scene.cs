@@ -2,12 +2,13 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-public class Scene : MonoBehaviour
+public class TitleManager : MonoBehaviour
 {
     private string _savePath;
     [SerializeField] private Image _newGameDialog;
     [SerializeField] private Image _noSaveFileDialog;
     [SerializeField] private Image _gameRuleDialog;
+    [SerializeField] private Image _settingDialog;
 
     public void OnOkayButtonClick()
     {
@@ -63,5 +64,13 @@ public class Scene : MonoBehaviour
     public void OnGameRuleCloseButtonClick()
     {
         _gameRuleDialog.gameObject.SetActive(false);
+    }
+    public void OnSettingButtonClick()
+    {
+        _settingDialog.gameObject.SetActive(true);
+    }
+    public void OnSettingCloseButtonClick()
+    {
+        _settingDialog.gameObject.SetActive(false);
     }
 }

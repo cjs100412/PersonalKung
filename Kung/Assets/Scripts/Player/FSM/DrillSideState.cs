@@ -1,8 +1,12 @@
+using UnityEngine;
+
 public class DrillSideState : IState
 {
     private Player player;
     public int Direction { get; private set; }
     private int direction;
+    private const float _drillDuration = 0.3f;
+    private float _checkTime = 0f;
 
     public DrillSideState(Player player, int direction)
     {
@@ -23,6 +27,12 @@ public class DrillSideState : IState
 
     public void Update()
     {
+        _checkTime += Time.deltaTime;
+        if (_checkTime > _drillDuration)
+        {
+            SoundManager.Instance.PlaySFX(SFX.Drilling);
+            _checkTime = 0f;
+        }
         player.drilling.ProcessDrilling();
     }
 

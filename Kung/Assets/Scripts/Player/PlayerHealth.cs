@@ -161,6 +161,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void Die()
     {
+        SoundManager.Instance.PlaySFX(SFX.PlayerDead);
         StartCoroutine(playerDie());
         Debug.Log("사망");
     }
@@ -213,7 +214,7 @@ public class PlayerHealth : MonoBehaviour
                         int equippedHelmetId, int equippedBootsId, int equippedDrillId)
     {
         // 위치 복원
-        transform.position = new Vector3(-1, 0, 0);
+        transform.position = new Vector3(-1, 0.1f, 0);
 
         // 회전/스케일 초기화 (바닥에 똑바로 세우기)
         transform.rotation = Quaternion.identity;

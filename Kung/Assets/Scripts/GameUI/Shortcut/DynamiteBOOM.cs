@@ -31,6 +31,7 @@ public class DynamiteBOOM : MonoBehaviour
         Vector3Int DynamiteCell = _rockTile.WorldToCell(transform.position);
         _rockTileScript.DestroyRockTile(DynamiteCell);
 
+        SoundManager.Instance.PlaySFX(SFX.Dynamite);
         Destroy(Instantiate(_Effect, transform.position, Quaternion.identity), 3);
     }
 }
