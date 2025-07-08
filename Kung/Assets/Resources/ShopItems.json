@@ -3,7 +3,6 @@
 {"id":1003,"dev_name":"폭탄","price":100,"discription":"적을 죽일 수 있는 폭탄이다.","category":"expendable","equipmentType":"0"},
 {"id":1004,"dev_name":"울트라 폭탄","price":300,"discription":"폭탄보다 강한 위력을 가진 폭탄이다.","category":"expendable","equipmentType":"0"},
 {"id":1005,"dev_name":"다이나마이트","price":2000,"discription":"암석을 깨트릴 수 있다.","category":"expendable","equipmentType":"0"},
-{"id":1006,"dev_name":"확장팩","price":10000,"discription":"인벤토리 공간을 1줄 늘려준다.","category":"expendable","equipmentType":"0"},
 {"id":2101,"dev_name":"나이스 캡","price":5000,"discription":"AIR 용량과 방어력 100% 상승","category":"equipment","equipmentType":"cap"},
 {"id":2102,"dev_name":"메가 캡","price":20000,"discription":"AIR 용량과 방어력 150% 상승","category":"equipment","equipmentType":"cap"},
 {"id":2103,"dev_name":"울트라 캡","price":50000,"discription":"AIR 용량과 방어력 200% 상승","category":"equipment","equipmentType":"cap"},

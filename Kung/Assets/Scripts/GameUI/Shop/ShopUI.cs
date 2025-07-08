@@ -15,11 +15,14 @@ public class ShopUI : MonoBehaviour
     public float delayBeforeShopOpen = 0.5f;
 
     [SerializeField] private GameObject _shopUI;
-    [SerializeField] private GameObject InventoryUI;
+    [SerializeField] private GameObject _inventoryUI;
+    [SerializeField] private GameObject _inventoryUIQuitButton;
+
     [SerializeField] private GameObject _mineralBillButton;
     [SerializeField] private GameObject _mineralSellPanel;
     [SerializeField] private GameObject _mineralNotThingSellPanel;
     [SerializeField] private GameObject _mineralBillImange;
+
     //[SerializeField] private PlayerMovement playerMovement;
 
 
@@ -39,9 +42,10 @@ public class ShopUI : MonoBehaviour
         _mineralBillImange.SetActive(false);
         _mineralNotThingSellPanel.SetActive(false);
         _shopUI.transform.DOLocalMove(quitShopTarget.localPosition, _UIspeed);
-        InventoryUI.transform.DOLocalMove(quitInventoryTarget.localPosition, _UIspeed);
+        _inventoryUI.transform.DOLocalMove(quitInventoryTarget.localPosition, _UIspeed);
         //playerMovement.IsMovementLocked = false;
-        _isPlayerInsideTrigger = false; 
+        _isPlayerInsideTrigger = false;
+        _inventoryUIQuitButton.SetActive(true);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -79,8 +83,8 @@ public class ShopUI : MonoBehaviour
         {
             _mineralBillButton.SetActive(true);
             _shopUI.transform.DOLocalMove(enterShopTarget.localPosition, _UIspeed);
-            InventoryUI.transform.DOLocalMove(enterInventoryTarget.localPosition, _UIspeed);
-
+            _inventoryUI.transform.DOLocalMove(enterInventoryTarget.localPosition, _UIspeed);
+            _inventoryUIQuitButton.SetActive(false);
             //playerMovement.IsMovementLocked = true;
         }
         _shopOpenCoroutine = null;
