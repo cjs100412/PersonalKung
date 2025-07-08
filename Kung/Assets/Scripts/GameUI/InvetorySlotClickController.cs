@@ -20,8 +20,8 @@ public class InvetorySlotClickController : MonoBehaviour
     [SerializeField] private PlayerEquipment _playerEquipment;
     [SerializeField] private InventoryRepositoryLocatorSO _itemRepositoryLocator;
 
-    [SerializeField] private Text _itemNameText;
-    [SerializeField] private Text _itemDescriptionText;
+    [SerializeField] private TextMeshProUGUI _itemNameText;
+    [SerializeField] private TextMeshProUGUI _itemDescriptionText;
     [SerializeField] private TextMeshProUGUI _itemPriceText;
 
     private int currentIndex;

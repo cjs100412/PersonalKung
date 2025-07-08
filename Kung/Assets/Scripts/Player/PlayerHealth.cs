@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,6 +52,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private Image _drillEquipment;
 
     [SerializeField] private GameObject boostLight;
+    [SerializeField] private GameObject _playerDiePanel;
 
     public int MaxHp => _maxhp;
     public int MaxAir
@@ -165,9 +167,11 @@ public class PlayerHealth : MonoBehaviour
 
     IEnumerator playerDie()
     {
+        _playerDiePanel.SetActive(true);
         _playerDieObject.SetActive(true);
         _playerDieAnimator.SetBool("isDie", true);
         SetPlayerObjectsActive(false);
+        gameObject.GetComponent<Player>().enabled = false;
         yield return new WaitForSeconds(0.8f);
     }
 
