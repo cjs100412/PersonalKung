@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor.Overlays;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class PlayerData
@@ -29,7 +30,25 @@ public class GameManager : MonoBehaviour
     private TileManager _tileManager;
     private MineralTile _mineralTile;
     private RockTile _rockTile;
-    private UI _ui;
+    private HUD _ui;
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "KungGameScene")
+        {
+            LoadGame();
+        }
+    }
 
     public void Init(ShortCutServiceLocatorSO shortCutServiceLocator)
     {
@@ -37,7 +56,7 @@ public class GameManager : MonoBehaviour
         _tileManager = FindAnyObjectByType<TileManager>();
         _mineralTile = FindAnyObjectByType<MineralTile>();
         _rockTile = FindAnyObjectByType<RockTile>();
-        _ui = FindAnyObjectByType<UI>();
+        _ui = FindAnyObjectByType<HUD>();
         _savePath = Path.Combine(Application.persistentDataPath, "save.json");
         if (File.Exists(_savePath))
         {
@@ -130,6 +149,7 @@ public class GameManager : MonoBehaviour
         _tileManager.LoadDestroiedTiles(_data.destroiedTiles);
         _mineralTile.LoadDestroiedTiles(_data.destroiedMineralTiles);
         _rockTile.LoadDestroiedTiles(_data.destroiedRockTiles);
+        Time.timeScale = 1f;
         yield return null;
     }
 

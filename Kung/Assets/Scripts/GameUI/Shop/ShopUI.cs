@@ -36,7 +36,7 @@ public class ShopUI : MonoBehaviour
             StopCoroutine(_shopOpenCoroutine);
             _shopOpenCoroutine = null;
         }
-
+        SoundManager.Instance.PlaySFX(SFX.InventoryOpen);
         _mineralSellPanel.SetActive(false);
         _mineralBillButton.SetActive(false);
         _mineralBillImange.SetActive(false);
@@ -84,8 +84,11 @@ public class ShopUI : MonoBehaviour
             _mineralBillButton.SetActive(true);
             _shopUI.transform.DOLocalMove(enterShopTarget.localPosition, _UIspeed);
             _inventoryUI.transform.DOLocalMove(enterInventoryTarget.localPosition, _UIspeed);
+            SoundManager.Instance.PlaySFX(SFX.InventoryOpen);
             _inventoryUIQuitButton.SetActive(false);
             //playerMovement.IsMovementLocked = true;
+            InventoryUI inventoryUI = _inventoryUI.GetComponent<InventoryUI>();
+            inventoryUI.Refresh();
         }
         _shopOpenCoroutine = null;
     }

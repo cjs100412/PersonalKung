@@ -26,7 +26,7 @@ public class MineralTile : MonoBehaviour
     private Camera mainCamera;
     private HashSet<Vector3Int> removedCells = new HashSet<Vector3Int>();
 
-    public UI ui;
+    public HUD ui;
 
     [HideInInspector] public List<DestroiedTiles> destroiedMineralTiles;
 
@@ -73,6 +73,7 @@ public class MineralTile : MonoBehaviour
             if (_inventoryServiceLocator.Service.CanAcquireItem(customTile.id))
             {
                 _inventoryServiceLocator.Service.AcquireItem(customTile.id);
+                SoundManager.Instance.PlaySFX(SFX.Mineral);
                 StartCoroutine(ExprotPrice(customTile.price, tilePos));
                 ui.score += customTile.price;
                 mineralTilemap.SetTile(cellPos, null);

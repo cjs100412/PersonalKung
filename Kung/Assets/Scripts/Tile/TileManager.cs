@@ -39,7 +39,7 @@ public class TileManager : MonoBehaviour
     float secondThreshold;
     public float[,] tiles;
     public int baseHp;
-    public UI ui;
+    public HUD ui;
     [HideInInspector] public List<DestroiedTiles> destroiedTiles;
     void Awake()
     {

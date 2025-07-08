@@ -23,6 +23,7 @@ public class ThreeSecondBOOM : MonoBehaviour
                 enemy.TakeDamage(damage);
             }
         }
+        SoundManager.Instance.PlaySFX(SFX.Bomb);
         Destroy(Instantiate(_Effect, transform.position, Quaternion.identity), 3);
     }
 

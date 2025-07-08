@@ -3,7 +3,8 @@ using UnityEngine;
 public class DrillDownState : IState
 {
     private Player player;
-
+    private const float _drillDuration = 0.3f;
+    private float _checkTime = 0f;
     public DrillDownState(Player player)
     {
         this.player = player;
@@ -22,8 +23,13 @@ public class DrillDownState : IState
 
     public void Update()
     {
+        _checkTime += Time.deltaTime;
+        if (_checkTime > _drillDuration)
+        {
+            SoundManager.Instance.PlaySFX(SFX.Drilling);
+            _checkTime = 0f;
+        }
         player.drilling.ProcessDrilling();
-
     }
 
     public void Exit()

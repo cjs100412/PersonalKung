@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI : MonoBehaviour
+public class HUD : MonoBehaviour
 {
     public Image hpImage;
     public TextMeshProUGUI hpText;
@@ -24,6 +24,7 @@ public class UI : MonoBehaviour
     private float _UIspeed = 0.5f;
     public void OnClickInventoryButton()
     {
+        SoundManager.Instance.PlaySFX(SFX.InventoryOpen);
         _inventoryUI.transform.DOLocalMove(enterTarget.localPosition, _UIspeed);
         _inventoryUI.Refresh();
     }

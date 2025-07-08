@@ -41,6 +41,7 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private Transform _quitTransform;
     public void OnClickCloseButton()
     {
+        SoundManager.Instance.PlaySFX(SFX.InventoryClose);
         transform.DOLocalMove(_quitTransform.localPosition, _UIspeed);
     }
 }

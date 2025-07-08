@@ -10,6 +10,13 @@ public class GameManagerSO : ScriptableObject
     {
         if (GameManager != null) return;
 
+        var existing = FindAnyObjectByType<GameManager>();
+        if (existing != null)
+        {
+            GameManager = existing;
+            return;
+        }
+
         var gameObjecct = new GameObject("GameManager");
         var gameManager = gameObjecct.AddComponent<GameManager>();
         gameManager.Init(_shortCutServiceLocator);
