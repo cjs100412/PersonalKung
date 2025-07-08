@@ -5,7 +5,8 @@ using System.Collections;
 [CreateAssetMenu(fileName = "SummonPattern", menuName = "BossPatterns/Summon", order = 15)]
 public class SummonPattern : ScriptableObject, ISpawnPattern
 {
-    public GameObject summonPrefab;     
+    public GameObject summonPrefab;
+    public float maxDistance = 20f;
     public float cooldown = 20f;          
     public int summonCount = 5;          
     public float spawnInterval = 0.1f;
@@ -30,7 +31,9 @@ public class SummonPattern : ScriptableObject, ISpawnPattern
 
     public bool CanExecute(BossController boss, Transform player)
     {
-        return Time.time >= _lastUsedTime + cooldown;
+        float dist = Vector2.Distance(boss.transform.position, player.position);
+
+        return Time.time >= _lastUsedTime + cooldown && dist <= maxDistance;
     }
 
     public IEnumerator Execute(BossController boss, Transform player)
