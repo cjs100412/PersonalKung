@@ -9,6 +9,7 @@ public class PlayerData
 {
     public int hp;
     public int coins;
+    public int score;
     public int equippedHelmetId;
     public int equippedBootsId;
     public int equippedDrillId;
@@ -17,8 +18,6 @@ public class PlayerData
     public List<DestroiedTiles> destroiedTiles = new List<DestroiedTiles>();
     public List<DestroiedTiles> destroiedMineralTiles = new List<DestroiedTiles>();
     public List<DestroiedTiles> destroiedRockTiles = new List<DestroiedTiles>();
-    public bool boughtExpandBag1 = false;
-    public bool boughtExpandBag2 = false;
 }
 
 public class GameManager : MonoBehaviour
@@ -30,8 +29,7 @@ public class GameManager : MonoBehaviour
     private TileManager _tileManager;
     private MineralTile _mineralTile;
     private RockTile _rockTile;
-    public int SavedHp => _data.hp;
-    public int SavedCoins => _data.coins;
+    private UI _ui;
 
     public void Init(ShortCutServiceLocatorSO shortCutServiceLocator)
     {
@@ -39,6 +37,7 @@ public class GameManager : MonoBehaviour
         _tileManager = FindAnyObjectByType<TileManager>();
         _mineralTile = FindAnyObjectByType<MineralTile>();
         _rockTile = FindAnyObjectByType<RockTile>();
+        _ui = FindAnyObjectByType<UI>();
         _savePath = Path.Combine(Application.persistentDataPath, "save.json");
         if (File.Exists(_savePath))
         {
@@ -65,6 +64,7 @@ public class GameManager : MonoBehaviour
         {
             hp = 100,
             coins = 0,
+            score = 0,
             destroiedTiles = new List<DestroiedTiles>(),
             destroiedMineralTiles = new List<DestroiedTiles>(),
             destroiedRockTiles = new List<DestroiedTiles>(),
@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
         Debug.Log($"[GameManager] Default save created at {_savePath}");
     }
 
-    public void SaveGame(Vector2 pos, int hp, int coins,List<DestroiedTiles> destroiedTiles,
+    public void SaveGame(Vector2 pos, int hp, int coins, int score, List<DestroiedTiles> destroiedTiles,
                          List<DestroiedTiles> destroiedMineralTiles,
                          List<DestroiedTiles> destroiedRockTiles,
                          List<UserInventoryItemDto> inv, List<UserShortCutItemDto> sc,
@@ -86,6 +86,7 @@ public class GameManager : MonoBehaviour
     {
         _data.hp = hp;
         _data.coins = coins;
+        _data.score = score;
         _data.destroiedTiles = destroiedTiles;
         _data.destroiedMineralTiles = destroiedMineralTiles;
         _data.destroiedRockTiles = destroiedRockTiles;
@@ -125,33 +126,11 @@ public class GameManager : MonoBehaviour
                 _data.equippedHelmetId, _data.equippedBootsId, _data.equippedDrillId
             );
         }
+        _ui.score = _data.score;
         _tileManager.LoadDestroiedTiles(_data.destroiedTiles);
         _mineralTile.LoadDestroiedTiles(_data.destroiedMineralTiles);
         _rockTile.LoadDestroiedTiles(_data.destroiedRockTiles);
         yield return null;
-    }
-    public bool IsBoughtExpandBag1() { return _data.boughtExpandBag1; }
-    public bool IsBoughtExpandBag2() { return _data.boughtExpandBag2; }
-
-    public void SetBoughtExpandBag1()
-    {
-        if (!_data.boughtExpandBag1)
-        {
-            _data.boughtExpandBag1 = true;
-            SaveJSON();
-            Debug.Log("[GameManager] Bought ExpandBag1");
-        }
-    }
-
-
-    public void SetBoughtExpandBag2()
-    {
-        if (!_data.boughtExpandBag2)
-        {
-            _data.boughtExpandBag2 = true;
-            SaveJSON();
-            Debug.Log("[GameManager] Bought ExpandBag2");
-        }
     }
 
     public void SetCoins(int newCoinCount)
