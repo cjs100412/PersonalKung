@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class RunState : IState
 {
-    float _playerSpeed = 2;
     Player player;
 
     public RunState(Player player)
@@ -23,7 +22,7 @@ public class RunState : IState
     {
         // 드릴 활성화 여부에 따라 이동 애니메이션을 제어하는 로직은 제거 (각 드릴 상태에서 이동 애니메이션을 끄는 것이 더 적절)
 
-        player.rigid.linearVelocity = new Vector2(player.moveInput.x * _playerSpeed, player.rigid.linearVelocity.y);
+        player.rigid.linearVelocity = new Vector2(player.moveInput.x * player.playerStats.movementSpeed * Time.deltaTime * 100, player.rigid.linearVelocity.y);
 
         // 회전 로직은 Player 클래스나 별도의 이동 로직에서 처리하는 것을 권장
         if (player.moveInput.x > 0)
