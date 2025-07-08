@@ -1365,7 +1365,6 @@ RectTransform:
   - {fileID: 2047732718}
   - {fileID: 559650014}
   - {fileID: 850797175}
-  - {fileID: 3653814090987395309}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -7118,7 +7117,7 @@ GameObject:
   - component: {fileID: 850797177}
   - component: {fileID: 850797176}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Bill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7145,6 +7144,7 @@ RectTransform:
   - {fileID: 1465314003}
   - {fileID: 181241688}
   - {fileID: 754284974}
+  - {fileID: 3653814090987395309}
   m_Father: {fileID: 194280806}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
@@ -10621,7 +10621,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -37402,7 +37402,7 @@ GameObject:
   - component: {fileID: 7677100189453859306}
   - component: {fileID: 5323328148267872596}
   m_Layer: 0
-  m_Name: 1 1
+  m_Name: PlayerLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37570,9 +37570,11 @@ MonoBehaviour:
   _playerRigid: {fileID: 2882545759769678278}
   _playerColider: {fileID: 5569804128665510877}
   _damageAnimator: {fileID: 2697535991754863524}
+  _playerDieAnimator: {fileID: 0}
   _damageObject: {fileID: 1128286131509152170}
   _headObject: {fileID: 3000711295841330400}
   _bodyObject: {fileID: 4588654153736021542}
+  _playerDieObject: {fileID: 0}
   _inventoryServiceLocator: {fileID: 11400000, guid: 9e305352b541900459714187f962477e, type: 2}
   _shortCutServiceLocator: {fileID: 11400000, guid: 60f34f62b51a8434b924e38f0bb70ccf, type: 2}
   _itemServiceLocator: {fileID: 11400000, guid: c0e7431e0933d3b4da50bc33bd4bc5d6, type: 2}
@@ -39717,11 +39719,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 194280806}
+  m_Father: {fileID: 850797175}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1280, y: -450}
+  m_AnchoredPosition: {x: 280, y: -450}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3663765313950509272
@@ -97105,7 +97107,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 5
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -117934,7 +117936,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: f64a4387e350e6e48ab45c1fb1eb40a9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -125975,7 +125977,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -4450922710188175957, guid: 89be146963dbb4b488169bdce5c2f30f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -126826,7 +126828,7 @@ GameObject:
   - component: {fileID: 4509404184955357393}
   - component: {fileID: 2403902704323848534}
   m_Layer: 5
-  m_Name: Text (TMP) (2)
+  m_Name: BillTotal (Text)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -127922,12 +127924,12 @@ Transform:
   - {fileID: 1764328130185568863}
   - {fileID: 6060012705745614430}
   - {fileID: 1423136308917769351}
+  - {fileID: 7674296712291897658}
   - {fileID: 192019937205736442}
   - {fileID: 7280821780126867454}
   - {fileID: 3819334773758387916}
   - {fileID: 6905159080553819909}
   - {fileID: 5385089638157784168}
-  - {fileID: 7674296712291897658}
   - {fileID: 5204708961140592883}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
