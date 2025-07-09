@@ -22,7 +22,7 @@ public class TitleManager : MonoBehaviour
         if (File.Exists(_savePath))
             File.Delete(_savePath);
 
-        SceneManager.LoadScene("LoadingScene");
+        SceneManager.LoadScene("OpeningScene");
     }
 
     public void OnGameLoadButtonClick()
@@ -54,7 +54,7 @@ public class TitleManager : MonoBehaviour
         else
         {
             File.Delete(_savePath);
-            SceneManager.LoadScene("LoadingScene");
+            SceneManager.LoadScene("OpeningScene");
         }
     }
 

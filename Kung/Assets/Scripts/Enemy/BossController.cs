@@ -2,27 +2,33 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class BossController : MonoBehaviour
+public class BossController : MonoBehaviour,IDamageable
 {
     public Animator animator;
     public Transform player;
     public Transform spawner;
-
+    [SerializeField] private GameObject _damageZone;
+    [SerializeField] private Image _bossEnergyBar;
     [Header("패턴 ScriptableObject")]
     public List<ScriptableObject> patternSOs;
 
     List<IBossPattern> patterns;
     public bool isBusy;
 
-    Health health;
-    private int _maxhp = 300;
+    const int DestroyTime = 5;
 
+    [HideInInspector] public Health hp;
+    private int _maxhp = 600;
+
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+    private float _blinkDuration = 0.2f;
     void Awake()
     {
-        health = Health.New(_maxhp, _maxhp);
+        hp = Health.New(_maxhp, _maxhp);
 
-        // SO리스트에서 IBossPattern 인터페이스를 구현한것들만 patterns에 넣는다
         patterns = new List<IBossPattern>();
 
         foreach (ScriptableObject so in patternSOs)
@@ -36,14 +42,21 @@ public class BossController : MonoBehaviour
 
     void Update()
     {
+        if (hp.Amount <= 0)
+        {
+            _bossEnergyBar.fillAmount = 0f;
+        }
+        else
+        {
+            _bossEnergyBar.fillAmount = Mathf.InverseLerp(0f, _maxhp, hp.Amount);
+        }
         if (isBusy)
         {
             return;
         }
-         if (health.IsDead) return;
+        if (hp.IsDead) return;
 
         var tempList = new List<IBossPattern>();
-        //패턴들 중 실행 가능한 패턴들만을 리스트에 담고 배열로 변환한다
         foreach (var pattern in patterns)
         {
             if (pattern.CanExecute(this, player))
@@ -56,16 +69,28 @@ public class BossController : MonoBehaviour
 
         if (available.Length == 0) return;
 
-        // 실행 가능한 패턴들 중, ISpawnPattern이 있으면 스폰 위치를 설정해준다
         foreach (IBossPattern pattern in available)
         {
             if (pattern is ISpawnPattern spawnPat)
                 spawnPat.SetSpawnPoint(spawner);
         }
 
-        // 무작위로 패턴 하나 선택 후 실행
         var choice = available[Random.Range(0, available.Length)];
         StartCoroutine(RunPattern(choice));
+    }
+    private IEnumerator DamageBlink()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            Color color = _spriteRenderer.color;
+            color = new Color(1, 1, 1, 0.5f);
+            _spriteRenderer.color = color;
+            yield return new WaitForSeconds(_blinkDuration);
+
+            color = new Color(1, 1, 1, 1);
+            _spriteRenderer.color = color;
+            yield return new WaitForSeconds(_blinkDuration);
+        }
     }
     IEnumerator RunPattern(IBossPattern pattern)
     {
@@ -73,5 +98,36 @@ public class BossController : MonoBehaviour
         yield return StartCoroutine(pattern.Execute(this, player));
         yield return new WaitForSeconds(0.2f);
         isBusy = false;
+    }
+    public void TakeDamage(int amount)
+    {
+        if (hp.IsDead) return;
+
+        hp = hp.TakeDamage(amount);
+
+        StartCoroutine(DamageBlink());
+
+        if (hp.IsDead)
+        {
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        animator.SetTrigger("isDead");
+
+        Destroy(_damageZone);
+        Vector2 TreasureChestPosition = transform.position;
+
+        Destroy(gameObject, DestroyTime);
+        StartCoroutine(EndingScene());
+    }
+
+    IEnumerator EndingScene()
+    {
+        yield return new WaitForSeconds(4f);
+        Debug.Log("EndingScene가즈아");
+        SceneManager.LoadScene("EndingScene");
     }
 }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class UISpriteAnimator : MonoBehaviour
 {
@@ -10,8 +11,6 @@ public class UISpriteAnimator : MonoBehaviour
 
     private int currentIndex = 0;
     private Coroutine animCoroutine;
-
-
 
     private void OnEnable()
     {

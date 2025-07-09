@@ -17,10 +17,10 @@ public class ThreeSecondBOOM : MonoBehaviour
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 0.3f, LayerMask.GetMask("Enemy"));
         foreach (Collider2D col in hits)
         {
-            var enemy = col.GetComponent<NormalMonsterHealth>();
-            if (enemy != null)
+            var damageable = col.GetComponent<IDamageable>();
+            if (damageable != null)
             {
-                enemy.TakeDamage(damage);
+                damageable.TakeDamage(damage);
             }
         }
         SoundManager.Instance.PlaySFX(SFX.Bomb);
