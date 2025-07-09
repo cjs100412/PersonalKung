@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class NormalMonsterHealth : MonoBehaviour
 {
-    
+    [Header("몬스터 고유 ID")]
+    public string monsterID;
+
     private int _maxHp = 30;
 
     public Health hp;
@@ -11,6 +13,7 @@ public class NormalMonsterHealth : MonoBehaviour
     public Animator animator;
     [SerializeField] private GameObject _treasureChest;
     [SerializeField] private GameObject _damageZone;
+    [SerializeField] private GameManagerSO _gameManagerSO;
     const float TreasureChestOffset = 0.07f;
     const int DestroyTime = 2;
 
@@ -18,7 +21,14 @@ public class NormalMonsterHealth : MonoBehaviour
     {
         hp = Health.New(_maxHp, _maxHp);
     }
-
+    private void Start()
+    {
+        if (_gameManagerSO.GameManager.IsMonsterCollected(monsterID))
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
     private void Update()
     {
         if (hp.IsDead) return;
@@ -50,6 +60,7 @@ public class NormalMonsterHealth : MonoBehaviour
         Vector2 TreasureChestPosition = transform.position;
         TreasureChestPosition.y -= TreasureChestOffset;
         Instantiate(_treasureChest, TreasureChestPosition, Quaternion.identity);
+        _gameManagerSO.GameManager.SetMonsterCollected(monsterID);
 
         Destroy(gameObject, DestroyTime);
     }
