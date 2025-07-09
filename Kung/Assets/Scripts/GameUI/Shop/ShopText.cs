@@ -58,6 +58,7 @@ public class ShopText : MonoBehaviour
     {
         if (_playerHealth.gold.IsEnough(_price))
         {
+            SoundManager.Instance.PlaySFX(SFX.Buyitem);
             _playerHealth.gold = _playerHealth.gold.RemoveGold(_price);
             if(id < 2000)
             {
@@ -72,6 +73,7 @@ public class ShopText : MonoBehaviour
         }
         else
         {
+            SoundManager.Instance.PlaySFX(SFX.Error);
             SetNotEnoughText();
         }
     }
@@ -89,13 +91,12 @@ public class ShopText : MonoBehaviour
         List<UserInventoryItemDto> items = _inventoryServiceLocator.Service.Items
             .Where(item => item.ItemId >= 3000)
             .ToList();
-        Debug.Log("1");
         if (items.Count <= 0)
         {
+            SoundManager.Instance.PlaySFX(SFX.Buyitem);
             _mineralNotThingPanel.SetActive(true);
             return;
         }
-        Debug.Log("2");
 
         mineralDict.Clear();
         foreach (GameObject go in _billTexts)
@@ -104,7 +105,7 @@ public class ShopText : MonoBehaviour
         }
         _billImage.SetActive(true);
         _mineralSellPanel.SetActive(true);
-        Debug.Log("3");
+        SoundManager.Instance.PlaySFX(SFX.Exchange);
 
         items.Sort((a, b) => a.ItemId.CompareTo(b.ItemId));
 
@@ -119,7 +120,6 @@ public class ShopText : MonoBehaviour
                 mineralDict.Add(item.ItemId, item.Quantity);
             }
         }
-        Debug.Log("4");
 
         int index = 0;
         int totalPrice = 0;
@@ -135,11 +135,9 @@ public class ShopText : MonoBehaviour
             _billTexts[index].SetActive(true);
             index++;
         }
-        Debug.Log("5");
 
         _totalPrice.text = totalPrice.ToString() + " ₩";
         _totalPrice.gameObject.SetActive(true);
-        Debug.Log("6");
     }
 
     public void OnClickMineralSellButton()
