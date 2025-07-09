@@ -19,6 +19,7 @@ public class PlayerData
     public List<DestroiedTiles> destroiedTiles = new List<DestroiedTiles>();
     public List<DestroiedTiles> destroiedMineralTiles = new List<DestroiedTiles>();
     public List<DestroiedTiles> destroiedRockTiles = new List<DestroiedTiles>();
+    public List<string> DeadMonsterList = new List<string>();
 }
 
 public class GameManager : MonoBehaviour
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
     private MineralTile _mineralTile;
     private RockTile _rockTile;
     private HUD _ui;
+    [HideInInspector] public List<string> deadMonsterList;
 
     private void OnEnable()
     {
@@ -96,7 +98,8 @@ public class GameManager : MonoBehaviour
             shortCutItems = _shortCutServiceLocator.Service.Items,
             equippedHelmetId = 0,
             equippedBootsId = 0,
-            equippedDrillId = 0
+            equippedDrillId = 0,
+            DeadMonsterList = new List<string>()
         };
         File.WriteAllText(_savePath, JsonUtility.ToJson(_data, true));
         Debug.Log($"[GameManager] Default save created at {_savePath}");
@@ -106,7 +109,7 @@ public class GameManager : MonoBehaviour
                          List<DestroiedTiles> destroiedMineralTiles,
                          List<DestroiedTiles> destroiedRockTiles,
                          List<UserInventoryItemDto> inv, List<UserShortCutItemDto> sc,
-                         int helmId, int bootsId, int drillId)
+                         int helmId, int bootsId, int drillId, List<string> deadMonsterList)
     {
         _data.hp = hp;
         _data.coins = coins;
@@ -119,6 +122,7 @@ public class GameManager : MonoBehaviour
         _data.equippedHelmetId = helmId;
         _data.equippedBootsId = bootsId;
         _data.equippedDrillId = drillId;
+        _data.DeadMonsterList = deadMonsterList;
         File.WriteAllText(_savePath, JsonUtility.ToJson(_data, true));
         Debug.Log("[GameManager] Saved");
     }
@@ -154,17 +158,25 @@ public class GameManager : MonoBehaviour
         _tileManager.LoadDestroiedTiles(_data.destroiedTiles);
         _mineralTile.LoadDestroiedTiles(_data.destroiedMineralTiles);
         _rockTile.LoadDestroiedTiles(_data.destroiedRockTiles);
+        deadMonsterList = _data.DeadMonsterList;
         Time.timeScale = 1f;
         yield return null;
     }
 
-    public void SetCoins(int newCoinCount)
+    public bool IsMonsterCollected(string monsterID)
     {
-        _data.coins = newCoinCount;
-        SaveJSON();
-        Debug.Log($"[GameManager] Coins updated to: {newCoinCount}");
+        return deadMonsterList.Contains(monsterID);
     }
 
+
+    public void SetMonsterCollected(string monsterID)
+    {
+        if (!deadMonsterList.Contains(monsterID))
+        {
+            deadMonsterList.Add(monsterID);
+            Debug.Log($"[GameManager] Item collected recorded: {monsterID}");
+        }
+    }
 
     // JSON 갱신만 담당하는 내부 함수
     void SaveJSON()

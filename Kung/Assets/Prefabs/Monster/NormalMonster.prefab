@@ -264,9 +264,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a6758c22278cfa43bdc8f5326a5ff31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monsterID: 
   animator: {fileID: 1346398993427971147}
   _treasureChest: {fileID: 3466693552051006682, guid: af3e6d617d5674a44b0e568db8284563, type: 3}
   _damageZone: {fileID: 7833834319710177398}
+  _gameManagerSO: {fileID: 11400000, guid: 09b9fa12309b4e342bafe3bc8693912f, type: 2}
 --- !u!114 &880842109669353894
 MonoBehaviour:
   m_ObjectHideFlags: 0

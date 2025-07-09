@@ -30,7 +30,8 @@ public class SaveButton : MonoBehaviour
             _shortCutServiceLocator.Service.Items,
             _playerEquipment.equippedHelmet?.itemId ?? 0,
             _playerEquipment.equippedBoots?.itemId ?? 0,
-            _playerEquipment.equippedDrill?.itemId ?? 0
+            _playerEquipment.equippedDrill?.itemId ?? 0,
+            _gameManagerSO.GameManager.deadMonsterList
         );
         _SaveCheckPanel.gameObject.SetActive(true);
     }
