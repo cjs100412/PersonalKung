@@ -266,6 +266,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 1346398993427971147}
   _treasureChest: {fileID: 3466693552051006682, guid: af3e6d617d5674a44b0e568db8284563, type: 3}
+  _damageZone: {fileID: 7833834319710177398}
 --- !u!114 &880842109669353894
 MonoBehaviour:
   m_ObjectHideFlags: 0
