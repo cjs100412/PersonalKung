@@ -12,6 +12,7 @@ public class Drilling : MonoBehaviour
 {
     [Header("채굴 타일맵")]
     [SerializeField] private TileManager tileManager;
+    [SerializeField] private Tilemap _rockTileMap;
     private Tilemap _brokenableTilemap;
     
     [Header("미니맵 관련")]
@@ -28,6 +29,7 @@ public class Drilling : MonoBehaviour
     private int _surfaceY; 
 
     public LayerMask brokenTileLayer;
+    public LayerMask RockTileLayer;
     public float lastDrillTime;
     public float drillCoolTime;
     private int currentDrillDirection = int.MinValue;
@@ -76,19 +78,29 @@ public class Drilling : MonoBehaviour
     {
         Vector2 origin = transform.position;
         Vector2 direction = dir == 0 ? Vector2.down : (dir == 1 ? Vector2.right : Vector2.left);
-        return Physics2D.Raycast(origin, direction, 0.2f, brokenTileLayer);
+        bool brokenTileHit = Physics2D.Raycast(origin, direction, 0.2f, brokenTileLayer);
+        bool rockTileHit = Physics2D.Raycast(origin, direction, 0.2f, RockTileLayer);
+        return brokenTileHit || rockTileHit;
     }
 
 
     public void ExecuteDrillAction(int dir)
     {
         Vector3Int cell = _brokenableTilemap.WorldToCell(transform.position);
+        Vector3Int rockcell = _rockTileMap.WorldToCell(transform.position);
         Vector3Int target = dir switch
         {
             -1 => new Vector3Int(cell.x - 1, cell.y), // 좌
             1 => new Vector3Int(cell.x + 1, cell.y),  // 우
             0 => new Vector3Int(cell.x, cell.y - 1),  // 아래
             _ => cell 
+        };
+        Vector3Int rockTarget = dir switch
+        {
+            -1 => new Vector3Int(rockcell.x - 1, rockcell.y), // 좌
+            1 => new Vector3Int(rockcell.x + 1, rockcell.y),  // 우
+            0 => new Vector3Int(rockcell.x, rockcell.y - 1),  // 아래
+            _ => rockcell
         };
 
         if (!_brokenableTilemap.HasTile(target))

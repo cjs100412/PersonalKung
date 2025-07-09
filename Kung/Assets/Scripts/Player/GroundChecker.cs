@@ -2,28 +2,20 @@ using UnityEngine;
 
 public class GroundChecker : MonoBehaviour
 {
-    [Tooltip("¶¥À¸·Î °£ÁÖÇÒ ³ë¸Ö º¤ÅÍÀÇ Y°ª ÃÖ¼Ò ÀÓ°èÄ¡ÀÔ´Ï´Ù.")]
-    [Range(0.5f, 1.0f)] // 0.5f´Â ¾à 60µµ, 1.0f´Â 0µµ¸¦ ÀÇ¹Ì
-    public float _groundNormalThreshold = 0.8f; // ¶¥À¸·Î °£ÁÖÇÒ ³ë¸Ö º¤ÅÍÀÇ Y°ª (0.7f ~ 1.0f »çÀÌ ±ÇÀå)
+    [Tooltip("ë•…ìœ¼ë¡œ ì¸ì‹í•  í‘œë©´ì˜ ìµœì†Œ Yì¶• ë²•ì„  ë²¡í„°ê°’ì…ë‹ˆë‹¤. (1ì— ê°€ê¹Œìš¸ìˆ˜ë¡ í‰í‰í•œ ë©´ë§Œ ë•…ìœ¼ë¡œ ì¸ì‹)")]
+    [Range(0.5f, 1.0f)]
+    public float _groundNormalThreshold = 0.8f;
 
-    private bool _isGrounded; // ÇöÀç ¶¥¿¡ ´ê¾ÆÀÖ´ÂÁö ¿©ºÎ
+    private bool _isGrounded;
 
-    // ¶¥¿¡ ´ê¾Ò´ÂÁö È®ÀÎÇÏ´Â ÇÁ·ÎÆÛÆ¼ (´Ù¸¥ ½ºÅ©¸³Æ®¿¡¼­ Á¢±Ù °¡´É)
     public bool IsGrounded
     {
         get { return _isGrounded; }
     }
 
-    void Start()
+    void FixedUpdate()
     {
-        // ÃÊ±âÈ­
         _isGrounded = false;
-    }
-
-    
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        CheckForGround(collision);
     }
 
     void OnCollisionStay2D(Collision2D collision)
@@ -31,39 +23,25 @@ public class GroundChecker : MonoBehaviour
         CheckForGround(collision);
     }
 
-    void OnCollisionExit2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        // Ãæµ¹ÀÌ ³¡³µÀ» ¶§, ¶¥¿¡¼­ ¶³¾îÁ³´Ù°í °¡Á¤ÇÒ ¼ö ÀÖ½À´Ï´Ù.
-        // ÇÏÁö¸¸ ¸¸¾à ¿©·¯ °³ÀÇ ContactPoint Áß ÇÏ³ª¸¸ ¶³¾îÁ®µµ ¹®Á¦°¡ µÉ ¼ö ÀÖÀ¸´Ï
-        // IsGrounded¸¦ true·Î À¯ÁöÇÏ´Â ´Ù¸¥ ·ÎÁ÷ÀÌ ÇÊ¿äÇÒ ¼ö ÀÖ½À´Ï´Ù.
-        // ¿©±â¼­´Â °£´ÜÇÏ°Ô ¸ğµç Ãæµ¹ÀÌ ³¡³ª¸é false·Î ¼³Á¤ÇÕ´Ï´Ù.
-        // º¸´Ù Á¤È®ÇÑ ·ÎÁ÷À» À§ÇØ¼­´Â OnCollisionStay¿¡¼­ Áö¼ÓÀûÀ¸·Î Ã¼Å©ÇÏ´Â °ÍÀÌ ÁÁ½À´Ï´Ù.
-        _isGrounded = false;
+        CheckForGround(collision);
     }
 
     void CheckForGround(Collision2D collision)
     {
-        // °¢ Ãæµ¹ ÁöÁ¡(ContactPoint)À» ¼øÈ¸ÇÕ´Ï´Ù.
+        if (_isGrounded) return;
+
         foreach (ContactPoint2D contact in collision.contacts)
         {
-            // Ãæµ¹ ÁöÁ¡ÀÇ ³ë¸Ö º¤ÅÍ¸¦ °¡Á®¿É´Ï´Ù.
-            Vector3 normal = contact.normal;
-
-            // ³ë¸Ö º¤ÅÍÀÇ Y°ªÀÌ groundNormalThresholdº¸´Ù Å©°Å³ª °°À¸¸é ¶¥À¸·Î °£ÁÖÇÕ´Ï´Ù.
-            // Vector3.Dot(normal, Vector3.up)Àº normal º¤ÅÍ¿Í À§ÂÊ ¹æÇâ º¤ÅÍ(0,1,0)ÀÇ ³»ÀûÀ» °è»êÇÕ´Ï´Ù.
-            // µÎ º¤ÅÍ°¡ °°Àº ¹æÇâÀ» °¡¸®Å³¼ö·Ï 1¿¡ °¡±î¿öÁö°í, ¼öÁ÷ÀÏ¼ö·Ï 0¿¡ °¡±î¿öÁı´Ï´Ù.
-            if (Vector3.Dot(normal, Vector3.up) >= _groundNormalThreshold)
+            if (Vector3.Dot(contact.normal, Vector3.up) >= _groundNormalThreshold)
             {
-                //Debug.Log("´êÀ½");
                 _isGrounded = true;
-                return; // ¶¥À» Ã£¾ÒÀ¸¹Ç·Î ´õ ÀÌ»ó È®ÀÎÇÒ ÇÊ¿ä°¡ ¾ø½À´Ï´Ù.
+                return; 
             }
         }
-        // ¸ğµç ContactPoint¸¦ È®ÀÎÇßÀ½¿¡µµ ¶¥À» Ã£Áö ¸øÇß´Ù¸é
-        _isGrounded = false;
     }
 
-    // µğ¹ö±×¿ë: ¿¡µğÅÍ¿¡¼­ ÇÃ·¹ÀÌÇÒ ¶§ ¶¥¿¡ ´ê¾Ò´ÂÁö ½Ã°¢ÀûÀ¸·Î È®ÀÎÇÒ ¼ö ÀÖ½À´Ï´Ù.
     void OnGUI()
     {
         GUI.color = _isGrounded ? Color.green : Color.red;
