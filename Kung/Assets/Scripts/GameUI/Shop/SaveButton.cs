@@ -12,6 +12,7 @@ public class SaveButton : MonoBehaviour
     [SerializeField] private ShortCutServiceLocatorSO _shortCutServiceLocator;
     [SerializeField] private GameManagerSO _gameManagerSO;
     [SerializeField] private HUD _ui;
+    [SerializeField] private GameObject _SaveCheckPanel;
 
     public void OnSaveButtonClick()
     {
@@ -31,5 +32,6 @@ public class SaveButton : MonoBehaviour
             _playerEquipment.equippedBoots?.itemId ?? 0,
             _playerEquipment.equippedDrill?.itemId ?? 0
         );
+        _SaveCheckPanel.gameObject.SetActive(true);
     }
 }

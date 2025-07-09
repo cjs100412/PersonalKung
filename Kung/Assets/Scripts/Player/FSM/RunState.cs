@@ -11,20 +11,21 @@ public class RunState : IState
 
     public void Enter()
     {
-        // ÀÌµ¿ ¾Ö´Ï¸ÞÀÌ¼Ç¸¸ Á¦¾î
+        // ì´ë™ ì• ë‹ˆë©”ì´ì…˜ë§Œ ì œì–´
         player.headAnimator.SetBool("Move", true);
         player.bodyAnimator.SetBool("Move", true);
-        player.PlayDrillSideAnim(false); // ÀÌµ¿ ½ÃÀÛ ½Ã µå¸± ¾Ö´Ï¸ÞÀÌ¼Ç ²ô±â
-        player.PlayDrillDownAnim(false); // ÀÌµ¿ ½ÃÀÛ ½Ã µå¸± ¾Ö´Ï¸ÞÀÌ¼Ç ²ô±â
+        //player.PlayDrillSideAnim(false); // ì´ë™ ì‹œìž‘ ì‹œ ë“œë¦´ ì• ë‹ˆë©”ì´ì…˜ ë„ê¸°
+        //player.PlayDrillDownAnim(false); // ì´ë™ ì‹œìž‘ ì‹œ ë“œë¦´ ì• ë‹ˆë©”ì´ì…˜ ë„ê¸°
     }
 
     public void Update()
     {
-        // µå¸± È°¼ºÈ­ ¿©ºÎ¿¡ µû¶ó ÀÌµ¿ ¾Ö´Ï¸ÞÀÌ¼ÇÀ» Á¦¾îÇÏ´Â ·ÎÁ÷Àº Á¦°Å (°¢ µå¸± »óÅÂ¿¡¼­ ÀÌµ¿ ¾Ö´Ï¸ÞÀÌ¼ÇÀ» ²ô´Â °ÍÀÌ ´õ ÀûÀý)
+        // ë“œë¦´ í™œì„±í™” ì—¬ë¶€ì— ë”°ë¼ ì´ë™ ì• ë‹ˆë©”ì´ì…˜ì„ ì œì–´í•˜ëŠ” ë¡œì§ì€ ì œê±° (ê° ë“œë¦´ ìƒíƒœì—ì„œ ì´ë™ ì• ë‹ˆë©”ì´ì…˜ì„ ë„ëŠ” ê²ƒì´ ë” ì ì ˆ)
 
-        player.rigid.linearVelocity = new Vector2(player.moveInput.x * player.playerStats.movementSpeed * Time.deltaTime * 100, player.rigid.linearVelocity.y);
+        player.rigid.linearVelocity = new Vector2(player.moveInput.x * player.playerStats.movementSpeed * Time.deltaTime * 50, player.rigid.linearVelocity.y);
 
-        // È¸Àü ·ÎÁ÷Àº Player Å¬·¡½º³ª º°µµÀÇ ÀÌµ¿ ·ÎÁ÷¿¡¼­ Ã³¸®ÇÏ´Â °ÍÀ» ±ÇÀå
+        // íšŒì „ ë¡œì§ì€ Player í´ëž˜ìŠ¤ë‚˜ ë³„ë„ì˜ ì´ë™ ë¡œì§ì—ì„œ ì²˜ë¦¬í•˜ëŠ” ê²ƒì„ ê¶Œìž¥
+        //player.gameObject.transform.Translate(new Vector2(player.moveInput.x * player.playerStats.movementSpeed * Time.deltaTime, 0),Space.World);
         if (player.moveInput.x > 0)
             player.transform.rotation = Quaternion.Euler(0, 180, 0);
         else if (player.moveInput.x < 0)
@@ -33,7 +34,6 @@ public class RunState : IState
 
     public void Exit()
     {
-        player.rigid.linearVelocity = new Vector2(0, player.rigid.linearVelocity.y);
         player.headAnimator.SetBool("Move", false);
         player.bodyAnimator.SetBool("Move", false);
     }

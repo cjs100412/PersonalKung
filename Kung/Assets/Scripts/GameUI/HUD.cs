@@ -3,6 +3,7 @@ using System;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class HUD : MonoBehaviour
@@ -20,6 +21,7 @@ public class HUD : MonoBehaviour
 
     public Transform enterTarget;
     [SerializeField] private InventoryUI _inventoryUI;
+    [SerializeField] private GameObject _playerDiePanel;
 
     private float _UIspeed = 0.5f;
     public void OnClickInventoryButton()
@@ -27,6 +29,17 @@ public class HUD : MonoBehaviour
         SoundManager.Instance.PlaySFX(SFX.InventoryOpen);
         _inventoryUI.transform.DOLocalMove(enterTarget.localPosition, _UIspeed);
         _inventoryUI.Refresh();
+    }
+
+    public void OnMenuButton()
+    {
+        _playerDiePanel.gameObject.SetActive(false);
+        SceneManager.LoadScene("TitleScene");
+    }
+    public void OnLoadButton()
+    {
+        _playerDiePanel.gameObject.SetActive(false);
+        SceneManager.LoadScene("LoadingScene");
     }
 
     private void Update()

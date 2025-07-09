@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Unity.Burst.Intrinsics;
 
 [System.Serializable]
 public class PlayerData
@@ -45,6 +46,11 @@ public class GameManager : MonoBehaviour
     {
         if (scene.name == "KungGameScene")
         {
+            _tileManager = FindAnyObjectByType<TileManager>();
+            _mineralTile = FindAnyObjectByType<MineralTile>();
+            _rockTile = FindAnyObjectByType<RockTile>();
+            _ui = FindAnyObjectByType<HUD>();
+
             LoadGame();
         }
     }
