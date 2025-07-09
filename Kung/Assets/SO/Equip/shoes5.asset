@@ -15,7 +15,7 @@ MonoBehaviour:
   equipmentType: 2
   itemId: 2305
   movementSpeed: 2.5
-  bosterSpeed: 25
+  bosterSpeed: 12
   defance: 0
   drillDamage: 0
   airCapacity: 0
@@ -23,8 +23,8 @@ MonoBehaviour:
   headMoveAni: {fileID: 0}
   headSmileAni: {fileID: 0}
   headDamageAni: {fileID: 0}
-  bodyIdleAni: {fileID: 7400000, guid: 6938177acea0c9f438e509741ff4f319, type: 2}
-  bodyMoveAni: {fileID: 7400000, guid: edda0504cac98774199d6155d2e129d3, type: 2}
+  bodyIdleAni: {fileID: 7400000, guid: a12ca6a2a10b9c045a3c48afe54aad37, type: 2}
+  bodyMoveAni: {fileID: 7400000, guid: 22170750ca436bf42bd6386aeb9e35d0, type: 2}
   bodyStopAni: {fileID: 7400000, guid: fb062ef66d492224bb4ca0565c96611b, type: 2}
   drillMoveAni: {fileID: 0}
   drillDownAni: {fileID: 0}

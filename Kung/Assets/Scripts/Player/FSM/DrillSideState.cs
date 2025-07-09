@@ -21,9 +21,6 @@ public class DrillSideState : IState
         SoundManager.Instance.PlaySFX(SFX.Drilling);
         player.impulseSource.GenerateImpulse();
         player.drilling.StartDrilling((int)player.moveInput.x);
-        // 드릴 시작 시 이동 애니메이션 끄기
-        //player.headAnimator.SetBool("Move", true);
-        //player.bodyAnimator.SetBool("Move", true);
         player.bodyAnimator.SetBool("isDrilling", true);
 
     }

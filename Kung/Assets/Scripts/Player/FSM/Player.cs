@@ -63,6 +63,7 @@ void Update()
 
         if (playerHealth.isDamaged)
         {
+            _moveStateMachine.ChangeState(new IdleState(this));
             return;
         }
         _moveStateMachine.Update();

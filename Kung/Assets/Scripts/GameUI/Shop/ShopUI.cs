@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class ShopUI : MonoBehaviour
@@ -22,7 +23,7 @@ public class ShopUI : MonoBehaviour
     [SerializeField] private GameObject _mineralSellPanel;
     [SerializeField] private GameObject _mineralNotThingSellPanel;
     [SerializeField] private GameObject _mineralBillImange;
-
+    [SerializeField] private GameObject _mineralBillTotalText;
 
     private Coroutine _shopOpenCoroutine; 
     private bool _isPlayerInsideTrigger = false; 
@@ -44,6 +45,7 @@ public class ShopUI : MonoBehaviour
         //playerMovement.IsMovementLocked = false;
         _isPlayerInsideTrigger = false;
         _inventoryUIQuitButton.SetActive(true);
+        _mineralBillTotalText.SetActive(false);
     }
 
 

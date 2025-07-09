@@ -30,6 +30,6 @@ public class BoostState : IState
             player.rigid.AddForce(Vector2.up * player.playerStats.boosterSpeed * Time.deltaTime * 50 , ForceMode2D.Force);
         }
         player.glowOutlineObj.transform.rotation = Quaternion.identity;
-        player.rigid.linearVelocity = new Vector2(player.moveInput.x * player.playerStats.movementSpeed * 50 * Time.deltaTime, player.rigid.linearVelocity.y);
+        player.rigid.linearVelocity = new Vector2(player.moveInput.x * player.playerStats.movementSpeed * 70 * Time.deltaTime, player.rigid.linearVelocity.y);
     }
 }

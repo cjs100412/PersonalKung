@@ -16856,7 +16856,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1554642044
 RectTransform:
   m_ObjectHideFlags: 0
@@ -41722,7 +41722,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1119193005122889934
 GameObject:
   m_ObjectHideFlags: 0
@@ -134363,6 +134363,7 @@ MonoBehaviour:
   _mineralSellPanel: {fileID: 930779193}
   _mineralNotThingSellPanel: {fileID: 567422573}
   _mineralBillImange: {fileID: 850797174}
+  _mineralBillTotalText: {fileID: 8430995455108780425}
 --- !u!95 &9194987711842007461
 Animator:
   serializedVersion: 7
