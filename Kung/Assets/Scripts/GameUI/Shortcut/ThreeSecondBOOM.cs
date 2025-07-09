@@ -9,6 +9,7 @@ public class ThreeSecondBOOM : MonoBehaviour
 
     void Start()
     {
+        SoundManager.Instance.PlaySFX(SFX.Bombinstall);
         Destroy(gameObject, 2);
     }
 

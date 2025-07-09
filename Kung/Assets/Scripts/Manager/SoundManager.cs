@@ -14,13 +14,14 @@ public enum SOUND_TYPE
 
 public enum BGM
 {
-    Title, InGame, bossbgm
+    Title, InGame, bossbgm, Shop
 }
 
 public enum SFX
 {
     PlayerDamaged, PlayerDead, NormalMonsterDead, BossMonsterDead, Bomb, Dynamite, InventoryOpen, InventoryClose,
-    Drilling, Mineral
+    Drilling, Mineral, Buyitem, Medicbox, Special,Airgage,Exchange,Error,
+    Warning,Bombinstall
 }
 
 [Serializable]

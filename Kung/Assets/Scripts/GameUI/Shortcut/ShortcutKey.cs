@@ -99,6 +99,7 @@ public class ShortcutKey : MonoBehaviour
         {
             _shortCutServiceLocator.Service.RemoveShortCutItemQuantity(1001);
             _playerHealth.hp = _playerHealth.hp.Heal(_playerHealth.MaxHp);
+            SoundManager.Instance.PlaySFX(SFX.Medicbox);
             Refresh();
         }
     }

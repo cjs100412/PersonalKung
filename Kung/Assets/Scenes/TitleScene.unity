@@ -317,6 +317,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 80c154de155f7b344a8806e174ab225b, type: 3}
   - type: 2
     clip: {fileID: 8300000, guid: f46be11f41186fa499274850256a989d, type: 3}
+  - type: 3
+    clip: {fileID: 8300000, guid: 35bd3970a45424e4b85583fe07ab9988, type: 3}
   sfx_list:
   - type: 6
     clip: {fileID: 8300000, guid: 85d66ec3bbb3e874d88a3613901afa2d, type: 3}
@@ -334,6 +336,16 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: f06b73441de27bb4b9ebed3414735673, type: 3}
   - type: 2
     clip: {fileID: 8300000, guid: 5e89c5d1789cfb14080ae48bfa778df6, type: 3}
+  - type: 17
+    clip: {fileID: 8300000, guid: 4bf080be41d61a3459e32df364c26831, type: 3}
+  - type: 11
+    clip: {fileID: 8300000, guid: dcc9a2b11bdc8254e9e12ae2ce31740f, type: 3}
+  - type: 10
+    clip: {fileID: 8300000, guid: ff7e0e33ee961774f85c93acbc8ce37f, type: 3}
+  - type: 14
+    clip: {fileID: 8300000, guid: 57b3e3e103519e841846480f579227d7, type: 3}
+  - type: 15
+    clip: {fileID: 8300000, guid: 9b24e03bd36bf8d4a9a85f199628a44d, type: 3}
   bgm_slider: {fileID: 940365796}
   sfx_slider: {fileID: 335732415}
   bgm_toggle: {fileID: 56925706}
