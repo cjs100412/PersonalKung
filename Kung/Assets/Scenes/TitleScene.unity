@@ -332,6 +332,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 9f2a163af1956ce4a84f512738007323, type: 3}
   - type: 9
     clip: {fileID: 8300000, guid: f06b73441de27bb4b9ebed3414735673, type: 3}
+  - type: 2
+    clip: {fileID: 8300000, guid: 5e89c5d1789cfb14080ae48bfa778df6, type: 3}
   bgm_slider: {fileID: 940365796}
   sfx_slider: {fileID: 335732415}
   bgm_toggle: {fileID: 56925706}
@@ -3143,7 +3145,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.01416, y: 151.52}
+  m_AnchoredPosition: {x: 0.01416, y: 83}
   m_SizeDelta: {x: 1208.9, y: 303.0442}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1127165662
@@ -3166,13 +3168,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'File is Exist
-
-
-    Do you still want to do it?'
+  m_text: "\uC138\uC774\uBE0C\uD30C\uC77C\uC774 \uC874\uC7AC\uD569\uB2C8\uB2E4.\n\uC0C8\uB85C
+    \uC2DC\uC791\uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C?\n(\uC138\uC774\uBE0C \uD30C\uC77C\uC774
+    \uC0AD\uC81C\uB429\uB2C8\uB2E4.)"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: db5bd25d8e0bfaa488eb12db8865862b, type: 2}
+  m_sharedMaterial: {fileID: 158164139886110823, guid: db5bd25d8e0bfaa488eb12db8865862b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3196,8 +3197,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 80
-  m_fontSizeBase: 80
+  m_fontSize: 70
+  m_fontSizeBase: 70
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3491,7 +3492,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d150c22b91306284d8a0e1f87d394c2e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a60685562d4b4ab46a69e785d35c5463, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3605,10 +3606,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 3120, y: 1440}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -3941,7 +3942,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.01416, y: 151.52}
+  m_AnchoredPosition: {x: 0.01416, y: 80}
   m_SizeDelta: {x: 1208.9, y: 303.0442}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1451075045
@@ -3964,10 +3965,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: There is no Save File
+  m_text: "\uC138\uC774\uBE0C \uD30C\uC77C\uC774 \uC5C6\uC2B5\uB2C8\uB2E4."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: db5bd25d8e0bfaa488eb12db8865862b, type: 2}
+  m_sharedMaterial: {fileID: 158164139886110823, guid: db5bd25d8e0bfaa488eb12db8865862b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4941,7 +4942,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d150c22b91306284d8a0e1f87d394c2e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a60685562d4b4ab46a69e785d35c5463, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

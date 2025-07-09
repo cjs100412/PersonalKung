@@ -15,18 +15,18 @@ public class PlayerHealth : MonoBehaviour
     private bool _isAirDecrease;
     private bool _isHpDecrease;
 
-    private const float _decreaseAirTime0 = 2f;
-    private const float _decreaseAirTime1 = 1.8f;
-    private const float _decreaseAirTime2 = 1.6f;
-    private const float _decreaseAirTime3 = 1.3f;
-    private const float _decreaseAirTime4 = 1.0f;
-    private const float _decreaseAirTime5 = 0.7f;
-    private const float _decreaseAirTime6 = 0.5f;
+    private const float _decreaseAirTime0 = 1.5f;
+    private const float _decreaseAirTime1 = 1.3f;
+    private const float _decreaseAirTime2 = 1.1f;
+    private const float _decreaseAirTime3 = 0.9f;
+    private const float _decreaseAirTime4 = 0.7f;
+    private const float _decreaseAirTime5 = 0.5f;
+    private const float _decreaseAirTime6 = 0.3f;
 
     private const float _hpDecreaseInterval = 0.2f;
 
     private bool _isInvincible;
-    private float _invincibleTime = 1.0f;
+    private float _invincibleTime = 2.5f;
 
     [HideInInspector] public bool isDamaged;
 
@@ -238,25 +238,20 @@ public class PlayerHealth : MonoBehaviour
     public void Respawn(int savedhp,int savedcoin, List<UserInventoryItemDto> savedInventoryItems, List<UserShortCutItemDto> savedShortCutItems,
                         int equippedHelmetId, int equippedBootsId, int equippedDrillId)
     {
-        // 위치 복원
         transform.position = new Vector3(-1, 0.1f, 0);
 
-        // 회전/스케일 초기화 (바닥에 똑바로 세우기)
         transform.rotation = Quaternion.identity;
         var ls = transform.localScale;
         ls.y = Mathf.Abs(ls.y);
         transform.localScale = ls;
 
-        // 물리 충돌 복원
         _playerColider.enabled = true;
         _playerRigid.simulated = true;
-        _playerRigid.linearVelocity = Vector2.zero;  // 이전 관성 제거
+        _playerRigid.linearVelocity = Vector2.zero;
 
-        // 이동 스크립트 재활성화
         var pm = GetComponent<Player>();
         if (pm != null) pm.enabled = true;
 
-        // 각종 상태 복원
         hp = Health.New(savedhp, _maxhp);
         gold = Gold.New(savedcoin);
         _inventoryServiceLocator.Service.SetItems(savedInventoryItems);
@@ -294,7 +289,6 @@ public class PlayerHealth : MonoBehaviour
         _inventoryUI.Refresh();
         _shortcutKey.Refresh();
 
-        // 애니메이터 상태 리셋
         _headAnimator.ResetTrigger("isDead");
         _bodyAnimator.ResetTrigger("isDead");
         _headAnimator.Play("Idle");

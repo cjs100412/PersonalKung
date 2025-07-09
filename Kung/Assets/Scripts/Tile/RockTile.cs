@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 
 public class RockTile : MonoBehaviour
 {
-    public Tilemap _miniMapRockTile;
+    [HideInInspector] public Tilemap _miniMapRockTile;
 
     [SerializeField] private Tilemap _rockTile;
 

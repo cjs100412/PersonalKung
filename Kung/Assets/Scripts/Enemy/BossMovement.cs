@@ -11,7 +11,7 @@ public class BossMovement : MonoBehaviour
 
     void Update()
     {
-        //if (_bossController.isBusy) return;
+        if (_bossController.hp.IsDead) return;
 
         Vector2 dist = _playerTransform.position - transform.position;
 

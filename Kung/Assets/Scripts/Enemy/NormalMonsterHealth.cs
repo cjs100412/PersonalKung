@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class NormalMonsterHealth : MonoBehaviour
+public class NormalMonsterHealth : MonoBehaviour ,IDamageable
 {
     [Header("몬스터 고유 ID")]
     public string monsterID;
@@ -61,7 +61,7 @@ public class NormalMonsterHealth : MonoBehaviour
         TreasureChestPosition.y -= TreasureChestOffset;
         Instantiate(_treasureChest, TreasureChestPosition, Quaternion.identity);
         _gameManagerSO.GameManager.SetMonsterCollected(monsterID);
-
+        SoundManager.Instance.PlaySFX(SFX.NormalMonsterDead);
         Destroy(gameObject, DestroyTime);
     }
 }
