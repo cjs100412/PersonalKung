@@ -5,7 +5,7 @@ public class PlayerEquipment : MonoBehaviour
 {
     [HideInInspector] public EquipmentData equippedHelmet;
     [HideInInspector] public EquipmentData equippedBoots;
-    public EquipmentData equippedDrill;
+    [HideInInspector] public EquipmentData equippedDrill;
 
     [SerializeField] TextMeshProUGUI drillDamageText;
     [SerializeField] TextMeshProUGUI moveMentSpeedText;

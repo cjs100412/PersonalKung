@@ -43373,7 +43373,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   lastDrillTime: 0
-  drillCoolTime: 0.01
+  drillCoolTime: 0.03
   isDrilling: 0
 --- !u!1 &2794148823173477900
 GameObject:
