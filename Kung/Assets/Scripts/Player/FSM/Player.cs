@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private GroundChecker groundChecker;
+    public GroundChecker groundChecker;
 
     public CinemachineImpulseSource impulseSource;
 
@@ -65,6 +65,7 @@ public class Player : MonoBehaviour
 
 void Update()
     {
+
         if (playerHealth.isDamaged)
         {
             return;
@@ -72,22 +73,21 @@ void Update()
         _moveStateMachine.Update();
         _drillStateMachine.Update();
 
-        if (_isDirectionMoving) return;
+        //if (_isDirectionMoving) return;
 
-        //if (Input.GetKey(KeyCode.UpArrow))
-        //{
-        //    Debug.Log("Up Arrow Pressed");
-        //    isBoost = true;
-        //    if (!(_moveStateMachine.CurrentState is BoostState))
-        //        _moveStateMachine.ChangeState(new BoostState(this));
-        //    _drillStateMachine.ChangeState(new DrillOffState(this));
-        //}
-        //if (Input.GetKeyUp(KeyCode.UpArrow))
+        if (isBoost)
+        {
+            Debug.Log("Up Arrow Pressed");
+            if (!(_moveStateMachine.CurrentState is BoostState))
+                _moveStateMachine.ChangeState(new BoostState(this));
+            _drillStateMachine.ChangeState(new DrillOffState(this));
+        }
+        //else if (!isBoost)
         //{
         //    if (!(_moveStateMachine.CurrentState is IdleState))
-        //    _moveStateMachine.ChangeState(new IdleState(this));
+        //        _moveStateMachine.ChangeState(new IdleState(this));
         //}
-        
+
 
         // === 입력 처리 ===
         //moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
@@ -101,15 +101,15 @@ void Update()
             {
                 _drillStateMachine.ChangeState(new DrillOffState(this));
             }
-            return;
         }
-        else
-        {
-            if (_moveStateMachine.CurrentState is FallingState)
-            {
-                _moveStateMachine.ChangeState(new IdleState(this));
-            }
-        }
+        //else
+        //{
+        //    if (!(_moveStateMachine.CurrentState is IdleState))
+        //    {
+        //        _moveStateMachine.ChangeState(new IdleState(this));
+        //    }
+
+        //}
 
         if (isBoost)
         {
@@ -136,14 +136,21 @@ void Update()
         }
 
         // === 드릴 FSM 상태 전이 ===
-        if (isDrillButtonDown)
+        if (isDrillButtonDown && !groundChecker.IsGrounded)
+        {
+            if (!(_drillStateMachine.CurrentState is DrillOffState))
+            {
+                _drillStateMachine.ChangeState(new DrillOffState(this));
+            }
+        }
+        else if(isDrillButtonDown && groundChecker.IsGrounded)
         {
             _drillDirection = (int)moveInput.x;
-            bool canDrillCurrentDirection = drilling.CanDrill(_drillDirection);
+            bool canDrillCurrentDirection = drilling.CanDrill((int)moveInput.x);
 
             if (canDrillCurrentDirection)
             {
-                if (_drillDirection == 0) // 아래 드릴
+                if (moveInput.x == 0) // 아래 드릴
                 {
                     if (!(_drillStateMachine.CurrentState is DrillDownState))
                     {
@@ -173,6 +180,8 @@ void Update()
                 _drillStateMachine.ChangeState(new DrillOffState(this));
             }
         }
+        
+        
 
 
     }
@@ -203,14 +212,11 @@ void Update()
     }
     private void HandleBoostInput()
     {
-        if (!(_moveStateMachine.CurrentState is BoostState))
-            _moveStateMachine.ChangeState(new BoostState(this));
-        _drillStateMachine.ChangeState(new DrillOffState(this));
+        isBoost = true;
     }
     private void HandleBoostRelease()
     {
-        if (!(_moveStateMachine.CurrentState is IdleState))
-            _moveStateMachine.ChangeState(new IdleState(this));
+        isBoost = false;
     }
     private void HandleDrillInput()
     {
@@ -220,44 +226,23 @@ void Update()
     {
         isDrillButtonDown = false;
     }
-
-
     private void HandleLeftInput()
     {
-        if(!(_moveStateMachine.CurrentState is RunState))
-        {
-            moveInput.x = -1f;
-            _moveStateMachine.ChangeState(new RunState(this));
-            _isDirectionMoving = true;
-        }
+        moveInput.x = -1f;
     }
 
     private void HandleRightInput()
     {
-        if (!(_moveStateMachine.CurrentState is RunState))
-        {
-            moveInput.x = 1f;
-            _moveStateMachine.ChangeState(new RunState(this));
-            _isDirectionMoving = true;
-        }
+        moveInput.x = 1f;
     }
 
     private void HandleLeftRelease()
     {
-        if(!(_moveStateMachine.CurrentState is IdleState)){
-            moveInput.x = 0f;
-            _moveStateMachine.ChangeState(new IdleState(this));
-            _isDirectionMoving = false;
-        }
+        moveInput.x = 0f; 
     }
     private void HandleRightRelease()
     {
-        if (!(_moveStateMachine.CurrentState is IdleState))
-        {
-            moveInput.x = 0f;
-            _moveStateMachine.ChangeState(new IdleState(this));
-            _isDirectionMoving = false;
-        }
+        moveInput.x = 0f;
     }
 
 

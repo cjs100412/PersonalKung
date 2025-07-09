@@ -18,10 +18,10 @@ public class DrillSideState : IState
     public void Enter()
     {
         player.PlayDrillSideAnim(true);
-        player.drilling.StartDrilling(direction);
         SoundManager.Instance.PlaySFX(SFX.Drilling);
         player.impulseSource.GenerateImpulse();
-        // µå¸± ½ÃÀÛ ½Ã ÀÌµ¿ ¾Ö´Ï¸ŞÀÌ¼Ç ²ô±â
+        player.drilling.StartDrilling((int)player.moveInput.x);
+        // ë“œë¦´ ì‹œì‘ ì‹œ ì´ë™ ì• ë‹ˆë©”ì´ì…˜ ë„ê¸°
         //player.headAnimator.SetBool("Move", true);
         //player.bodyAnimator.SetBool("Move", true);
         player.bodyAnimator.SetBool("isDrilling", true);

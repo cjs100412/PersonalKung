@@ -19,7 +19,7 @@ class FallingState : IState
     public void Exit()
     {
         Debug.Log("exit falling");
-        if (player.isBoost == false && dropDamageTime >= 0.5f)
+        if (player.isBoost == false && dropDamageTime >= 1f && player.groundChecker.IsGrounded)
         {
             Debug.Log("Player took fall damage");
             player.playerHealth.TakeDamage(20);
