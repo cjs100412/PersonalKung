@@ -43075,7 +43075,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   lastDrillTime: 0
-  drillCoolTime: 0.01
+  drillCoolTime: 0.03
   isDrilling: 0
 --- !u!224 &2835873483672681195
 RectTransform:
