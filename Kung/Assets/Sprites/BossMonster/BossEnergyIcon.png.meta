@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      BossEnergyIcon_0: -8139065601151589613
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
