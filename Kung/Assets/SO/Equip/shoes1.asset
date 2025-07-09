@@ -23,8 +23,8 @@ MonoBehaviour:
   headMoveAni: {fileID: 0}
   headSmileAni: {fileID: 0}
   headDamageAni: {fileID: 0}
-  bodyIdleAni: {fileID: 7400000, guid: ee3322c56e616724b83a464b0f0618c9, type: 2}
-  bodyMoveAni: {fileID: 7400000, guid: df5d269ebca0d334796a8945488388f7, type: 2}
+  bodyIdleAni: {fileID: 7400000, guid: 0e3b641650bbe90439d82e2b5b6edc4c, type: 2}
+  bodyMoveAni: {fileID: 7400000, guid: b169a0b3be71f554e9598526ee9c42ba, type: 2}
   bodyStopAni: {fileID: 7400000, guid: b169a0b3be71f554e9598526ee9c42ba, type: 2}
   drillMoveAni: {fileID: 0}
   drillDownAni: {fileID: 0}
