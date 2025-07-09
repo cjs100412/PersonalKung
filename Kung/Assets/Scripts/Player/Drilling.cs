@@ -16,7 +16,7 @@ public class Drilling : MonoBehaviour
     private Tilemap _brokenableTilemap;
     
     [Header("미니맵 관련")]
-    [SerializeField] private Tilemap _miniMapFrontTilemap;   
+    [HideInInspector] private Tilemap _miniMapFrontTilemap;   
     [SerializeField] private TextMeshProUGUI _depthText; 
     
     [Header("플레이어 연결")]
