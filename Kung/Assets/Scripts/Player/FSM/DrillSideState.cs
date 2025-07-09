@@ -17,7 +17,7 @@ public class DrillSideState : IState
     public void Enter()
     {
         player.PlayDrillSideAnim(true);
-        player.drilling.StartDrilling(direction);
+        player.drilling.StartDrilling((int)player.moveInput.x);
         // 드릴 시작 시 이동 애니메이션 끄기
         //player.headAnimator.SetBool("Move", true);
         //player.bodyAnimator.SetBool("Move", true);
