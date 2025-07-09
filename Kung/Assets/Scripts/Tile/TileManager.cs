@@ -41,7 +41,6 @@ public class TileManager : MonoBehaviour
     [HideInInspector] public List<DestroiedTiles> destroiedTiles;
     void Awake()
     {
-        Debug.Log("타일매니저 awake");
         Instantiate(backGroundTIleMap, par);
         Instantiate(backMiniMapTilemap, par);
         brokenableTilemap = Instantiate(brokenTileMap, par).GetComponent<Tilemap>();

@@ -23,8 +23,6 @@ public class ShopUI : MonoBehaviour
     [SerializeField] private GameObject _mineralNotThingSellPanel;
     [SerializeField] private GameObject _mineralBillImange;
 
-    //[SerializeField] private PlayerMovement playerMovement;
-
 
     private Coroutine _shopOpenCoroutine; 
     private bool _isPlayerInsideTrigger = false; 

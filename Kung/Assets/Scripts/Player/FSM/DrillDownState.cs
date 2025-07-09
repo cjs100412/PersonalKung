@@ -17,10 +17,7 @@ public class DrillDownState : IState
         player.drilling.StartDrilling(0);
         SoundManager.Instance.PlaySFX(SFX.Drilling);
         player.impulseSource.GenerateImpulse();
-        // 드릴 시작 시 이동 애니메이션 끄기
-        //player.headAnimator.enabled = false;
         player.headAnimator.SetBool("isDrilling", true);
-        //player.headSpriteRanderer.sprite = player.frontHeadDrillSprite;
         player.bodyAnimator.SetBool("Move", false);
     }
 
@@ -41,6 +38,5 @@ public class DrillDownState : IState
         player.PlayDrillDownAnim(false);
         player.headAnimator.SetBool("isDrilling", false);
         player.drilling.StopDrilling();
-        //player.headAnimator.enabled = true;
     }
 }

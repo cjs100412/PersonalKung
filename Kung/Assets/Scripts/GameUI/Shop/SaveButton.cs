@@ -16,8 +16,6 @@ public class SaveButton : MonoBehaviour
 
     public void OnSaveButtonClick()
     {
-        // 기존 SaveGame 로직도 호출
-        //GameManager.Instance.SaveGame(
         _gameManagerSO.GameManager.SaveGame(
             new Vector3(-1, 0.1f, 0),
             _playerHealth.hp.Amount,
