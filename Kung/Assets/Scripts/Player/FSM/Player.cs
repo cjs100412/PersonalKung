@@ -33,20 +33,15 @@ public class Player : MonoBehaviour
     private StateMachine _moveStateMachine;
     private StateMachine _drillStateMachine;
     private int _drillDirection = 0;
-    public const float maxFallSpeed = -4f;
+    public const float maxFallSpeed = -3f;
 
     public Vector2 moveInput;
     public float[,] tiles = new float[0,0];
     [HideInInspector] public bool isBoost;
     [HideInInspector] public bool isDrillButtonDown;
-    private bool _isDirectionMoving;
 
 
-    private float _horizontal = 0f;
 
-    public void OnLeftButtonDown() => _horizontal = -1f;
-    public void OnRightButtonDown() => _horizontal = 1f;
-    public void OnButtonUp() => _horizontal = 0f;
 
     void Start()
     {
@@ -73,24 +68,23 @@ void Update()
         _moveStateMachine.Update();
         _drillStateMachine.Update();
 
-        //if (_isDirectionMoving) return;
-
         if (isBoost)
         {
             Debug.Log("Up Arrow Pressed");
             if (!(_moveStateMachine.CurrentState is BoostState))
+            {
                 _moveStateMachine.ChangeState(new BoostState(this));
-            _drillStateMachine.ChangeState(new DrillOffState(this));
+
+            }
+            if (!(_drillStateMachine.CurrentState is DrillOffState))
+            {
+                _drillStateMachine.ChangeState(new DrillOffState(this));
+
+            }
         }
-        //else if (!isBoost)
-        //{
-        //    if (!(_moveStateMachine.CurrentState is IdleState))
-        //        _moveStateMachine.ChangeState(new IdleState(this));
-        //}
 
 
         // === 입력 처리 ===
-        //moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
         if (!isBoost && !groundChecker.IsGrounded)
         {
             if (!(_moveStateMachine.CurrentState is FallingState))
@@ -101,15 +95,8 @@ void Update()
             {
                 _drillStateMachine.ChangeState(new DrillOffState(this));
             }
+            return;
         }
-        //else
-        //{
-        //    if (!(_moveStateMachine.CurrentState is IdleState))
-        //    {
-        //        _moveStateMachine.ChangeState(new IdleState(this));
-        //    }
-
-        //}
 
         if (isBoost)
         {
@@ -150,7 +137,7 @@ void Update()
 
             if (canDrillCurrentDirection)
             {
-                if (moveInput.x == 0) // 아래 드릴
+                if (moveInput.x == 0) 
                 {
                     if (!(_drillStateMachine.CurrentState is DrillDownState))
                     {

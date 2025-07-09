@@ -3,25 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
-
-//public static class JsonHelper
-//{
-//    public static T[] FromJson<T>(string json)
-//    {
-//        string wrappedJson = "{\"array\":" + json + "}";
-//        Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(wrappedJson);
-//        return wrapper.array;
-//    }
-
-//    [Serializable]
-//    private class Wrapper<T>
-//    {
-//        public T[] array;
-//    }
-//}
-
-
 /// <summary>
 /// Json에서 불러온 데이터로 상점에 보여줄 아이템 버튼 생성과 버튼 클릭시 상호작용을 구현
 /// </summary>
@@ -50,7 +31,7 @@ public class ShopButton : MonoBehaviour
             int itemIndex = i;
             if (_shopItems[i].Category == "mineral")
             {
-                continue; // 광물 카테고리는 제외
+                continue; 
             }
             GameObject go = Instantiate(_shopButtonPrefab, buttonParent);
 

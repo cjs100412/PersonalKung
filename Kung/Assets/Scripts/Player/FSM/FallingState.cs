@@ -24,6 +24,7 @@ class FallingState : IState
             Debug.Log("Player took fall damage");
             player.playerHealth.TakeDamage(20);
         }
+
     }
 
     public void Update()
@@ -33,6 +34,7 @@ class FallingState : IState
         {
             player.rigid.linearVelocity = new Vector2(player.rigid.linearVelocity.x, Player.maxFallSpeed);
         }
-        player.rigid.linearVelocity = new Vector2(player.moveInput.x * player.playerStats.movementSpeed * 100 * Time.deltaTime, player.rigid.linearVelocity.y);
+        player.rigid.linearVelocity = new Vector2(player.moveInput.x * player.playerStats.movementSpeed * 50 * Time.deltaTime, player.rigid.linearVelocity.y);
+        
     }
 }
