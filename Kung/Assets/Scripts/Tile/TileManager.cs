@@ -41,6 +41,7 @@ public class TileManager : MonoBehaviour
     [HideInInspector] public List<DestroiedTiles> destroiedTiles;
     void Awake()
     {
+        Debug.Log("타일매니저 awake");
         Instantiate(backGroundTIleMap, par);
         Instantiate(backMiniMapTilemap, par);
         brokenableTilemap = Instantiate(brokenTileMap, par).GetComponent<Tilemap>();
@@ -53,8 +54,10 @@ public class TileManager : MonoBehaviour
 
         _rockTile._miniMapRockTile = Instantiate(miniMapRockTile, par).GetComponent<Tilemap>();
     }
-    private void Start()
+
+    public void LoadDestroiedTiles(List<DestroiedTiles> LoadDestroiedTiles)
     {
+        destroiedTiles = LoadDestroiedTiles;
         if (destroiedTiles != null)
         {
             foreach (DestroiedTiles tile in destroiedTiles)
@@ -64,10 +67,6 @@ public class TileManager : MonoBehaviour
                 miniMapFrontTilemap.SetTile(pos, null);
             }
         }
-    }
-    public void LoadDestroiedTiles(List<DestroiedTiles> LoadDestroiedTiles)
-    {
-        destroiedTiles = LoadDestroiedTiles;
     }
 
     /// <summary>

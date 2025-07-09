@@ -11,7 +11,7 @@ public class TreasureChest : MonoBehaviour
     [SerializeField] private Canvas _chestDialogCanvas;
     [SerializeField] private TextMeshProUGUI _chestDialogText;
     [SerializeField] private GameObject _chestObject;
-    [SerializeField] private PlayerHealth _playerHealth;
+    private PlayerHealth _playerHealth;
     private ShortcutKey _shortcutKey;
     private int randomNumber;
 
@@ -23,9 +23,9 @@ public class TreasureChest : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        _chestDialogCanvas.gameObject.SetActive(true);
         if (collision.CompareTag("Player"))
         {
+            _chestDialogCanvas.gameObject.SetActive(true);
             Debug.Log("Treasure Chest Open");
             spriteRenderer.sprite = _chestOpen;
             randomNumber = Random.Range(1001, 1007);
@@ -40,7 +40,7 @@ public class TreasureChest : MonoBehaviour
                 _chestDialogText.text = _inventoryRepository.Repository.FindById(randomNumber).DevName.ToString();
             }
             _shortcutKey.Refresh();
+            Destroy(_chestObject, 1f);
         }
-        Destroy(_chestObject, 1f);
     }
 }

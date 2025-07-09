@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
@@ -14,7 +15,14 @@ public class PlayerHealth : MonoBehaviour
     private bool _isAirDecrease;
     private bool _isHpDecrease;
 
-    private const float _decreaseAirTime = 3.0f;
+    private const float _decreaseAirTime0 = 2f;
+    private const float _decreaseAirTime1 = 1.8f;
+    private const float _decreaseAirTime2 = 1.6f;
+    private const float _decreaseAirTime3 = 1.3f;
+    private const float _decreaseAirTime4 = 1.0f;
+    private const float _decreaseAirTime5 = 0.7f;
+    private const float _decreaseAirTime6 = 0.5f;
+
     private const float _hpDecreaseInterval = 0.2f;
 
     private bool _isInvincible;
@@ -53,6 +61,8 @@ public class PlayerHealth : MonoBehaviour
 
     [SerializeField] private GameObject boostLight;
     [SerializeField] private GameObject _playerDiePanel;
+    [SerializeField] private TextMeshProUGUI _scoreText;
+    [SerializeField] private HUD _HUD;
 
     public int MaxHp => _maxhp;
     public int MaxAir
@@ -125,8 +135,9 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int amount)
     {
         if (hp.IsDead || _isInvincible) return;
-        boostLight.SetActive(false); 
-        hp = hp.TakeDamage(amount);
+        boostLight.SetActive(false);
+        int damage = amount - (int)_playerStats.defense;
+        hp = hp.TakeDamage(damage);
         if(hp.IsDead)
         {
             Die();  
@@ -155,7 +166,20 @@ public class PlayerHealth : MonoBehaviour
         _isAirDecrease = true;
         air = air.AirDecrease(1);
         Debug.Log($"현재 산소 :{air.Amount}");
-        yield return new WaitForSeconds(_decreaseAirTime);
+        if (transform.position.y < -180)
+            yield return new WaitForSeconds(_decreaseAirTime6);
+        else if(transform.position.y < -150)
+            yield return new WaitForSeconds(_decreaseAirTime5);
+        else if(transform.position.y < -120)
+            yield return new WaitForSeconds(_decreaseAirTime4);
+        else if(transform.position.y < -90)
+            yield return new WaitForSeconds(_decreaseAirTime3);
+        else if(transform.position.y < -60)
+            yield return new WaitForSeconds(_decreaseAirTime2);
+        else if(transform.position.y < -30)
+            yield return new WaitForSeconds(_decreaseAirTime1);
+        else
+            yield return new WaitForSeconds(_decreaseAirTime0);
         _isAirDecrease = false;
     }
 
@@ -171,6 +195,7 @@ public class PlayerHealth : MonoBehaviour
         _playerDiePanel.SetActive(true);
         _playerDieObject.SetActive(true);
         _playerDieAnimator.SetBool("isDie", true);
+        _scoreText.text = "SCORE : " + _HUD.score.ToString();
         SetPlayerObjectsActive(false);
         gameObject.GetComponent<Player>().enabled = false;
         yield return new WaitForSeconds(0.8f);
