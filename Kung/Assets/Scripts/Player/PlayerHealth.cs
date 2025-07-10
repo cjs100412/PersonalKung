@@ -16,12 +16,12 @@ public class PlayerHealth : MonoBehaviour
     private bool _isHpDecrease;
 
     private const float _decreaseAirTime0 = 1.5f;
-    private const float _decreaseAirTime1 = 1.3f;
-    private const float _decreaseAirTime2 = 1.1f;
-    private const float _decreaseAirTime3 = 0.9f;
-    private const float _decreaseAirTime4 = 0.7f;
-    private const float _decreaseAirTime5 = 0.5f;
-    private const float _decreaseAirTime6 = 0.3f;
+    private const float _decreaseAirTime1 = 1.2f;
+    private const float _decreaseAirTime2 = 0.9f;
+    private const float _decreaseAirTime3 = 0.7f;
+    private const float _decreaseAirTime4 = 0.5f;
+    private const float _decreaseAirTime5 = 0.3f;
+    private const float _decreaseAirTime6 = 0.1f;
 
     private const float _hpDecreaseInterval = 0.2f;
 
