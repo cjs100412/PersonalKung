@@ -14,7 +14,7 @@ public class TreasureChest : MonoBehaviour
     private PlayerHealth _playerHealth;
     private ShortcutKey _shortcutKey;
     private int randomNumber;
-
+    private bool _isget = false;
     private void Awake()
     {
         _shortcutKey = GameObject.Find("ShortcutKey").GetComponent<ShortcutKey>();
@@ -25,6 +25,8 @@ public class TreasureChest : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            if (_isget) return;
+            _isget = true;
             _chestDialogCanvas.gameObject.SetActive(true);
             Debug.Log("Treasure Chest Open");
             spriteRenderer.sprite = _chestOpen;

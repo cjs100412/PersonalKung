@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 4104119843770206901}
   - component: {fileID: 7475834394982990025}
   - component: {fileID: 1651673556391266195}
-  - component: {fileID: 2397760710119362496}
   m_Layer: 7
   m_Name: MiniMapRockTile
   m_TagString: Untagged
@@ -7811,18 +7810,3 @@ CompositeCollider2D:
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 6659228341291211305}
---- !u!114 &2397760710119362496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6659228341291211305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 855e68f580cc3b0458c476024137f86a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _miniMapRockTile: {fileID: 0}
-  _rockTile: {fileID: 3812176257578481596}
-  destroiedRockTiles: []

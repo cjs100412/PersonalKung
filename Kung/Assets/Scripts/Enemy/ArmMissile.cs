@@ -16,7 +16,6 @@ public class ArmMissile : MonoBehaviour
     private float destroyHoming = 5.0f;
     private float destroytime = 0f;
 
-    // HomingMissilePattern코드에서 초기화하기 위한 메소드
     public void Init(Transform target, float speed, float turnSpeed)
     {
         this._target = target;
@@ -45,16 +44,13 @@ public class ArmMissile : MonoBehaviour
         {
             Vector2 dir = ((Vector2)_target.position - _rigid.position).normalized;
 
-            // Vector3.Cross의 z값이 양수면 반시계, 음수면 시계 방향 회전.
             float rotateAmount = Vector3.Cross(dir, transform.up).z;
 
-            // 리지드바디의 회전속도 설정. 
             _rigid.angularVelocity = -rotateAmount * _turnSpeed;
 
             if (Time.time - spawnTime >= homingDuration)
             {
                 stoppedHoming = true;
-                // homingDuration만큼의 시간이 지난 뒤, 추적, 회전을 멈추고 직진만
                 _rigid.angularVelocity = 0f;
                 _rigid.linearVelocity = transform.up * _speed;
             }
