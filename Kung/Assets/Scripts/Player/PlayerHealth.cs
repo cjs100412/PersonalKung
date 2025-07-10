@@ -16,12 +16,12 @@ public class PlayerHealth : MonoBehaviour
     private bool _isHpDecrease;
 
     private const float _decreaseAirTime0 = 1.5f;
-    private const float _decreaseAirTime1 = 1.2f;
-    private const float _decreaseAirTime2 = 0.9f;
-    private const float _decreaseAirTime3 = 0.7f;
-    private const float _decreaseAirTime4 = 0.5f;
-    private const float _decreaseAirTime5 = 0.3f;
-    private const float _decreaseAirTime6 = 0.1f;
+    private const float _decreaseAirTime1 = 1.0f;
+    private const float _decreaseAirTime2 = 0.5f;
+    private const float _decreaseAirTime3 = 0.3f;
+    private const float _decreaseAirTime4 = 0.2f;
+    private const float _decreaseAirTime5 = 0.1f;
+    private const float _decreaseAirTime6 = 0.05f;
 
     private const float _hpDecreaseInterval = 0.2f;
 
@@ -164,7 +164,6 @@ public class PlayerHealth : MonoBehaviour
     {
         _isAirDecrease = true;
         air = air.AirDecrease(1);
-        Debug.Log($"현재 산소 :{air.Amount}");
         if (air.Amount <= 0) yield break;
 
         if (transform.position.y < -180)
@@ -181,6 +180,7 @@ public class PlayerHealth : MonoBehaviour
             yield return new WaitForSeconds(_decreaseAirTime1);
         else
             yield return new WaitForSeconds(_decreaseAirTime0);
+        Debug.Log($"현재 산소 :{air.Amount}");
         _isAirDecrease = false;
     }
 
