@@ -58,7 +58,11 @@ public class Player : MonoBehaviour
 
 }
 
-void Update()
+    private void FixedUpdate()
+    {
+        _moveStateMachine.Update();
+    }
+    void Update()
     {
 
         if (playerHealth.isDamaged)
@@ -66,7 +70,7 @@ void Update()
             _moveStateMachine.ChangeState(new IdleState(this));
             return;
         }
-        _moveStateMachine.Update();
+        
         _drillStateMachine.Update();
 
         if (isBoost)

@@ -22,6 +22,11 @@ public class JumpAttackPattern : ScriptableObject, IBossPattern
     private float _lastUsedTime = -Mathf.Infinity;
     public float Cooldown => cooldown;
 
+    public void Reset()
+    {
+        _lastUsedTime = -Mathf.Infinity;
+    }
+
     private void OnEnable()
     {
         _lastUsedTime = -Mathf.Infinity;
@@ -54,7 +59,6 @@ public class JumpAttackPattern : ScriptableObject, IBossPattern
         yield return new WaitForFixedUpdate();
 
         bool landed = false;
-        // 최대 대기 시간을 설정, 땅에 떨어지지 않아도 최대 대기시간이 넘으면 탈출
         float timer = 0f, maxWait = 2f;
         while (timer < maxWait)
         {
@@ -68,7 +72,6 @@ public class JumpAttackPattern : ScriptableObject, IBossPattern
             yield return null;
         }
 
-        // 최대 대기시간으로 빠져나오면 landed가 false임. 땅이 감지될때까지 대기
         if (!landed)
         {
             do { yield return null; }

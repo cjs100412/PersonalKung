@@ -13,6 +13,7 @@ public class DrillDownState : IState
 
     public void Enter()
     {
+        player.rigid.linearVelocity = Vector2.zero;
         player.PlayDrillDownAnim(true);
         player.drilling.StartDrilling(0);
         SoundManager.Instance.PlaySFX(SFX.Drilling);

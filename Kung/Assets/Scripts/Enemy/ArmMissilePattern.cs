@@ -17,13 +17,16 @@ public class ArmMissilePattern : ScriptableObject, ISpawnPattern
     float lastUsedTime = -Mathf.Infinity;
     public float Cooldown => cooldown;
 
-    private void OnEnable()
+    public void Reset()
     {
-        // 첫 실행에 쿨다운 검사에서 무조건 True가 나오게 하기 위한 초기화
         lastUsedTime = -Mathf.Infinity;
     }
 
-    // ISpawnPattern상속 메소드.이 패턴의 spawnPoint에 넣을 Transform을 보스컨트롤러에서 받아온다
+    private void OnEnable()
+    {
+        lastUsedTime = -Mathf.Infinity;
+    }
+
     public void SetSpawnPoint(Transform sp)
     {
         spawnPoint = sp;
@@ -41,12 +44,10 @@ public class ArmMissilePattern : ScriptableObject, ISpawnPattern
 
         boss.animator.SetTrigger("Missile");
 
-        //발사 모션과 맞추기 위해 약간 텀 주기
         yield return new WaitForSeconds(0.3f);
 
         GameObject proj = Instantiate(missilePrefab, spawnPoint.position, spawnPoint.rotation);
         
-        //ArmMissile 코드의 Init메소드를 호출해 초기화
         ArmMissile homing = proj.GetComponent<ArmMissile>();
         if (homing != null)
         {

@@ -19,6 +19,11 @@ public class SummonPattern : ScriptableObject, ISpawnPattern
     private float _lastUsedTime = -Mathf.Infinity;
     public float Cooldown => cooldown;
 
+    public void Reset()
+    {
+        _lastUsedTime = -Mathf.Infinity;
+    }
+
     private void OnEnable()
     {
         _lastUsedTime = -Mathf.Infinity;
@@ -47,7 +52,6 @@ public class SummonPattern : ScriptableObject, ISpawnPattern
         {
             var obj = Instantiate(summonPrefab, _spawnPoint.position, Quaternion.identity);
 
-            // 랜덤 각도 계산
             float half = angleRange * 0.5f;
             float randomAngle = Random.Range(-half, half);
 

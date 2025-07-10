@@ -16,12 +16,12 @@ public class PlayerHealth : MonoBehaviour
     private bool _isHpDecrease;
 
     private const float _decreaseAirTime0 = 1.5f;
-    private const float _decreaseAirTime1 = 1.3f;
-    private const float _decreaseAirTime2 = 1.1f;
-    private const float _decreaseAirTime3 = 0.9f;
-    private const float _decreaseAirTime4 = 0.7f;
-    private const float _decreaseAirTime5 = 0.5f;
-    private const float _decreaseAirTime6 = 0.3f;
+    private const float _decreaseAirTime1 = 1.2f;
+    private const float _decreaseAirTime2 = 0.9f;
+    private const float _decreaseAirTime3 = 0.7f;
+    private const float _decreaseAirTime4 = 0.5f;
+    private const float _decreaseAirTime5 = 0.3f;
+    private const float _decreaseAirTime6 = 0.1f;
 
     private const float _hpDecreaseInterval = 0.2f;
 
@@ -145,7 +145,6 @@ public class PlayerHealth : MonoBehaviour
         }
 
         StartCoroutine(playerAttacked());
-        // 코루틴이 시작되면 플레이어를 이동시킬 수 없고, 무적 상태가 됨
 
 
         StartCoroutine(Invincible());
@@ -166,6 +165,8 @@ public class PlayerHealth : MonoBehaviour
         _isAirDecrease = true;
         air = air.AirDecrease(1);
         Debug.Log($"현재 산소 :{air.Amount}");
+        if (air.Amount <= 0) yield break;
+
         if (transform.position.y < -180)
             yield return new WaitForSeconds(_decreaseAirTime6);
         else if(transform.position.y < -150)
@@ -192,6 +193,7 @@ public class PlayerHealth : MonoBehaviour
 
     IEnumerator playerDie()
     {
+        SoundManager.Instance.PlaySFX(SFX.PlayerDead);
         _playerDiePanel.SetActive(true);
         _playerDieObject.SetActive(true);
         _playerDieAnimator.SetBool("isDie", true);
@@ -201,7 +203,6 @@ public class PlayerHealth : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
     }
 
-
     IEnumerator playerAttacked()
     {
         isDamaged = true;
@@ -209,6 +210,7 @@ public class PlayerHealth : MonoBehaviour
         _damageAnimator.SetBool("isDamaged", true);
         SetPlayerObjectsActive(false);
         _playerRigid.linearVelocity = new Vector2(0, 2);
+        SoundManager.Instance.PlaySFX(SFX.PlayerDamaged);
         yield return new WaitForSeconds(0.8f);
         _damageAnimator.SetBool("isDamaged", false);
         _damageObject.SetActive(false);

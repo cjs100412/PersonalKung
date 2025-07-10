@@ -13,8 +13,7 @@ public class TileManager : MonoBehaviour
     [SerializeField] private GameObject backMiniMapTilemap;
     [SerializeField] private Tile mineralTile;
     
-    [SerializeField] private GameObject Level1;
-    [SerializeField] private GameObject Level2;
+    [SerializeField] private GameObject[] Levels;
     
     [SerializeField] private GameObject miniMapRockTile;
 
@@ -38,6 +37,8 @@ public class TileManager : MonoBehaviour
     public float[,] tiles;
     public int baseHp;
     public HUD ui;
+
+    private float[] tileLevel = new float[5];
     [HideInInspector] public List<DestroiedTiles> destroiedTiles;
     void Awake()
     {
@@ -46,11 +47,7 @@ public class TileManager : MonoBehaviour
         brokenableTilemap = Instantiate(brokenTileMap, par).GetComponent<Tilemap>();
         miniMapFrontTilemap = Instantiate(frontMiniMapTilemap, par).GetComponent<Tilemap>();
         tileArrayInit();
-        GameObject lv1 = Instantiate(Level1, new Vector2(0, firstThreshold * 0.45f), Quaternion.identity);    
-        GameObject lv2 = Instantiate(Level2, new Vector2(0, firstThreshold * 0.75f), Quaternion.identity);
-        lv1.GetComponent<Transform>().localScale = new Vector2(_width, _height / 3) * 0.3f; 
-        lv2.GetComponent<Transform>().localScale = new Vector2(_width, _height / 3) * 0.3f;
-
+        InitLevel();
         _rockTile._miniMapRockTile = Instantiate(miniMapRockTile, par).GetComponent<Tilemap>();
     }
 
@@ -68,6 +65,16 @@ public class TileManager : MonoBehaviour
         }
     }
 
+    private void InitLevel()
+    {
+        for (int i = 0; i < Levels.Length; i++)
+        {
+            GameObject go = Instantiate(Levels[i], new Vector2(0, firstThreshold * (0.15f + (0.3f * (i + 1)))), Quaternion.identity);
+            go.GetComponent<Transform>().localScale = new Vector2(_width, _height / 6) * 0.3f;
+
+        }
+    }
+
     /// <summary>
     /// 타일맵의 타일 하나하나 초기화
     /// </summary>
@@ -80,7 +87,11 @@ public class TileManager : MonoBehaviour
         _offsetX = -bounds.xMin;
         _offsetY = -bounds.yMin;
 
-        firstThreshold = bounds.yMax - (_height / 3f);      
+        firstThreshold = bounds.yMax - (_height / 6f);
+        for (int i = 0; i < 5; i++)
+        {
+            tileLevel[i] = bounds.yMax - (_height * (i + 1)/ 6f);
+        }
         secondThreshold = bounds.yMax - (_height * 2f / 3f); 
         for (int x = bounds.xMin; x < bounds.xMax; x++)
         {
@@ -139,9 +150,18 @@ public class TileManager : MonoBehaviour
     }
     private int GetTileMaxHp(int y)
     {
-        if (y < firstThreshold && y >= secondThreshold) return baseHp * 2;
-        if (y < secondThreshold) return baseHp * 3;
-        return baseHp;
+        if (y >= firstThreshold)
+        {
+            return baseHp;
+        }
+        for (int i = 1; i < tileLevel.Length; i++)
+        {
+            if (y < tileLevel[i - 1] && y >= tileLevel[i])
+            {
+                return (int)(baseHp * (i + 0.5f));
+            }
+        }
+        return (int)(baseHp * (tileLevel.Length + 0.5));
     }
 
 

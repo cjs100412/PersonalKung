@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   equipmentType: 2
   itemId: 2305
-  movementSpeed: 2.5
+  movementSpeed: 2.1
   bosterSpeed: 12
   defance: 0
   drillDamage: 0

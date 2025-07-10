@@ -17,6 +17,7 @@ public class DrillSideState : IState
 
     public void Enter()
     {
+        player.rigid.linearVelocity = Vector2.zero;
         player.PlayDrillSideAnim(true);
         SoundManager.Instance.PlaySFX(SFX.Drilling);
         player.impulseSource.GenerateImpulse();

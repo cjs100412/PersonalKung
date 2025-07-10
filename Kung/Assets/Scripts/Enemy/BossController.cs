@@ -12,7 +12,7 @@ public class BossController : MonoBehaviour,IDamageable
     public Transform spawner;
     [SerializeField] private GameObject _damageZone;
     [SerializeField] private Image _bossEnergyBar;
-    [Header("패턴 ScriptableObject")]
+
     public List<ScriptableObject> patternSOs;
 
     List<IBossPattern> patterns;
@@ -33,10 +33,31 @@ public class BossController : MonoBehaviour,IDamageable
 
         foreach (ScriptableObject so in patternSOs)
         {
-            if (so is IBossPattern bossPatterns)
+            if (so is IBossPattern bossPattern)
             {
-                patterns.Add(bossPatterns);
+                IBossPattern newPatternInstance = Instantiate(so) as IBossPattern;
+                if (newPatternInstance != null)
+                {
+                    patterns.Add(newPatternInstance);
+                }
             }
+        }
+    }
+
+    void OnEnable()
+    {
+        foreach (var pattern in patterns)
+        {
+            pattern.Reset();
+        }
+        isBusy = false;
+    }
+
+    public void ResetPatternCooldowns()
+    {
+        foreach (var pattern in patterns)
+        {
+            pattern.Reset();
         }
     }
 
@@ -116,7 +137,7 @@ public class BossController : MonoBehaviour,IDamageable
     public void Die()
     {
         animator.SetTrigger("isDead");
-
+        SoundManager.Instance.PlaySFX(SFX.BossMonsterDead);
         Destroy(_damageZone);
         Vector2 TreasureChestPosition = transform.position;
 
@@ -127,7 +148,6 @@ public class BossController : MonoBehaviour,IDamageable
     IEnumerator EndingScene()
     {
         yield return new WaitForSeconds(4f);
-        Debug.Log("EndingScene가즈아");
         SceneManager.LoadScene("EndingScene");
     }
 }

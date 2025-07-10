@@ -11,7 +11,12 @@ public class BossMovement : MonoBehaviour
 
     void Update()
     {
-        if (_bossController.hp.IsDead) return;
+        if (_bossController.hp.IsDead)
+        {
+            rigid.linearVelocity = Vector2.zero;
+            return;
+        }
+
 
         Vector2 dist = _playerTransform.position - transform.position;
 
