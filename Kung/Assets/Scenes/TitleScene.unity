@@ -325,7 +325,7 @@ MonoBehaviour:
   - type: 7
     clip: {fileID: 8300000, guid: 1e67acc4c5a4774459cde590e3c56817, type: 3}
   - type: 1
-    clip: {fileID: 8300000, guid: 39b60c7b406d26d438c328128aed6613, type: 3}
+    clip: {fileID: 8300000, guid: a418b96832bf31e4285d9bc28a454ab3, type: 3}
   - type: 8
     clip: {fileID: 8300000, guid: de3f8a3bffdcf4c448ad1bed44a6303b, type: 3}
   - type: 4
@@ -346,6 +346,10 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 57b3e3e103519e841846480f579227d7, type: 3}
   - type: 15
     clip: {fileID: 8300000, guid: 9b24e03bd36bf8d4a9a85f199628a44d, type: 3}
+  - type: 0
+    clip: {fileID: 8300000, guid: 166cf48e16bb53e4389727a36977739f, type: 3}
+  - type: 3
+    clip: {fileID: 8300000, guid: 38e4502a6446f6843a281c4bebe14b84, type: 3}
   bgm_slider: {fileID: 940365796}
   sfx_slider: {fileID: 335732415}
   bgm_toggle: {fileID: 56925706}

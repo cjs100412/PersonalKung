@@ -137,7 +137,7 @@ public class BossController : MonoBehaviour,IDamageable
     public void Die()
     {
         animator.SetTrigger("isDead");
-
+        SoundManager.Instance.PlaySFX(SFX.BossMonsterDead);
         Destroy(_damageZone);
         Vector2 TreasureChestPosition = transform.position;
 
