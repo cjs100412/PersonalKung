@@ -32,6 +32,7 @@ public class InvetorySlotClickController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _MineralPriceText;
 
     private int currentIndex;
+    private bool isOpen = false;
 
     private void Start()
     {
@@ -47,31 +48,49 @@ public class InvetorySlotClickController : MonoBehaviour
 
     public void OnClickItem(int index)
     {
+        if (isOpen)
+        {
+            return;
+        }
         InventoryItemSlotUI slot = slots[index].GetComponent<InventoryItemSlotUI>();
         if (slot._itemId >= 3000)
         {
-            _MineralPanel.transform.position = slots[index].transform.position + new Vector3(0, -250, 0);
+            if (index >= 15)
+            {
+                _MineralPanel.transform.position = slots[index].transform.position + new Vector3(0, 250, 0);
+            }
+            else
+            {
+                _MineralPanel.transform.position = slots[index].transform.position + new Vector3(0, -250, 0);
+            }
             _MineralPanel.SetActive(true);
             currentIndex = index;
 
             Item item = _itemRepositoryLocator.Repository.FindById(slot._itemId);
             _MineralNameText.text = item.DevName;
             _MineralPriceText.text = item.Price.ToString();
+            isOpen = true;
             return;
         }
 
         if (slot.isItem)
         {
-            Debug.Log(slot._itemId);
-            _SlotPanel.transform.position = slots[index].transform.position + new Vector3(0, -250, 0);
+            if (index >= 15)
+            {
+                _SlotPanel.transform.position = slots[index].transform.position + new Vector3(0, 250, 0);
+            }
+            else
+            {
+                _SlotPanel.transform.position = slots[index].transform.position + new Vector3(0, -250, 0);
+            }
             _SlotPanel.SetActive(true);
             currentIndex = index;
 
             Item item = _itemRepositoryLocator.Repository.FindById(slot._itemId);
-
             _itemNameText.text = item.DevName;
             _itemPriceText.text = item.Price.ToString();
             _itemDescriptionText.text = item.Discription;
+            isOpen = true;
         }
     }
 
@@ -111,6 +130,7 @@ public class InvetorySlotClickController : MonoBehaviour
 
         }
         currentIndex = -1;
+        isOpen = false;
     }
 
     public void OnClickSellButton()
@@ -122,12 +142,14 @@ public class InvetorySlotClickController : MonoBehaviour
             _inventoryUI.Refresh();
         }
         currentIndex = -1;
+        isOpen = false;
     }
 
     public void OnClickCloseMineralPanelButton()
     {
         _MineralPanel.SetActive(false);
         currentIndex = -1;
+        isOpen = false;
     }
 
     public void OnClickCloseButton()
@@ -136,6 +158,7 @@ public class InvetorySlotClickController : MonoBehaviour
         _inventoryUI.Refresh();
         _SlotPanel.SetActive(false);
         currentIndex = -1;
+        isOpen = false;
 
     }
 }
