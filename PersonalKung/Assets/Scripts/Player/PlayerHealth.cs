@@ -1,10 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +9,7 @@ public class PlayerHealth : MonoBehaviour
 {
     private int _maxair = 100;
     private int _maxhp = 100;
-    private bool _isAirDecrease;
+    [HideInInspector] public Coroutine _airDecreaseCoroutine;
     private bool _isHpDecrease;
 
     private const float _decreaseAirTime0 = 1.5f;
@@ -70,7 +67,7 @@ public class PlayerHealth : MonoBehaviour
         get => _maxair;
         set => _maxair = value;
     }
-    
+
 
     private void OnEnable()
     {
@@ -92,30 +89,25 @@ public class PlayerHealth : MonoBehaviour
     {
         if (hp.IsDead) return;
 
-        if(transform.position.y >= -1 && air.Current < MaxAir)
+        if (transform.position.y >= -1 && air.Current < MaxAir)
         {
             air = air.Heal(MaxAir);
+            if (_airDecreaseCoroutine != null)
+            {
+                StopCoroutine(_airDecreaseCoroutine);
+                _airDecreaseCoroutine = null;
+            }
         }
 
-        if(transform.position.y < -1 && !_isAirDecrease)
+        if (transform.position.y < -1 && _airDecreaseCoroutine == null)
         {
-            StartCoroutine(airDecrease());
+            _airDecreaseCoroutine = StartCoroutine(airDecrease());
         }
 
-        if(air.IsAirZero && !_isHpDecrease)
+        if (air.IsAirZero && !_isHpDecrease)
         {
             StartCoroutine(hpDecrease());
         }
-
-        //if (Input.GetKeyDown(KeyCode.A))
-        //{
-        //    TakeDamage(5);
-        //}
-        //if (Input.GetKeyDown(KeyCode.S))
-        //{
-        //    air = air.AirDecrease(5);
-        //    Debug.Log($"현재 산소 :{air.Amount}");
-        //}
     }
 
     IEnumerator hpDecrease()
@@ -138,9 +130,9 @@ public class PlayerHealth : MonoBehaviour
         boostLight.SetActive(false);
         int damage = amount - (int)_playerStats.defense;
         hp = hp.TakeDamage(damage);
-        if(hp.IsDead)
+        if (hp.IsDead)
         {
-            Die();  
+            Die();
             return;
         }
 
@@ -159,29 +151,34 @@ public class PlayerHealth : MonoBehaviour
         yield return new WaitForSeconds(_invincibleTime);
         _isInvincible = false;
     }
-    
+
     IEnumerator airDecrease()
     {
-        _isAirDecrease = true;
-        air = air.AirDecrease(1);
-        if (air.Amount <= 0) yield break;
+        while (true)
+        {
+            air = air.AirDecrease(1);
+            if (air.Amount <= 0)
+            {
+                _airDecreaseCoroutine = null;
+                yield break;
+            }
 
-        if (transform.position.y < -180)
-            yield return new WaitForSeconds(_decreaseAirTime6);
-        else if(transform.position.y < -150)
-            yield return new WaitForSeconds(_decreaseAirTime5);
-        else if(transform.position.y < -120)
-            yield return new WaitForSeconds(_decreaseAirTime4);
-        else if(transform.position.y < -90)
-            yield return new WaitForSeconds(_decreaseAirTime3);
-        else if(transform.position.y < -60)
-            yield return new WaitForSeconds(_decreaseAirTime2);
-        else if(transform.position.y < -30)
-            yield return new WaitForSeconds(_decreaseAirTime1);
-        else
-            yield return new WaitForSeconds(_decreaseAirTime0);
-        Debug.Log($"현재 산소 :{air.Amount}");
-        _isAirDecrease = false;
+            if (transform.position.y < -180)
+                yield return new WaitForSeconds(_decreaseAirTime6);
+            else if (transform.position.y < -150)
+                yield return new WaitForSeconds(_decreaseAirTime5);
+            else if (transform.position.y < -120)
+                yield return new WaitForSeconds(_decreaseAirTime4);
+            else if (transform.position.y < -90)
+                yield return new WaitForSeconds(_decreaseAirTime3);
+            else if (transform.position.y < -60)
+                yield return new WaitForSeconds(_decreaseAirTime2);
+            else if (transform.position.y < -30)
+                yield return new WaitForSeconds(_decreaseAirTime1);
+            else
+                yield return new WaitForSeconds(_decreaseAirTime0);
+            Debug.Log($"현재 산소 :{air.Amount}");
+        }
     }
 
     public void Die()
@@ -227,7 +224,7 @@ public class PlayerHealth : MonoBehaviour
     private void HandleAirCapacityChanged(float newCapacity)
     {
         MaxAir = Mathf.FloorToInt(newCapacity);
-        if(air.Amount > MaxAir)
+        if (air.Amount > MaxAir)
         {
             air = Air.New(MaxAir, MaxAir);
         }
@@ -237,7 +234,7 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    public void Respawn(int savedhp,int savedcoin, List<UserInventoryItemDto> savedInventoryItems, List<UserShortCutItemDto> savedShortCutItems,
+    public void Respawn(int savedhp, int savedcoin, List<UserInventoryItemDto> savedInventoryItems, List<UserShortCutItemDto> savedShortCutItems,
                         int equippedHelmetId, int equippedBootsId, int equippedDrillId)
     {
         transform.position = new Vector3(-1, 0.1f, 0);
@@ -258,7 +255,7 @@ public class PlayerHealth : MonoBehaviour
         gold = Gold.New(savedcoin);
         _inventoryServiceLocator.Service.SetItems(savedInventoryItems);
         _shortCutServiceLocator.Service.SetShortCut(savedShortCutItems);
-        if(equippedHelmetId > 2000)
+        if (equippedHelmetId > 2000)
         {
             _helmetEquipment.sprite = Resources.Load<Sprite>(_itemServiceLocator.ItemService.GetIconPath(equippedHelmetId));
             EquipmentData equipmentHelmetData = equipmentDatas.First(equipment => equipment.itemId == equippedHelmetId);

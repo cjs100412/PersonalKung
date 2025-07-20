@@ -43,7 +43,7 @@ public class ShortcutKey : MonoBehaviour
 
     public void OnBombButtonClick()
     {
-        if(cooldownTime > bombCooldownTime)
+        if (cooldownTime > bombCooldownTime)
         {
             if (_shortCutServiceLocator.Service.CanUseShortCutItem(1003) && _groundChecker.IsGrounded)
             {
@@ -109,6 +109,11 @@ public class ShortcutKey : MonoBehaviour
         {
             _shortCutServiceLocator.Service.RemoveShortCutItemQuantity(1002);
             _playerHealth.air = _playerHealth.air.Heal(_playerHealth.MaxAir);
+            if (_playerHealth._airDecreaseCoroutine != null)
+            {
+                _playerHealth.StopCoroutine(_playerHealth._airDecreaseCoroutine);
+                _playerHealth._airDecreaseCoroutine = null;
+            }
             Refresh();
         }
     }
